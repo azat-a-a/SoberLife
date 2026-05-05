@@ -9,10 +9,11 @@ final class ServiceContractsTests: XCTestCase {
         XCTAssertEqual(ConversationType.analysis.rawValue, "analysis")
     }
 
-    func testNotificationCategoryRawValues() {
-        XCTAssertEqual(NotificationCategory.daily.rawValue, "daily")
-        XCTAssertEqual(NotificationCategory.milestone.rawValue, "milestone")
-        XCTAssertEqual(NotificationCategory.reengagement.rawValue, "reengagement")
+    func testNotificationCategoryEquality() {
+        XCTAssertEqual(NotificationCategory.daily, .daily)
+        XCTAssertEqual(NotificationCategory.milestone(days: 7), .milestone(days: 7))
+        XCTAssertNotEqual(NotificationCategory.milestone(days: 7), .milestone(days: 30))
+        XCTAssertEqual(NotificationCategory.reengagement, .reengagement)
     }
 
     func testNotificationPreferencesDefaults() {

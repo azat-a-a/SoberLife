@@ -87,9 +87,9 @@ public enum ConversationType: String, Sendable {
     case analysis
 }
 
-public enum NotificationCategory: String, Sendable {
+public enum NotificationCategory: Sendable, Equatable {
     case daily
-    case milestone
+    case milestone(days: Int)
     case reengagement
 }
 
@@ -118,4 +118,20 @@ public protocol NotificationService: Sendable {
     func requestPermission() async -> Bool
     func updatePreferences(_ preferences: NotificationPreferences, for userID: UUID) async throws
     func schedule(category: NotificationCategory, payload: NotificationPayload, for userID: UUID, at: Date?) async throws
+    /// Removes pending notifications whose identifiers match the given prefix (used to dedupe milestone schedules).
+    func removePending(withIdentifierPrefix prefix: String) async throws
+}
+
+public enum NotificationIdentifiers {
+    public static func dailyReminder(userID: UUID) -> String {
+        "soberlife.daily.\(userID.uuidString)"
+    }
+
+    public static func milestone(userID: UUID, milestoneDays: Int) -> String {
+        "soberlife.milestone.\(userID.uuidString).\(milestoneDays)"
+    }
+
+    public static func milestonePrefix(userID: UUID) -> String {
+        "soberlife.milestone.\(userID.uuidString)."
+    }
 }

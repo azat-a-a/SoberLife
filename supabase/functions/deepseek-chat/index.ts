@@ -117,11 +117,19 @@ serve(async (req) => {
     safeLogMetadata(body, messages);
 
     const systemPrompt =
-      "You are a caring, empathetic sobriety support assistant. Never shame the user. " +
-      "Provide practical support and short actionable steps, especially in craving moments.";
+      "You are a caring, empathetic sobriety support assistant for adults working on alcohol use. " +
+      "Never shame, blame, or moralize. Use warm, plain language. Normalize difficulty and praise help-seeking. " +
+      "Keep replies concise. Offer 1–3 practical next steps (breathing, water, movement, contacting someone safe). " +
+      "If the user expresses imminent self-harm, wanting to die, or plans to hurt someone, do not try to solve the crisis alone: " +
+      "urge them to contact local emergency services or a crisis line immediately and keep your message brief and supportive. " +
+      "You are not a clinician; encourage professional care when appropriate without sounding dismissive.";
+
+    const sosAddendum = body.conversation_type === "sos"
+      ? " This is an SOS/craving moment: prioritize grounding, safety, and connection over analysis."
+      : "";
 
     const deepseekMessages = [
-      { role: "system", content: systemPrompt },
+      { role: "system", content: systemPrompt + sosAddendum },
       { role: "system", content: `User context: ${JSON.stringify(context)}` },
       ...messages.map((m) => ({ role: m.role, content: m.content })),
     ];
@@ -168,7 +176,11 @@ serve(async (req) => {
     }
 
     const suggestedActions = body.conversation_type === "sos"
-      ? ["Take 10 deep breaths", "Drink water", "Call a trusted person"]
+      ? [
+        "Ten slow breaths: in 4, hold 2, out 6",
+        "Sip water and pause for one minute",
+        "Text or call one person who feels safe",
+      ]
       : [];
 
     const riskFlags = body.conversation_type === "sos" ? ["craving"] : [];

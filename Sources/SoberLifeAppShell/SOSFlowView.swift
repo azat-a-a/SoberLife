@@ -1,0 +1,171 @@
+import SwiftUI
+import SoberLifeCore
+
+@MainActor
+struct SOSFlowView: View {
+    let userID: UUID
+    let contact: SupportContact
+    let soberDays: Int
+    let aiService: (any AIService)?
+
+    @Environment(\.openURL) private var openURL
+    @State private var aiReply: String?
+    @State private var isLoadingAI = false
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(EmpathyCopy.sosTitle)
+                    .font(.title2)
+                    .bold()
+                Text(EmpathyCopy.sosSubtitle)
+                    .foregroundStyle(.secondary)
+
+                quickAction(
+                    title: EmpathyCopy.sosBreathingTitle,
+                    detail: EmpathyCopy.sosBreathingDetail,
+                    systemImage: "wind"
+                )
+                quickAction(
+                    title: EmpathyCopy.sosWaterTitle,
+                    detail: EmpathyCopy.sosWaterDetail,
+                    systemImage: "drop.fill"
+                )
+                quickAction(
+                    title: EmpathyCopy.sosGroundingTitle,
+                    detail: EmpathyCopy.sosGroundingDetail,
+                    systemImage: "leaf.fill"
+                )
+
+                if contact.hasCallableNumber {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Someone you trust")
+                            .font(.headline)
+                        Text(contact.trustedName.isEmpty ? "Your contact" : contact.trustedName)
+                            .foregroundStyle(.secondary)
+                        HStack {
+                            if let url = Self.callURL(phone: contact.trustedPhone) {
+                                Button {
+                                    openURL(url)
+                                } label: {
+                                    Label("Call", systemImage: "phone.fill")
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
+                            if let url = Self.smsURL(phone: contact.trustedPhone) {
+                                Button {
+                                    openURL(url)
+                                } label: {
+                                    Label("Message", systemImage: "message.fill")
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                }
+
+                if aiService != nil {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if let aiReply {
+                            Text(aiReply)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        Button {
+                            Task { await loadAI() }
+                        } label: {
+                            if isLoadingAI {
+                                ProgressView()
+                                    .frame(maxWidth: .infinity)
+                            } else {
+                                Text(EmpathyCopy.sosAiButton)
+                                    .frame(maxWidth: .infinity)
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(isLoadingAI)
+                    }
+                } else {
+                    Text(EmpathyCopy.sosAiFallback)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(EmpathyCopy.sosCrisisSection)
+                        .font(.headline)
+                    Text(EmpathyCopy.sosCrisisBody)
+                        .foregroundStyle(.secondary)
+                    if let url = URL(string: "https://findahelpline.com") {
+                        Link("Find a helpline (international)", destination: url)
+                    }
+                }
+                .padding()
+                .background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+            }
+            .padding()
+        }
+    }
+
+    private func quickAction(title: String, detail: String, systemImage: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.title2)
+                .foregroundStyle(.tint)
+                .frame(width: 32)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                Text(detail)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func loadAI() async {
+        guard let aiService else { return }
+        isLoadingAI = true
+        defer { isLoadingAI = false }
+        let message = ChatMessage(
+            role: "user",
+            content: "I am having a strong craving right now. Please respond with short, kind support.",
+            timestamp: Date()
+        )
+        let context = AIContext(soberDays: soberDays, recentTriggers: [], recentJournalNotes: [])
+        do {
+            let reply = try await aiService.send(
+                userID: userID,
+                conversationType: .sos,
+                messages: [message],
+                context: context
+            )
+            aiReply = reply.reply
+        } catch {
+            aiReply = EmpathyCopy.sosAiFallback
+        }
+    }
+
+    private static func callURL(phone: String) -> URL? {
+        let trimmed = phone.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        let allowed = trimmed.filter { $0.isNumber || $0 == "+" }
+        guard !allowed.isEmpty else { return nil }
+        return URL(string: "tel:\(allowed)")
+    }
+
+    private static func smsURL(phone: String) -> URL? {
+        let trimmed = phone.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        let allowed = trimmed.filter { $0.isNumber || $0 == "+" }
+        guard !allowed.isEmpty else { return nil }
+        return URL(string: "sms:\(allowed)")
+    }
+}

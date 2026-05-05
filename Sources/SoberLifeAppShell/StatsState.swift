@@ -5,6 +5,8 @@ import SoberLifeCore
 @MainActor
 public final class StatsState: ObservableObject {
     @Published public private(set) var currentStreakDays: Int = 0
+    @Published public private(set) var longestStreakDays: Int = 0
+    @Published public private(set) var honestyCheckIns: Int = 0
     @Published public private(set) var savedMoney: Double = 0
     @Published public private(set) var nextMilestoneDays: Int = 7
     @Published public private(set) var progressPercent: Int = 0
@@ -13,6 +15,7 @@ public final class StatsState: ObservableObject {
 
     private let userID: UUID
     private let store: OnboardingStore
+    private let relapseStore: RelapseHistoryStore
     private let achievementStore: AchievementStore
     private let calendar: Calendar
     private let nowProvider: () -> Date
@@ -20,20 +23,26 @@ public final class StatsState: ObservableObject {
     public init(
         userID: UUID,
         store: OnboardingStore,
+        relapseStore: RelapseHistoryStore = UserDefaultsRelapseHistoryStore(),
         achievementStore: AchievementStore = UserDefaultsAchievementStore(),
         calendar: Calendar = .current,
         nowProvider: @escaping () -> Date = Date.init
     ) {
         self.userID = userID
         self.store = store
+        self.relapseStore = relapseStore
         self.achievementStore = achievementStore
         self.calendar = calendar
         self.nowProvider = nowProvider
     }
 
     public func load() {
+        let history = relapseStore.events(userID: userID)
+        honestyCheckIns = history.count
+
         guard let profile = store.loadProfile(userID: userID) else {
             currentStreakDays = 0
+            longestStreakDays = 0
             savedMoney = 0
             nextMilestoneDays = 7
             progressPercent = 0
@@ -45,6 +54,12 @@ public final class StatsState: ObservableObject {
         currentStreakDays = SobrietyCounter.soberDays(
             since: profile.sobrietyStartDate,
             now: nowProvider(),
+            calendar: calendar
+        )
+        longestStreakDays = SobrietyJourney.longestStreakDays(
+            currentPeriodStart: profile.sobrietyStartDate,
+            now: nowProvider(),
+            history: history,
             calendar: calendar
         )
         savedMoney = (profile.dailyAlcoholCost ?? 0) * Double(currentStreakDays)

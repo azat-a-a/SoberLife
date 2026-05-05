@@ -1,11 +1,14 @@
 import SwiftUI
 import Foundation
+import SoberLifeCore
 
 public struct AppShellView: View {
     @ObservedObject private var sessionState: SessionState
+    private let aiService: (any AIService)?
 
-    public init(sessionState: SessionState) {
+    public init(sessionState: SessionState, authWiring: AuthWiring? = nil) {
         self.sessionState = sessionState
+        self.aiService = authWiring.map { wiring in wiring.makeAIService() }
     }
 
     public var body: some View {
@@ -23,6 +26,7 @@ public struct AppShellView: View {
             case let .signedIn(userID):
                 SignedInRootView(
                     userID: userID,
+                    aiService: aiService,
                     onSignOutTap: {
                         Task {
                             await sessionState.signOut()
@@ -39,16 +43,26 @@ public struct AppShellView: View {
 
 private struct SignedInRootView: View {
     let userID: UUID
+    let aiService: (any AIService)?
     let onSignOutTap: () -> Void
     private let onboardingStore: OnboardingStore
+    private let relapseStore: RelapseHistoryStore
+    private let supportContactStore: SupportContactStore
+    private let achievementStore: AchievementStore
+    private let notificationService: NotificationService
 
     @StateObject private var onboardingState: OnboardingState
 
-    init(userID: UUID, onSignOutTap: @escaping () -> Void) {
+    init(userID: UUID, aiService: (any AIService)?, onSignOutTap: @escaping () -> Void) {
         self.userID = userID
+        self.aiService = aiService
         self.onSignOutTap = onSignOutTap
         let store = UserDefaultsOnboardingStore()
         self.onboardingStore = store
+        self.relapseStore = UserDefaultsRelapseHistoryStore()
+        self.supportContactStore = UserDefaultsSupportContactStore()
+        self.achievementStore = UserDefaultsAchievementStore()
+        self.notificationService = UNNotificationCenterService()
         _onboardingState = StateObject(
             wrappedValue: OnboardingState(
                 userID: userID,
@@ -63,6 +77,11 @@ private struct SignedInRootView: View {
                 MainTabView(
                     userID: userID,
                     onboardingStore: onboardingStore,
+                    relapseStore: relapseStore,
+                    supportContactStore: supportContactStore,
+                    achievementStore: achievementStore,
+                    notificationService: notificationService,
+                    aiService: aiService,
                     onSignOutTap: onSignOutTap
                 )
             } else {
@@ -75,19 +94,32 @@ private struct SignedInRootView: View {
 private struct MainTabView: View {
     let userID: UUID
     let onboardingStore: OnboardingStore
+    let relapseStore: RelapseHistoryStore
+    let supportContactStore: SupportContactStore
+    let achievementStore: AchievementStore
+    let notificationService: NotificationService
+    let aiService: (any AIService)?
     let onSignOutTap: () -> Void
+
+    @State private var notificationSyncTick: Int = 0
 
     var body: some View {
         TabView {
             HomeView(
+                userID: userID,
+                onboardingStore: onboardingStore,
+                relapseStore: relapseStore,
+                supportContactStore: supportContactStore,
                 state: HomeState(
                     userID: userID,
                     store: onboardingStore
-                )
+                ),
+                aiService: aiService,
+                notificationSyncTick: $notificationSyncTick
             )
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
+            .tabItem {
+                Label("Home", systemImage: "house")
+            }
 
             AIChatPlaceholderView()
                 .tabItem {
@@ -97,18 +129,54 @@ private struct MainTabView: View {
             StatsView(
                 state: StatsState(
                     userID: userID,
-                    store: onboardingStore
-                )
+                    store: onboardingStore,
+                    relapseStore: relapseStore,
+                    achievementStore: achievementStore
+                ),
+                syncTick: notificationSyncTick
             )
-                .tabItem {
-                    Label("Stats", systemImage: "chart.bar")
-                }
+            .tabItem {
+                Label("Stats", systemImage: "chart.bar")
+            }
 
-            ProfilePlaceholderView(onSignOutTap: onSignOutTap)
-                .tabItem {
-                    Label("Profile", systemImage: "person")
-                }
+            ProfileView(
+                userID: userID,
+                supportContactStore: supportContactStore,
+                onSignOutTap: onSignOutTap
+            )
+            .tabItem {
+                Label("Profile", systemImage: "person")
+            }
         }
+        .task(id: notificationSyncTick) {
+            await runNotificationSync()
+        }
+    }
+
+    private func runNotificationSync() async {
+        guard let profile = onboardingStore.loadProfile(userID: userID) else { return }
+        let calendar = Calendar.current
+        let now = Date()
+        let streak = SobrietyCounter.soberDays(
+            since: profile.sobrietyStartDate,
+            now: now,
+            calendar: calendar
+        )
+        let nextMilestone = Self.nextMilestone(after: streak)
+        try? await NotificationScheduleSync.syncAll(
+            userID: userID,
+            profile: profile,
+            currentStreakDays: streak,
+            nextMilestoneTarget: nextMilestone,
+            notificationService: notificationService,
+            calendar: calendar,
+            now: now
+        )
+    }
+
+    private static func nextMilestone(after days: Int) -> Int {
+        let milestones = [7, 30, 90, 365]
+        return milestones.first(where: { days < $0 }) ?? (days + 30)
     }
 }
 
@@ -167,7 +235,7 @@ private struct OnboardingFlowView: View {
 
     private var goalStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("What is your goal?")
+            Text("What feels right as a direction?")
                 .font(.title2)
                 .bold()
 
@@ -188,7 +256,7 @@ private struct OnboardingFlowView: View {
                 .buttonStyle(.plain)
             }
 
-            Text("You can skip this and decide later.")
+            Text("There is no wrong answer, and you can change your mind later.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -196,7 +264,7 @@ private struct OnboardingFlowView: View {
 
     private var dateStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("When did your sobriety period start?")
+            Text("When does this sober period start?")
                 .font(.title2)
                 .bold()
             DatePicker(
@@ -230,8 +298,8 @@ private struct OnboardingFlowView: View {
             Text("Daily reminders")
                 .font(.title2)
                 .bold()
-            Toggle("Enable motivational notifications", isOn: $state.notificationsEnabled)
-            Text("You can change this anytime in settings.")
+            Toggle("Gentle daily reminders", isOn: $state.notificationsEnabled)
+            Text("You can change this anytime. We keep reminders short and skip shaming language.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -249,7 +317,7 @@ private struct SignedOutPlaceholderView: View {
                     .font(.largeTitle)
                     .bold()
 
-                Text("Apple Sign-In flow is scaffolded. Real token exchange is wired through AuthService.")
+                Text("Sign in to save your progress. If sign-in feels like a lot right now, you can still explore the flow when you are ready.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
 
@@ -260,7 +328,7 @@ private struct SignedOutPlaceholderView: View {
                         .multilineTextAlignment(.center)
                 }
 
-                Button("Sign In Placeholder", action: onSignInTap)
+                Button("Continue with Apple", action: onSignInTap)
                     .buttonStyle(.borderedProminent)
             }
             .padding(24)
@@ -270,15 +338,47 @@ private struct SignedOutPlaceholderView: View {
 }
 
 private struct HomeView: View {
+    let userID: UUID
+    let onboardingStore: OnboardingStore
+    let relapseStore: RelapseHistoryStore
+    let supportContactStore: SupportContactStore
     @StateObject private var state: HomeState
+    let aiService: (any AIService)?
+    @Binding var notificationSyncTick: Int
 
-    init(state: HomeState) {
+    @State private var showSOS = false
+    @State private var showRelapseConfirm = false
+
+    init(
+        userID: UUID,
+        onboardingStore: OnboardingStore,
+        relapseStore: RelapseHistoryStore,
+        supportContactStore: SupportContactStore,
+        state: HomeState,
+        aiService: (any AIService)?,
+        notificationSyncTick: Binding<Int>
+    ) {
+        self.userID = userID
+        self.onboardingStore = onboardingStore
+        self.relapseStore = relapseStore
+        self.supportContactStore = supportContactStore
+        self.aiService = aiService
+        _notificationSyncTick = notificationSyncTick
         _state = StateObject(wrappedValue: state)
     }
 
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
+                Button {
+                    showSOS = true
+                } label: {
+                    Label("SOS — quick help", systemImage: "lifepreserver")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.orange)
+
                 Text("Sobriety")
                     .font(.headline)
                     .foregroundStyle(.secondary)
@@ -287,12 +387,12 @@ private struct HomeView: View {
                     .font(.system(size: 42, weight: .bold))
 
                 if let dailyAlcoholCost = state.dailyAlcoholCost {
-                    Text("Saved money: \(Int(Double(state.soberDays) * dailyAlcoholCost))")
+                    Text("Estimated savings: \(Int(Double(state.soberDays) * dailyAlcoholCost))")
                         .font(.subheadline)
                 }
 
                 if let startDate = state.sobrietyStartDate {
-                    Text("Started: \(startDate.formatted(date: .abbreviated, time: .omitted))")
+                    Text("This period started: \(startDate.formatted(date: .abbreviated, time: .omitted))")
                         .foregroundStyle(.secondary)
                 }
 
@@ -304,7 +404,12 @@ private struct HomeView: View {
 
                 Divider()
 
-                Text("Sobriety counter is now connected to your onboarding start date.")
+                Button(EmpathyCopy.relapseButton) {
+                    showRelapseConfirm = true
+                }
+                .buttonStyle(.bordered)
+
+                Text("Your milestones stay with you. Starting a new period does not erase what you have already learned.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
 
@@ -314,6 +419,45 @@ private struct HomeView: View {
             .navigationTitle("Home")
             .task {
                 state.load()
+            }
+            .sheet(isPresented: $showSOS) {
+                NavigationStack {
+                    SOSFlowView(
+                        userID: userID,
+                        contact: supportContactStore.loadContact(userID: userID),
+                        soberDays: state.soberDays,
+                        aiService: aiService
+                    )
+                    .navigationTitle("SOS")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Close") {
+                                showSOS = false
+                            }
+                        }
+                    }
+                }
+            }
+            .confirmationDialog(
+                EmpathyCopy.relapseTitle,
+                isPresented: $showRelapseConfirm,
+                titleVisibility: .visible
+            ) {
+                Button(EmpathyCopy.relapseConfirm, role: .destructive) {
+                    RelapseRecording.recordRelapse(
+                        userID: userID,
+                        newPeriodStart: Date(),
+                        now: Date(),
+                        calendar: Calendar.current,
+                        profileStore: onboardingStore,
+                        historyStore: relapseStore
+                    )
+                    state.load()
+                    notificationSyncTick += 1
+                }
+                Button(EmpathyCopy.relapseCancel, role: .cancel) {}
+            } message: {
+                Text(EmpathyCopy.relapseMessage)
             }
         }
     }
@@ -326,7 +470,7 @@ private struct AIChatPlaceholderView: View {
                 Text("AI Chat")
                     .font(.title2)
                     .bold()
-                Text("DeepSeek chat and SOS flow will be connected in Sprint 03.")
+                Text("Everyday coaching chat will land here. For cravings right now, use SOS on Home — it is built to be fast and kind.")
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -338,9 +482,11 @@ private struct AIChatPlaceholderView: View {
 
 private struct StatsView: View {
     @StateObject private var state: StatsState
+    let syncTick: Int
 
-    init(state: StatsState) {
+    init(state: StatsState, syncTick: Int) {
         _state = StateObject(wrappedValue: state)
+        self.syncTick = syncTick
     }
 
     var body: some View {
@@ -350,8 +496,10 @@ private struct StatsView: View {
                     .font(.title2)
                     .bold()
 
-                statRow(label: "Current streak", value: "\(state.currentStreakDays) days")
-                statRow(label: "Saved money", value: "\(Int(state.savedMoney))")
+                statRow(label: "Current period", value: "\(state.currentStreakDays) days")
+                statRow(label: "Best streak so far", value: "\(state.longestStreakDays) days")
+                statRow(label: "Times you chose honesty", value: "\(state.honestyCheckIns)")
+                statRow(label: "Estimated savings (period)", value: "\(Int(state.savedMoney))")
                 statRow(label: "Next milestone", value: "\(state.nextMilestoneDays) days")
                 statRow(label: "Progress", value: "\(state.progressPercent)%")
 
@@ -359,7 +507,7 @@ private struct StatsView: View {
 
                 if !state.unlockedMilestones.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Milestones")
+                        Text("Milestones you have earned")
                             .font(.headline)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
@@ -375,18 +523,18 @@ private struct StatsView: View {
                 }
 
                 if !state.newlyUnlockedMilestones.isEmpty {
-                    Text("New unlock: \(state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", "))")
+                    Text("Celebrating: \(state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", "))")
                         .font(.footnote)
                         .foregroundStyle(.green)
                 }
 
-                Text("Stats are calculated from your onboarding start date and daily cost.")
+                Text("Honesty check-ins start a new sober period without removing badges you already unlocked.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
             .padding()
             .navigationTitle("Stats")
-            .task {
+            .task(id: syncTick) {
                 state.load()
             }
         }
@@ -404,25 +552,52 @@ private struct StatsView: View {
     }
 }
 
-private struct ProfilePlaceholderView: View {
+private struct ProfileView: View {
+    let userID: UUID
+    let supportContactStore: SupportContactStore
     let onSignOutTap: () -> Void
+
+    @State private var trustedName: String = ""
+    @State private var trustedPhone: String = ""
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Profile")
-                    .font(.title2)
-                    .bold()
-                Text("Settings, privacy, and legal screens are wired in later milestones.")
-                    .foregroundStyle(.secondary)
+            Form {
+                Section {
+                    Text("More settings will arrive later. What you add here stays on this device unless you sign in and sync in a future release.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
 
-                Button("Sign Out Placeholder", action: onSignOutTap)
-                    .buttonStyle(.bordered)
-                    .padding(.top, 8)
+                Section {
+                    TextField("Name or nickname", text: $trustedName)
+                    TextField("Phone number", text: $trustedPhone)
+                        .textContentType(.telephoneNumber)
+                } header: {
+                    Text(EmpathyCopy.profileSupportHeading)
+                } footer: {
+                    Text(EmpathyCopy.profileSupportHint)
+                }
+
+                Section {
+                    Button("Save SOS contact") {
+                        supportContactStore.saveContact(
+                            SupportContact(trustedName: trustedName, trustedPhone: trustedPhone),
+                            userID: userID
+                        )
+                    }
+                }
+
+                Section {
+                    Button("Sign out", action: onSignOutTap)
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding()
             .navigationTitle("Profile")
+            .onAppear {
+                let c = supportContactStore.loadContact(userID: userID)
+                trustedName = c.trustedName
+                trustedPhone = c.trustedPhone
+            }
         }
     }
 }

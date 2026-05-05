@@ -10,75 +10,13 @@
 
 ## Todo
 
-- [ ] AUTH-01 Apple Sign-In integration
-  - Priority: P0
-  - Outcome: user logs in securely with Apple ID.
-  - DoD: login/logout works, error handling implemented, happy-path test done.
-  - Estimate: 1.5 days
-
-- [ ] ONB-01 Onboarding (goal, sobriety start date, daily alcohol cost)
-  - Priority: P0
-  - Outcome: user completes onboarding in 3-4 screens.
-  - DoD: data persisted, skip option available, completion route to Home.
-  - Estimate: 2 days
-
-- [ ] HOME-01 Sobriety day counter on Home
-  - Priority: P0
-  - Outcome: clear, accurate sobriety counter visible on app launch.
-  - DoD: date logic tested for timezone/day change edge cases.
-  - Estimate: 1 day
-
-- [ ] STATS-01 Basic stats (current streak, saved money)
-  - Priority: P0
-  - Outcome: meaningful progress indicators for motivation.
-  - DoD: calculations validated against test fixtures.
-  - Estimate: 1 day
-
-- [ ] ACH-01 Milestones (7, 30, 90, 365)
-  - Priority: P1
-  - Outcome: user receives achievement badges on milestones.
-  - DoD: unlock once-only logic verified.
-  - Estimate: 1 day
-
-- [ ] AI-01 DeepSeek edge function proxy
-  - Priority: P0
-  - Outcome: backend endpoint returns AI responses safely.
-  - DoD: timeout/retry implemented, request/response logs sanitized.
-  - Estimate: 2 days
-
-- [ ] SOS-01 One-tap SOS support flow
-  - Priority: P0
-  - Outcome: user gets immediate support in cravings/crisis moments.
-  - DoD: accessible from Home in 1 tap, fallback emergency info shown.
-  - Estimate: 1.5 days
-
-- [ ] REL-01 Relapse ("truth button") flow
-  - Priority: P0
-  - Outcome: user can report relapse without losing full history.
-  - DoD: new sobriety period starts, history remains intact, supportive copy reviewed.
-  - Estimate: 1.5 days
-
-- [ ] PUSH-01 Daily and milestone notifications
-  - Priority: P1
-  - Outcome: retention support via non-intrusive reminders.
-  - DoD: quiet hours supported, no duplicate notifications.
-  - Estimate: 1.5 days
-
-- [ ] SAFE-01 Safety and empathy copy pass
-  - Priority: P0
-  - Outcome: no shame language across app and AI prompts.
-  - DoD: checklist completed, high-risk scenarios reviewed.
-  - Estimate: 0.5 day
+- Pull next committed work from `ROADMAP.md` / sprint files.
 
 ---
 
 ## In Progress
 
-- [ ] SOS-01 One-tap SOS support flow
-  - Priority: P0
-  - Outcome: user gets immediate support in cravings/crisis moments.
-  - DoD: accessible from Home in 1 tap, fallback emergency info shown.
-  - Estimate: 1.5 days
+- None
 
 ---
 
@@ -130,4 +68,20 @@
 - [x] AI-01 DeepSeek edge function proxy
   - Date: 2026-05-05
   - Notes: Added deepseek-chat Edge Function with timeout/retry and safe logs; implemented DeepSeekAIService with timeout/retry and tests.
+
+- [x] SOS-01 One-tap SOS support flow
+  - Date: 2026-05-05
+  - Notes: SOS button on Home opens sheet with grounding steps, optional DeepSeek SOS message when `AppShellView` is constructed with `authWiring`, trusted contact call/SMS from Profile, crisis disclaimer and Find a Helpline link.
+
+- [x] REL-01 Relapse ("truth button") flow
+  - Date: 2026-05-05
+  - Notes: Honesty flow records `RelapseEvent`, shifts `sobrietyStartDate` to today without clearing `AchievementStore`; Stats show best streak and check-in count.
+
+- [x] PUSH-01 Daily and milestone notifications
+  - Date: 2026-05-05
+  - Notes: `UNNotificationCenterService` + `NotificationScheduleSync` reschedule daily (10:00, repeating) and next milestone one-shot; pending requests cleared by stable identifiers to prevent duplicates. `NotificationPreferences.quietHours*` still unused until settings UI defines hours.
+
+- [x] SAFE-01 Safety and empathy copy pass
+  - Date: 2026-05-05
+  - Notes: `EmpathyCopy` + softer onboarding/Home/Stats strings; DeepSeek system prompt updated for anti-shame and crisis escalation; SOS UI includes emergency-care disclaimer.
 
