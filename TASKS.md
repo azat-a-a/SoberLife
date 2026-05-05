@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] PUSH-02 Notification preferences and quiet hours
-  - Priority: P1
-  - Outcome: user controls daily time, quiet window, and categories (daily / milestone / re-engagement).
-  - DoD: settings persisted (local + server when sync exists); scheduler respects toggles and quiet hours; no duplicate fires.
-  - Estimate: 1.5 days
-
 - [ ] IOS-APP-01 Xcode app target + TestFlight path
   - Priority: P1
   - Outcome: installable iOS app from repo, ready for internal TestFlight.
@@ -107,7 +101,11 @@
 
 - [x] PUSH-01 Daily and milestone notifications
   - Date: 2026-05-05
-  - Notes: `UNNotificationCenterService` + `NotificationScheduleSync` reschedule daily (10:00, repeating) and next milestone one-shot; pending requests cleared by stable identifiers to prevent duplicates. `NotificationPreferences.quietHours*` still unused until settings UI defines hours.
+  - Notes: `UNNotificationCenterService` + `NotificationScheduleSync` reschedule repeating daily and next milestone one-shot; pending requests cleared by stable identifiers to prevent duplicates. Per-user time/quiet/category controls added in PUSH-02.
+
+- [x] PUSH-02 Notification preferences and quiet hours
+  - Date: 2026-05-05
+  - Notes: `UserDefaultsNotificationPreferencesStore` + Profile toggles/time/quiet pickers; `NotificationQuietHours` shifts daily/milestone/re-engagement fire times; sync clears daily, milestone prefix, and re-engagement id before reschedule. Local-only persistence (server sync deferred).
 
 - [x] SAFE-01 Safety and empathy copy pass
   - Date: 2026-05-05

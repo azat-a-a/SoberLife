@@ -56,6 +56,7 @@ private struct SignedInRootView: View {
     private let supportContactStore: SupportContactStore
     private let achievementStore: AchievementStore
     private let notificationService: NotificationService
+    private let notificationPreferencesStore: NotificationPreferencesStore
 
     @StateObject private var onboardingState: OnboardingState
     @StateObject private var sobrietyCloudSync: SobrietyCloudSync
@@ -78,6 +79,7 @@ private struct SignedInRootView: View {
         self.supportContactStore = UserDefaultsSupportContactStore()
         self.achievementStore = UserDefaultsAchievementStore()
         self.notificationService = UNNotificationCenterService()
+        self.notificationPreferencesStore = UserDefaultsNotificationPreferencesStore()
         _onboardingState = StateObject(
             wrappedValue: OnboardingState(
                 userID: userID,
@@ -105,6 +107,7 @@ private struct SignedInRootView: View {
                     supportContactStore: supportContactStore,
                     achievementStore: achievementStore,
                     notificationService: notificationService,
+                    notificationPreferencesStore: notificationPreferencesStore,
                     aiService: aiService,
                     authWiring: authWiring,
                     cloudSync: sobrietyCloudSync,
@@ -135,6 +138,7 @@ private struct MainTabView: View {
     let supportContactStore: SupportContactStore
     let achievementStore: AchievementStore
     let notificationService: NotificationService
+    let notificationPreferencesStore: NotificationPreferencesStore
     let aiService: (any AIService)?
     let authWiring: AuthWiring?
     let cloudSync: SobrietyCloudSync
@@ -204,6 +208,8 @@ private struct MainTabView: View {
             ProfileView(
                 userID: userID,
                 supportContactStore: supportContactStore,
+                notificationPreferencesStore: notificationPreferencesStore,
+                onNotificationPreferencesChanged: { notificationSyncTick += 1 },
                 onSignOutTap: onSignOutTap
             )
             .tabItem {
@@ -247,9 +253,11 @@ private struct MainTabView: View {
             calendar: calendar
         )
         let nextMilestone = Self.nextMilestone(after: streak)
+        let prefs = notificationPreferencesStore.load(userID: userID)
         try? await NotificationScheduleSync.syncAll(
             userID: userID,
             profile: profile,
+            preferences: prefs,
             currentStreakDays: streak,
             nextMilestoneTarget: nextMilestone,
             notificationService: notificationService,
@@ -676,10 +684,17 @@ private struct StatsView: View {
 private struct ProfileView: View {
     let userID: UUID
     let supportContactStore: SupportContactStore
+    let notificationPreferencesStore: NotificationPreferencesStore
+    let onNotificationPreferencesChanged: () -> Void
     let onSignOutTap: () -> Void
 
     @State private var trustedName: String = ""
     @State private var trustedPhone: String = ""
+    @State private var notificationPrefs = NotificationPreferences()
+    @State private var reminderTime = Date()
+    @State private var quietHoursOn = false
+    @State private var quietStartHour = 22
+    @State private var quietEndHour = 8
 
     var body: some View {
         NavigationStack {
@@ -688,6 +703,77 @@ private struct ProfileView: View {
                     Text("More settings will arrive later. What you add here stays on this device unless you sign in and sync in a future release.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                }
+
+                Section {
+                    Toggle(EmpathyCopy.profileNotificationsDaily, isOn: dailyEnabledBinding)
+                    Toggle(EmpathyCopy.profileNotificationsMilestone, isOn: milestoneEnabledBinding)
+                    Toggle(EmpathyCopy.profileNotificationsReengagement, isOn: reengagementEnabledBinding)
+                    DatePicker(EmpathyCopy.profileNotificationsTime, selection: $reminderTime, displayedComponents: .hourAndMinute)
+                        .onChange(of: reminderTime) { _, newValue in
+                            let cal = Calendar.current
+                            saveNotificationPrefs(
+                                NotificationPreferences(
+                                    dailyEnabled: notificationPrefs.dailyEnabled,
+                                    milestoneEnabled: notificationPrefs.milestoneEnabled,
+                                    reengagementEnabled: notificationPrefs.reengagementEnabled,
+                                    dailyReminderHour: cal.component(.hour, from: newValue),
+                                    dailyReminderMinute: cal.component(.minute, from: newValue),
+                                    quietHoursStart: notificationPrefs.quietHoursStart,
+                                    quietHoursEnd: notificationPrefs.quietHoursEnd
+                                )
+                            )
+                        }
+                    Toggle(EmpathyCopy.profileNotificationsQuiet, isOn: $quietHoursOn)
+                        .onChange(of: quietHoursOn) { _, on in
+                            if on {
+                                saveNotificationPrefs(
+                                    NotificationPreferences(
+                                        dailyEnabled: notificationPrefs.dailyEnabled,
+                                        milestoneEnabled: notificationPrefs.milestoneEnabled,
+                                        reengagementEnabled: notificationPrefs.reengagementEnabled,
+                                        dailyReminderHour: notificationPrefs.dailyReminderHour,
+                                        dailyReminderMinute: notificationPrefs.dailyReminderMinute,
+                                        quietHoursStart: quietStartHour,
+                                        quietHoursEnd: quietEndHour
+                                    )
+                                )
+                            } else {
+                                saveNotificationPrefs(
+                                    NotificationPreferences(
+                                        dailyEnabled: notificationPrefs.dailyEnabled,
+                                        milestoneEnabled: notificationPrefs.milestoneEnabled,
+                                        reengagementEnabled: notificationPrefs.reengagementEnabled,
+                                        dailyReminderHour: notificationPrefs.dailyReminderHour,
+                                        dailyReminderMinute: notificationPrefs.dailyReminderMinute,
+                                        quietHoursStart: nil,
+                                        quietHoursEnd: nil
+                                    )
+                                )
+                            }
+                        }
+                    if quietHoursOn {
+                        Picker(EmpathyCopy.profileNotificationsQuietStart, selection: $quietStartHour) {
+                            ForEach(0..<24, id: \.self) { h in
+                                Text(String(format: "%02d:00", h)).tag(h)
+                            }
+                        }
+                        .onChange(of: quietStartHour) { _, _ in
+                            persistQuietHoursIfOn()
+                        }
+                        Picker(EmpathyCopy.profileNotificationsQuietEnd, selection: $quietEndHour) {
+                            ForEach(0..<24, id: \.self) { h in
+                                Text(String(format: "%02d:00", h)).tag(h)
+                            }
+                        }
+                        .onChange(of: quietEndHour) { _, _ in
+                            persistQuietHoursIfOn()
+                        }
+                    }
+                } header: {
+                    Text(EmpathyCopy.profileNotificationsHeading)
+                } footer: {
+                    Text(EmpathyCopy.profileNotificationsHint)
                 }
 
                 Section {
@@ -718,7 +804,101 @@ private struct ProfileView: View {
                 let c = supportContactStore.loadContact(userID: userID)
                 trustedName = c.trustedName
                 trustedPhone = c.trustedPhone
+                loadNotificationForm()
             }
         }
+    }
+
+    private var dailyEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { notificationPrefs.dailyEnabled },
+            set: { newValue in
+                saveNotificationPrefs(
+                    NotificationPreferences(
+                        dailyEnabled: newValue,
+                        milestoneEnabled: notificationPrefs.milestoneEnabled,
+                        reengagementEnabled: notificationPrefs.reengagementEnabled,
+                        dailyReminderHour: notificationPrefs.dailyReminderHour,
+                        dailyReminderMinute: notificationPrefs.dailyReminderMinute,
+                        quietHoursStart: notificationPrefs.quietHoursStart,
+                        quietHoursEnd: notificationPrefs.quietHoursEnd
+                    )
+                )
+            }
+        )
+    }
+
+    private var milestoneEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { notificationPrefs.milestoneEnabled },
+            set: { newValue in
+                saveNotificationPrefs(
+                    NotificationPreferences(
+                        dailyEnabled: notificationPrefs.dailyEnabled,
+                        milestoneEnabled: newValue,
+                        reengagementEnabled: notificationPrefs.reengagementEnabled,
+                        dailyReminderHour: notificationPrefs.dailyReminderHour,
+                        dailyReminderMinute: notificationPrefs.dailyReminderMinute,
+                        quietHoursStart: notificationPrefs.quietHoursStart,
+                        quietHoursEnd: notificationPrefs.quietHoursEnd
+                    )
+                )
+            }
+        )
+    }
+
+    private var reengagementEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { notificationPrefs.reengagementEnabled },
+            set: { newValue in
+                saveNotificationPrefs(
+                    NotificationPreferences(
+                        dailyEnabled: notificationPrefs.dailyEnabled,
+                        milestoneEnabled: notificationPrefs.milestoneEnabled,
+                        reengagementEnabled: newValue,
+                        dailyReminderHour: notificationPrefs.dailyReminderHour,
+                        dailyReminderMinute: notificationPrefs.dailyReminderMinute,
+                        quietHoursStart: notificationPrefs.quietHoursStart,
+                        quietHoursEnd: notificationPrefs.quietHoursEnd
+                    )
+                )
+            }
+        )
+    }
+
+    private func loadNotificationForm() {
+        let p = notificationPreferencesStore.load(userID: userID)
+        notificationPrefs = p
+        let cal = Calendar.current
+        reminderTime = cal.date(
+            bySettingHour: p.dailyReminderHour,
+            minute: p.dailyReminderMinute,
+            second: 0,
+            of: Date()
+        ) ?? Date()
+        quietHoursOn = p.quietHoursStart != nil && p.quietHoursEnd != nil
+        quietStartHour = p.quietHoursStart ?? 22
+        quietEndHour = p.quietHoursEnd ?? 8
+    }
+
+    private func saveNotificationPrefs(_ prefs: NotificationPreferences) {
+        notificationPrefs = prefs
+        notificationPreferencesStore.save(prefs, userID: userID)
+        onNotificationPreferencesChanged()
+    }
+
+    private func persistQuietHoursIfOn() {
+        guard quietHoursOn else { return }
+        saveNotificationPrefs(
+            NotificationPreferences(
+                dailyEnabled: notificationPrefs.dailyEnabled,
+                milestoneEnabled: notificationPrefs.milestoneEnabled,
+                reengagementEnabled: notificationPrefs.reengagementEnabled,
+                dailyReminderHour: notificationPrefs.dailyReminderHour,
+                dailyReminderMinute: notificationPrefs.dailyReminderMinute,
+                quietHoursStart: quietStartHour,
+                quietHoursEnd: quietEndHour
+            )
+        )
     }
 }

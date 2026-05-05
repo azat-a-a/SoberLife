@@ -40,8 +40,14 @@ public final class UNNotificationCenterService: NotificationService, @unchecked 
         case .daily:
             identifier = NotificationIdentifiers.dailyReminder(userID: userID)
             var dateComponents = DateComponents()
-            dateComponents.hour = 10
-            dateComponents.minute = 0
+            if let at {
+                let cal = Calendar.current
+                dateComponents.hour = cal.component(.hour, from: at)
+                dateComponents.minute = cal.component(.minute, from: at)
+            } else {
+                dateComponents.hour = 10
+                dateComponents.minute = 0
+            }
             trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         case .milestone(let days):
             identifier = NotificationIdentifiers.milestone(userID: userID, milestoneDays: days)

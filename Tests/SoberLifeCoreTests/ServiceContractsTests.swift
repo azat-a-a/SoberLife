@@ -21,6 +21,8 @@ final class ServiceContractsTests: XCTestCase {
         XCTAssertTrue(preferences.dailyEnabled)
         XCTAssertTrue(preferences.milestoneEnabled)
         XCTAssertTrue(preferences.reengagementEnabled)
+        XCTAssertEqual(preferences.dailyReminderHour, 10)
+        XCTAssertEqual(preferences.dailyReminderMinute, 0)
         XCTAssertNil(preferences.quietHoursStart)
         XCTAssertNil(preferences.quietHoursEnd)
     }

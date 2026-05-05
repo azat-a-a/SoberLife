@@ -67,4 +67,15 @@ public enum EmpathyCopy {
         "Each row is a chapter, not a verdict. Milestones you already earned stay with you."
     public static let statsPeriodCurrentBadge = "Current period"
     public static let statsPeriodPastBadge = "Earlier period"
+
+    public static let profileNotificationsHeading = "Notifications"
+    public static let profileNotificationsHint =
+        "Saved on this device. We avoid pings during quiet hours when we can."
+    public static let profileNotificationsDaily = "Daily gentle reminder"
+    public static let profileNotificationsMilestone = "Milestone reminders"
+    public static let profileNotificationsReengagement = "Nudge after you have been away"
+    public static let profileNotificationsTime = "Reminder time"
+    public static let profileNotificationsQuiet = "Quiet hours"
+    public static let profileNotificationsQuietStart = "Quiet from (hour)"
+    public static let profileNotificationsQuietEnd = "Quiet until (hour)"
 }

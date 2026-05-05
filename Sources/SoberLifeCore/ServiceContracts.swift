@@ -58,25 +58,64 @@ public struct NotificationPayload: Sendable, Equatable {
     }
 }
 
-public struct NotificationPreferences: Sendable, Equatable {
+public struct NotificationPreferences: Sendable, Equatable, Codable {
     public let dailyEnabled: Bool
     public let milestoneEnabled: Bool
     public let reengagementEnabled: Bool
+    /// Local hour 0–23 for repeating daily (and milestone / re-engagement time-of-day).
+    public let dailyReminderHour: Int
+    public let dailyReminderMinute: Int
+    /// Inclusive start hour 0–23 when paired with `quietHoursEnd`. If either is `nil`, quiet hours are off.
     public let quietHoursStart: Int?
+    /// Exclusive end hour 0–23 for non-wrapping intervals, or morning “open” hour when the window wraps past midnight.
     public let quietHoursEnd: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case dailyEnabled, milestoneEnabled, reengagementEnabled
+        case dailyReminderHour, dailyReminderMinute
+        case quietHoursStart, quietHoursEnd
+    }
 
     public init(
         dailyEnabled: Bool = true,
         milestoneEnabled: Bool = true,
         reengagementEnabled: Bool = true,
+        dailyReminderHour: Int = 10,
+        dailyReminderMinute: Int = 0,
         quietHoursStart: Int? = nil,
         quietHoursEnd: Int? = nil
     ) {
         self.dailyEnabled = dailyEnabled
         self.milestoneEnabled = milestoneEnabled
         self.reengagementEnabled = reengagementEnabled
-        self.quietHoursStart = quietHoursStart
-        self.quietHoursEnd = quietHoursEnd
+        self.dailyReminderHour = min(23, max(0, dailyReminderHour))
+        self.dailyReminderMinute = min(59, max(0, dailyReminderMinute))
+        self.quietHoursStart = quietHoursStart.map { min(23, max(0, $0)) }
+        self.quietHoursEnd = quietHoursEnd.map { min(23, max(0, $0)) }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        dailyEnabled = try c.decodeIfPresent(Bool.self, forKey: .dailyEnabled) ?? true
+        milestoneEnabled = try c.decodeIfPresent(Bool.self, forKey: .milestoneEnabled) ?? true
+        reengagementEnabled = try c.decodeIfPresent(Bool.self, forKey: .reengagementEnabled) ?? true
+        let h = try c.decodeIfPresent(Int.self, forKey: .dailyReminderHour) ?? 10
+        let m = try c.decodeIfPresent(Int.self, forKey: .dailyReminderMinute) ?? 0
+        dailyReminderHour = min(23, max(0, h))
+        dailyReminderMinute = min(59, max(0, m))
+        quietHoursStart = try c.decodeIfPresent(Int.self, forKey: .quietHoursStart).map { min(23, max(0, $0)) }
+        quietHoursEnd = try c.decodeIfPresent(Int.self, forKey: .quietHoursEnd).map { min(23, max(0, $0)) }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(dailyEnabled, forKey: .dailyEnabled)
+        try c.encode(milestoneEnabled, forKey: .milestoneEnabled)
+        try c.encode(reengagementEnabled, forKey: .reengagementEnabled)
+        try c.encode(dailyReminderHour, forKey: .dailyReminderHour)
+        try c.encode(dailyReminderMinute, forKey: .dailyReminderMinute)
+        try c.encodeIfPresent(quietHoursStart, forKey: .quietHoursStart)
+        try c.encodeIfPresent(quietHoursEnd, forKey: .quietHoursEnd)
     }
 }
 
@@ -133,5 +172,9 @@ public enum NotificationIdentifiers {
 
     public static func milestonePrefix(userID: UUID) -> String {
         "soberlife.milestone.\(userID.uuidString)."
+    }
+
+    public static func reengagement(userID: UUID) -> String {
+        "soberlife.reengagement.\(userID.uuidString)"
     }
 }
