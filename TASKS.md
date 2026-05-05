@@ -74,11 +74,11 @@
 
 ## In Progress
 
-- [ ] ARCH-01 Architecture baseline
+- [ ] DB-01 Supabase schema v1
   - Priority: P0
-  - Outcome: clear app layering and service contracts.
-  - DoD: architecture doc approved and no blockers for Sprint 02.
-  - Estimate: 1 day
+  - Outcome: database ready for onboarding and sobriety core.
+  - DoD: migrations run cleanly and seed script works.
+  - Estimate: 2 days
 
 ---
 
@@ -90,4 +90,8 @@
 - [x] SETUP-01 CI + environment baseline
   - Date: 2026-05-05
   - Notes: git initialized, Swift package scaffold added, CI workflow created (build/test/markdown lint).
+
+- [x] ARCH-01 Architecture baseline
+  - Date: 2026-05-05
+  - Notes: architecture document added, service contracts defined (Auth, Supabase, AI, Notification), edge function drafts captured.
 
