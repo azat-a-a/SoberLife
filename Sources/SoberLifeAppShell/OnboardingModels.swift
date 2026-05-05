@@ -1,0 +1,31 @@
+import Foundation
+
+public enum OnboardingGoal: String, CaseIterable, Codable, Sendable {
+    case reduce = "Reduce drinking"
+    case quit = "Quit completely"
+}
+
+public struct OnboardingProfile: Codable, Sendable, Equatable {
+    public let userID: UUID
+    public let goal: OnboardingGoal?
+    public let sobrietyStartDate: Date
+    public let dailyAlcoholCost: Double?
+    public let notificationsEnabled: Bool
+    public let createdAt: Date
+
+    public init(
+        userID: UUID,
+        goal: OnboardingGoal?,
+        sobrietyStartDate: Date,
+        dailyAlcoholCost: Double?,
+        notificationsEnabled: Bool,
+        createdAt: Date = Date()
+    ) {
+        self.userID = userID
+        self.goal = goal
+        self.sobrietyStartDate = sobrietyStartDate
+        self.dailyAlcoholCost = dailyAlcoholCost
+        self.notificationsEnabled = notificationsEnabled
+        self.createdAt = createdAt
+    }
+}

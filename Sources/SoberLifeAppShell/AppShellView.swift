@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 public struct AppShellView: View {
     @ObservedObject private var sessionState: SessionState
@@ -19,8 +20,9 @@ public struct AppShellView: View {
                         }
                     }
                 )
-            case .signedIn:
-                MainTabView(
+            case let .signedIn(userID):
+                SignedInRootView(
+                    userID: userID,
                     onSignOutTap: {
                         Task {
                             await sessionState.signOut()
@@ -35,12 +37,54 @@ public struct AppShellView: View {
     }
 }
 
+private struct SignedInRootView: View {
+    let userID: UUID
+    let onSignOutTap: () -> Void
+    private let onboardingStore: OnboardingStore
+
+    @StateObject private var onboardingState: OnboardingState
+
+    init(userID: UUID, onSignOutTap: @escaping () -> Void) {
+        self.userID = userID
+        self.onSignOutTap = onSignOutTap
+        let store = UserDefaultsOnboardingStore()
+        self.onboardingStore = store
+        _onboardingState = StateObject(
+            wrappedValue: OnboardingState(
+                userID: userID,
+                store: store
+            )
+        )
+    }
+
+    var body: some View {
+        Group {
+            if onboardingState.isCompleted {
+                MainTabView(
+                    userID: userID,
+                    onboardingStore: onboardingStore,
+                    onSignOutTap: onSignOutTap
+                )
+            } else {
+                OnboardingFlowView(state: onboardingState)
+            }
+        }
+    }
+}
+
 private struct MainTabView: View {
+    let userID: UUID
+    let onboardingStore: OnboardingStore
     let onSignOutTap: () -> Void
 
     var body: some View {
         TabView {
-            HomePlaceholderView()
+            HomeView(
+                state: HomeState(
+                    userID: userID,
+                    store: onboardingStore
+                )
+            )
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
@@ -59,6 +103,132 @@ private struct MainTabView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }
+        }
+    }
+}
+
+private struct OnboardingFlowView: View {
+    @ObservedObject var state: OnboardingState
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                Text("Onboarding \(state.currentStep + 1)/\(state.totalSteps)")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                Group {
+                    switch state.currentStep {
+                    case 0: goalStep
+                    case 1: dateStep
+                    case 2: costStep
+                    default: notificationsStep
+                    }
+                }
+                .frame(maxHeight: .infinity, alignment: .top)
+
+                HStack {
+                    if state.currentStep > 0 {
+                        Button("Back") {
+                            state.back()
+                        }
+                        .buttonStyle(.bordered)
+                    }
+
+                    Spacer()
+
+                    if state.currentStep == 0 || state.currentStep == 2 {
+                        Button("Skip") {
+                            state.skipCurrentStep()
+                        }
+                        .buttonStyle(.bordered)
+                    }
+
+                    Button(state.currentStep == state.totalSteps - 1 ? "Finish" : "Continue") {
+                        if state.currentStep == state.totalSteps - 1 {
+                            state.complete()
+                        } else {
+                            state.next()
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!state.canContinue)
+                }
+            }
+            .padding()
+            .navigationTitle("Welcome")
+        }
+    }
+
+    private var goalStep: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("What is your goal?")
+                .font(.title2)
+                .bold()
+
+            ForEach(OnboardingGoal.allCases, id: \.self) { goal in
+                Button {
+                    state.selectedGoal = goal
+                } label: {
+                    HStack {
+                        Text(goal.rawValue)
+                        Spacer()
+                        if state.selectedGoal == goal {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
+                    }
+                    .padding()
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                }
+                .buttonStyle(.plain)
+            }
+
+            Text("You can skip this and decide later.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var dateStep: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("When did your sobriety period start?")
+                .font(.title2)
+                .bold()
+            DatePicker(
+                "Start date",
+                selection: $state.sobrietyStartDate,
+                in: ...Date(),
+                displayedComponents: .date
+            )
+            .datePickerStyle(.graphical)
+        }
+    }
+
+    private var costStep: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Average daily alcohol spend")
+                .font(.title2)
+                .bold()
+
+            TextField("Optional (e.g. 850)", text: $state.dailyAlcoholCostText)
+                .padding(12)
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+
+            Text("Used to calculate your savings. You can skip this step.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var notificationsStep: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Daily reminders")
+                .font(.title2)
+                .bold()
+            Toggle("Enable motivational notifications", isOn: $state.notificationsEnabled)
+            Text("You can change this anytime in settings.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 }
@@ -94,19 +264,52 @@ private struct SignedOutPlaceholderView: View {
     }
 }
 
-private struct HomePlaceholderView: View {
+private struct HomeView: View {
+    @StateObject private var state: HomeState
+
+    init(state: HomeState) {
+        _state = StateObject(wrappedValue: state)
+    }
+
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Home")
-                    .font(.title2)
-                    .bold()
-                Text("Sobriety counter and milestones will be implemented in Sprint 02.")
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Sobriety")
+                    .font(.headline)
                     .foregroundStyle(.secondary)
+
+                Text("\(state.soberDays) days")
+                    .font(.system(size: 42, weight: .bold))
+
+                if let dailyAlcoholCost = state.dailyAlcoholCost {
+                    Text("Saved money: \(Int(Double(state.soberDays) * dailyAlcoholCost))")
+                        .font(.subheadline)
+                }
+
+                if let startDate = state.sobrietyStartDate {
+                    Text("Started: \(startDate.formatted(date: .abbreviated, time: .omitted))")
+                        .foregroundStyle(.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Next milestone: \(state.nextMilestoneDays) days")
+                        .font(.subheadline)
+                    ProgressView(value: state.milestoneProgress)
+                }
+
+                Divider()
+
+                Text("Sobriety counter is now connected to your onboarding start date.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding()
             .navigationTitle("Home")
+            .task {
+                state.load()
+            }
         }
     }
 }

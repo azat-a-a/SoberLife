@@ -74,11 +74,11 @@
 
 ## In Progress
 
-- [ ] ONB-01 Onboarding (goal, sobriety start date, daily alcohol cost)
+- [ ] STATS-01 Basic stats (current streak, saved money)
   - Priority: P0
-  - Outcome: user completes onboarding in 3-4 screens.
-  - DoD: data persisted, skip option available, completion route to Home.
-  - Estimate: 2 days
+  - Outcome: meaningful progress indicators for motivation.
+  - DoD: calculations validated against test fixtures.
+  - Estimate: 1 day
 
 ---
 
@@ -110,4 +110,12 @@
 - [x] AUTH-01 Apple Sign-In integration
   - Date: 2026-05-05
   - Notes: Apple Sign-In token provider, live iOS token bridge, Supabase auth exchange service, and session wiring factory added with tests.
+
+- [x] ONB-01 Onboarding (goal, sobriety start date, daily alcohol cost)
+  - Date: 2026-05-05
+  - Notes: 4-step onboarding flow added with skip support and local profile persistence; completed users route directly to Home tabs.
+
+- [x] HOME-01 Sobriety day counter on Home
+  - Date: 2026-05-05
+  - Notes: Home now reads onboarding profile, computes sobriety days via SobrietyCounter, and shows next milestone progress.
 
