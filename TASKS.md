@@ -74,11 +74,11 @@
 
 ## In Progress
 
-- [ ] AI-01 DeepSeek edge function proxy
+- [ ] SOS-01 One-tap SOS support flow
   - Priority: P0
-  - Outcome: backend endpoint returns AI responses safely.
-  - DoD: timeout/retry implemented, request/response logs sanitized.
-  - Estimate: 2 days
+  - Outcome: user gets immediate support in cravings/crisis moments.
+  - DoD: accessible from Home in 1 tap, fallback emergency info shown.
+  - Estimate: 1.5 days
 
 ---
 
@@ -126,4 +126,8 @@
 - [x] ACH-01 Milestones (7, 30, 90, 365)
   - Date: 2026-05-05
   - Notes: Milestone unlock logic added with once-only persistence and badges rendered in Stats tab.
+
+- [x] AI-01 DeepSeek edge function proxy
+  - Date: 2026-05-05
+  - Notes: Added deepseek-chat Edge Function with timeout/retry and safe logs; implemented DeepSeekAIService with timeout/retry and tests.
 

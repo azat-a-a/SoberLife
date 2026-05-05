@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ChatMessage: Sendable, Equatable {
+public struct ChatMessage: Sendable, Equatable, Codable {
     public let role: String
     public let content: String
     public let timestamp: Date
@@ -12,7 +12,7 @@ public struct ChatMessage: Sendable, Equatable {
     }
 }
 
-public struct AIContext: Sendable, Equatable {
+public struct AIContext: Sendable, Equatable, Codable {
     public let soberDays: Int?
     public let recentTriggers: [String]
     public let recentJournalNotes: [String]
@@ -24,7 +24,7 @@ public struct AIContext: Sendable, Equatable {
     }
 }
 
-public struct AIReply: Sendable, Equatable {
+public struct AIReply: Sendable, Equatable, Codable {
     public let reply: String
     public let suggestedActions: [String]
     public let riskFlags: [String]
