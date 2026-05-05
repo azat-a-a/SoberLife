@@ -64,6 +64,12 @@
 - Impact: UI lists only what is on device (and later synced profile/records); ordering is stable and covered by tests.
 - Status: Accepted
 
+## 2026-05-05 - D-013
+- Decision: Host the installable iOS client in `ios/` as an Xcode project that depends on the repo-root Swift package (`Package.swift`) via `XCLocalSwiftPackageReference`, rather than converting the whole repo to an Xcode-only layout.
+- Why: Keeps `swift build` / `swift test` workflows for Core and AppShell while still delivering a signed app archive from Xcode.
+- Impact: Developers open `ios/SoberLife.xcodeproj`; package paths assume the standard layout (`ios` sibling of `Package.swift`).
+- Status: Accepted
+
 ## Open Decisions
 - D-007 Pricing model details for premium limits (message caps, feature gates).
 - D-008 Analytics stack selection (self-hosted vs third-party).

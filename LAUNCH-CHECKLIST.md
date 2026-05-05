@@ -29,6 +29,7 @@ This checklist covers preparation and execution from pre-beta to the first 48 ho
 - [ ] Privacy policy and terms available in app.
 
 ### Technical Readiness
+- [x] iOS app target present (`ios/SoberLife.xcodeproj`) and links local Swift package.
 - [ ] CI is green on release candidate branch.
 - [ ] Crash reporting and error monitoring active.
 - [ ] Edge function secrets configured for stage/prod.

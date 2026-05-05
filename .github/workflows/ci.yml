@@ -21,6 +21,20 @@ jobs:
       - name: Test
         run: swift test
 
+  ios-xcodebuild:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build iOS app (Simulator)
+        run: |
+          cd ios
+          xcodebuild -project SoberLife.xcodeproj -scheme SoberLife \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -configuration Debug \
+            build
+
   markdown-lint:
     runs-on: ubuntu-latest
     steps:

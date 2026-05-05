@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] IOS-APP-01 Xcode app target + TestFlight path
-  - Priority: P1
-  - Outcome: installable iOS app from repo, ready for internal TestFlight.
-  - DoD: app target builds, signs, uses package modules; `LAUNCH-CHECKLIST.md` pre-beta items ticked for build/signing.
-  - Estimate: 2 days
-
 - [ ] DATA-01 Analytics baseline (core events)
   - Priority: P2
   - Outcome: funnel events for onboarding, SOS, relapse, milestones (schema + one sink).
@@ -106,6 +100,10 @@
 - [x] PUSH-02 Notification preferences and quiet hours
   - Date: 2026-05-05
   - Notes: `UserDefaultsNotificationPreferencesStore` + Profile toggles/time/quiet pickers; `NotificationQuietHours` shifts daily/milestone/re-engagement fire times; sync clears daily, milestone prefix, and re-engagement id before reschedule. Local-only persistence (server sync deferred).
+
+- [x] IOS-APP-01 Xcode app target + TestFlight path
+  - Date: 2026-05-05
+  - Notes: `ios/SoberLife.xcodeproj` hosts the iOS 17+ app, local SPM dependency on repo root; `SoberLifeApp` wires live/placeholder `SessionState` from Info.plist Supabase keys; CI job `ios-xcodebuild` on `macos-latest`; see `ios/README.md` and `LAUNCH-CHECKLIST.md` for TestFlight prep (team, icon 1024, capabilities).
 
 - [x] SAFE-01 Safety and empathy copy pass
   - Date: 2026-05-05

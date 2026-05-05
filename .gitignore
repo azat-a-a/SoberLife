@@ -19,5 +19,9 @@ fastlane/Preview.html
 .env
 .env.*
 
+# iOS local Xcode config (secrets)
+ios/Config/Secrets.xcconfig
+ios/Config/Local.xcconfig
+
 # Product source docs
 *.docx
