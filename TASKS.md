@@ -74,11 +74,11 @@
 
 ## In Progress
 
-- [ ] ACH-01 Milestones (7, 30, 90, 365)
-  - Priority: P1
-  - Outcome: user receives achievement badges on milestones.
-  - DoD: unlock once-only logic verified.
-  - Estimate: 1 day
+- [ ] AI-01 DeepSeek edge function proxy
+  - Priority: P0
+  - Outcome: backend endpoint returns AI responses safely.
+  - DoD: timeout/retry implemented, request/response logs sanitized.
+  - Estimate: 2 days
 
 ---
 
@@ -122,4 +122,8 @@
 - [x] STATS-01 Basic stats (current streak, saved money)
   - Date: 2026-05-05
   - Notes: Stats tab now computes current streak, saved money, next milestone, and progress percentage from onboarding profile.
+
+- [x] ACH-01 Milestones (7, 30, 90, 365)
+  - Date: 2026-05-05
+  - Notes: Milestone unlock logic added with once-only persistence and badges rendered in Stats tab.
 

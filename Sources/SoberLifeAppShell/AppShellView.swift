@@ -357,6 +357,29 @@ private struct StatsView: View {
 
                 ProgressView(value: Double(state.progressPercent), total: 100)
 
+                if !state.unlockedMilestones.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Milestones")
+                            .font(.headline)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(state.unlockedMilestones, id: \.self) { milestone in
+                                    Text("\(milestone)d")
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(.green.opacity(0.2), in: Capsule())
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if !state.newlyUnlockedMilestones.isEmpty {
+                    Text("New unlock: \(state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", "))")
+                        .font(.footnote)
+                        .foregroundStyle(.green)
+                }
+
                 Text("Stats are calculated from your onboarding start date and daily cost.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
