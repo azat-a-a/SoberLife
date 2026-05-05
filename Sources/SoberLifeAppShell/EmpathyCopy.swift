@@ -52,4 +52,7 @@ public enum EmpathyCopy {
 
     public static let chatEmptyHint =
         "This is a private space. There is no wrong thing to say. Short messages are fine."
+
+    public static let dataSyncFailedShort =
+        "Could not sync your progress to the cloud. It is still saved on this device — you can try again later."
 }

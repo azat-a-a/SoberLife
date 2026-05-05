@@ -1,4 +1,5 @@
 import Foundation
+import SoberLifeCore
 
 public enum OnboardingGoal: String, CaseIterable, Codable, Sendable {
     case reduce = "Reduce drinking"
@@ -27,5 +28,13 @@ public struct OnboardingProfile: Codable, Sendable, Equatable {
         self.dailyAlcoholCost = dailyAlcoholCost
         self.notificationsEnabled = notificationsEnabled
         self.createdAt = createdAt
+    }
+
+    public var sobrietySnapshot: SobrietyProfileSnapshot {
+        SobrietyProfileSnapshot(
+            sobrietyStartDate: sobrietyStartDate,
+            dailyAlcoholCost: dailyAlcoholCost,
+            displayName: goal?.rawValue
+        )
     }
 }

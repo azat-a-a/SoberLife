@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] DATA-SYNC-01 Onboarding + sobriety profile in Supabase
-  - Priority: P0
-  - Outcome: `public.users` / `sobriety_records` reflect the same truth as local onboarding and relapse flow.
-  - DoD: create/update current period on server after onboarding and after honesty flow; RLS passes with user JWT; basic error states in UI.
-  - Estimate: 2 days
-
 - [ ] REL-02 Relapse history in UI + multi-period stats
   - Priority: P1
   - Outcome: user sees past periods / markers without shame; stats stay interpretable after restarts.
@@ -86,6 +80,10 @@
 - [x] ONB-01 Onboarding (goal, sobriety start date, daily alcohol cost)
   - Date: 2026-05-05
   - Notes: 4-step onboarding flow added with skip support and local profile persistence; completed users route directly to Home tabs.
+
+- [x] DATA-SYNC-01 Onboarding + sobriety profile in Supabase
+  - Date: 2026-05-05
+  - Notes: `SobrietySupabaseSync` patches `users` and current `sobriety_records`; `SobrietyCloudSync` runs after onboarding and after relapse (with JWT); banner on sync failure; Core uses `SobrietyProfileSnapshot` to avoid layering violations.
 
 - [x] HOME-01 Sobriety day counter on Home
   - Date: 2026-05-05

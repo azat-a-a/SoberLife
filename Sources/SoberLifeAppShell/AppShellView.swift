@@ -58,6 +58,7 @@ private struct SignedInRootView: View {
     private let notificationService: NotificationService
 
     @StateObject private var onboardingState: OnboardingState
+    @StateObject private var sobrietyCloudSync: SobrietyCloudSync
 
     init(
         sessionState: SessionState,
@@ -83,6 +84,14 @@ private struct SignedInRootView: View {
                 store: store
             )
         )
+        _sobrietyCloudSync = StateObject(
+            wrappedValue: SobrietyCloudSync(
+                userID: userID,
+                authWiring: authWiring,
+                sessionState: sessionState,
+                onboardingStore: store
+            )
+        )
     }
 
     var body: some View {
@@ -98,10 +107,21 @@ private struct SignedInRootView: View {
                     notificationService: notificationService,
                     aiService: aiService,
                     authWiring: authWiring,
+                    cloudSync: sobrietyCloudSync,
                     onSignOutTap: onSignOutTap
                 )
             } else {
                 OnboardingFlowView(state: onboardingState)
+            }
+        }
+        .task {
+            if onboardingState.isCompleted {
+                await sobrietyCloudSync.syncOnboardingFromLocalStore()
+            }
+        }
+        .onChange(of: onboardingState.isCompleted) { _, completed in
+            if completed {
+                Task { await sobrietyCloudSync.syncOnboardingFromLocalStore() }
             }
         }
     }
@@ -117,12 +137,30 @@ private struct MainTabView: View {
     let notificationService: NotificationService
     let aiService: (any AIService)?
     let authWiring: AuthWiring?
+    let cloudSync: SobrietyCloudSync
     let onSignOutTap: () -> Void
 
     @State private var notificationSyncTick: Int = 0
 
     var body: some View {
-        TabView {
+        VStack(spacing: 0) {
+            if let message = cloudSync.lastError {
+                HStack(alignment: .top, spacing: 8) {
+                    Text(message)
+                        .font(.footnote)
+                        .foregroundStyle(.primary)
+                    Spacer(minLength: 8)
+                    Button("Dismiss") {
+                        cloudSync.clearError()
+                    }
+                    .font(.footnote)
+                }
+                .padding(10)
+                .frame(maxWidth: .infinity)
+                .background(Color.orange.opacity(0.18))
+            }
+
+            TabView {
             HomeView(
                 userID: userID,
                 onboardingStore: onboardingStore,
@@ -171,7 +209,9 @@ private struct MainTabView: View {
             .tabItem {
                 Label("Profile", systemImage: "person")
             }
+            }
         }
+        .environmentObject(cloudSync)
         .task(id: notificationSyncTick) {
             await runNotificationSync()
         }
@@ -381,6 +421,7 @@ private struct HomeView: View {
     @StateObject private var state: HomeState
     let aiService: (any AIService)?
     @Binding var notificationSyncTick: Int
+    @EnvironmentObject private var sobrietyCloudSync: SobrietyCloudSync
 
     @State private var showSOS = false
     @State private var showRelapseConfirm = false
@@ -480,16 +521,25 @@ private struct HomeView: View {
                 titleVisibility: .visible
             ) {
                 Button(EmpathyCopy.relapseConfirm, role: .destructive) {
+                    let calendar = Calendar.current
+                    let now = Date()
+                    let newStart = calendar.startOfDay(for: now)
                     RelapseRecording.recordRelapse(
                         userID: userID,
-                        newPeriodStart: Date(),
-                        now: Date(),
-                        calendar: Calendar.current,
+                        newPeriodStart: now,
+                        now: now,
+                        calendar: calendar,
                         profileStore: onboardingStore,
                         historyStore: relapseStore
                     )
                     state.load()
                     notificationSyncTick += 1
+                    Task {
+                        await sobrietyCloudSync.syncAfterRelapse(
+                            newPeriodStart: newStart,
+                            occurredAt: now
+                        )
+                    }
                 }
                 Button(EmpathyCopy.relapseCancel, role: .cancel) {}
             } message: {
