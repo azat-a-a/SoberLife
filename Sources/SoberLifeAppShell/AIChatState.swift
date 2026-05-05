@@ -18,6 +18,7 @@ public final class AIChatState: ObservableObject {
     private let aiService: (any AIService)?
     private let supabaseHTTP: HTTPSupabaseService?
     private let tokenProvider: @Sendable () async -> String?
+    private let onUnauthorized: @MainActor @Sendable () async -> Void
     private let localStore: UserDefaultsAIChatTranscriptStore
 
     public init(
@@ -26,6 +27,7 @@ public final class AIChatState: ObservableObject {
         aiService: (any AIService)?,
         supabaseHTTP: HTTPSupabaseService?,
         tokenProvider: @escaping @Sendable () async -> String?,
+        onUnauthorized: @escaping @MainActor @Sendable () async -> Void = {},
         localStore: UserDefaultsAIChatTranscriptStore = UserDefaultsAIChatTranscriptStore()
     ) {
         self.userID = userID
@@ -33,6 +35,7 @@ public final class AIChatState: ObservableObject {
         self.aiService = aiService
         self.supabaseHTTP = supabaseHTTP
         self.tokenProvider = tokenProvider
+        self.onUnauthorized = onUnauthorized
         self.localStore = localStore
     }
 
@@ -77,7 +80,9 @@ public final class AIChatState: ObservableObject {
                 persistLocalSnapshot()
                 return
             } catch {
-                errorMessage = EmpathyCopy.chatCloudLoadFailed
+                if await handleSupabaseError(error, fallbackMessage: EmpathyCopy.chatCloudLoadFailed) {
+                    return
+                }
             }
         }
 
@@ -109,7 +114,14 @@ public final class AIChatState: ObservableObject {
         else { return }
 
         let store = SupabaseAIChatHistoryStore(http: http)
-        guard let thread = try? await store.fetchConversation(id: id, bearerToken: token) else { return }
+        let thread: AIChatThread
+        do {
+            guard let fetched = try await store.fetchConversation(id: id, bearerToken: token) else { return }
+            thread = fetched
+        } catch {
+            _ = await handleSupabaseError(error, fallbackMessage: EmpathyCopy.chatCloudLoadFailed)
+            return
+        }
 
         if let idx = threads.firstIndex(where: { $0.id == id }) {
             threads[idx] = thread
@@ -240,7 +252,31 @@ public final class AIChatState: ObservableObject {
                 persistLocalSnapshot()
             }
         } catch {
-            errorMessage = EmpathyCopy.chatCloudSyncFailed
+            _ = await handleSupabaseError(error, fallbackMessage: EmpathyCopy.chatCloudSyncFailed)
+        }
+    }
+
+    @discardableResult
+    private func handleSupabaseError(_ error: Error, fallbackMessage: String) async -> Bool {
+        if case SupabaseHTTPServiceError.httpStatus(401) = error {
+            errorMessage = EmpathyCopy.sessionExpiredNeedsSignIn
+            await onUnauthorized()
+            return true
+        }
+        if let urlError = error as? URLError, Self.isOfflineError(urlError) {
+            errorMessage = EmpathyCopy.networkOfflineShort
+            return true
+        }
+        errorMessage = fallbackMessage
+        return false
+    }
+
+    private static func isOfflineError(_ error: URLError) -> Bool {
+        switch error.code {
+        case .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotFindHost, .cannotConnectToHost:
+            return true
+        default:
+            return false
         }
     }
 }

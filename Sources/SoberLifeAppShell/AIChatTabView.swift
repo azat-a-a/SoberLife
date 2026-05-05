@@ -22,7 +22,8 @@ struct AIChatTabView: View {
                 onboardingStore: onboardingStore,
                 aiService: aiService,
                 supabaseHTTP: http,
-                tokenProvider: { await sessionState.accessTokenIfAvailable() }
+                tokenProvider: { await sessionState.accessTokenIfAvailable() },
+                onUnauthorized: { await sessionState.handleUnauthorizedSession() }
             )
         )
     }

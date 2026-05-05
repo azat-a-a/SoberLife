@@ -10,6 +10,7 @@ struct SOSFlowView: View {
 
     @Environment(\.openURL) private var openURL
     @State private var aiReply: String?
+    @State private var aiErrorMessage: String?
     @State private var isLoadingAI = false
 
     var body: some View {
@@ -68,6 +69,11 @@ struct SOSFlowView: View {
 
                 if aiService != nil {
                     VStack(alignment: .leading, spacing: 8) {
+                        if let aiErrorMessage {
+                            Text(aiErrorMessage)
+                                .font(.footnote)
+                                .foregroundStyle(.orange)
+                        }
                         if let aiReply {
                             Text(aiReply)
                                 .padding()
@@ -133,6 +139,7 @@ struct SOSFlowView: View {
     private func loadAI() async {
         guard let aiService else { return }
         isLoadingAI = true
+        aiErrorMessage = nil
         defer { isLoadingAI = false }
         let message = ChatMessage(
             role: "user",
@@ -149,7 +156,21 @@ struct SOSFlowView: View {
             )
             aiReply = reply.reply
         } catch {
+            if let urlError = error as? URLError,
+               Self.isOfflineError(urlError)
+            {
+                aiErrorMessage = EmpathyCopy.networkOfflineShort
+            }
             aiReply = EmpathyCopy.sosAiFallback
+        }
+    }
+
+    private static func isOfflineError(_ error: URLError) -> Bool {
+        switch error.code {
+        case .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotFindHost, .cannotConnectToHost:
+            return true
+        default:
+            return false
         }
     }
 

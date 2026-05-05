@@ -65,4 +65,15 @@ public final class SessionState: ObservableObject {
         guard let session = try? await authService.currentSession() else { return nil }
         return session.accessToken
     }
+
+    /// Clears local auth state and prompts the user to re-auth after API 401.
+    public func handleUnauthorizedSession() async {
+        do {
+            try await authService.signOut()
+        } catch {
+            // Even if remote/local sign-out fails, we still force signed-out UI state.
+        }
+        authState = .signedOut
+        authErrorMessage = EmpathyCopy.sessionExpiredNeedsSignIn
+    }
 }

@@ -226,7 +226,15 @@ private struct MainTabView: View {
               SupabaseJWT.isLikelyUserAccessToken(token)
         else { return }
         let http = HTTPSupabaseService(baseURL: wiring.supabaseURL, anonKey: wiring.supabaseAnonKey)
-        try? await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+        do {
+            try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+        } catch let error as SupabaseHTTPServiceError {
+            if case .httpStatus(401) = error {
+                await sessionState.handleUnauthorizedSession()
+            }
+        } catch {
+            // Ignore transient errors here; onboarding/relapse sync paths surface user-facing messages.
+        }
     }
 
     private func runNotificationSync() async {

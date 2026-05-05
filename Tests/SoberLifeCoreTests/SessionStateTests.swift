@@ -83,6 +83,22 @@ final class SessionStateTests: XCTestCase {
         let token = await session.accessTokenIfAvailable()
         XCTAssertEqual(token, "token")
     }
+
+    func testHandleUnauthorizedSessionSignsOutAndSetsMessage() async {
+        let userID = UUID()
+        let session = SessionState(
+            authService: MockAuthService(storedSession: UserSession(userID: userID, accessToken: "token")),
+            appleSignInTokenProvider: MockAppleSignInTokenProvider(),
+            authState: .signedIn(userID: userID)
+        )
+
+        await session.handleUnauthorizedSession()
+
+        XCTAssertEqual(session.authState, .signedOut)
+        XCTAssertEqual(session.authErrorMessage, EmpathyCopy.sessionExpiredNeedsSignIn)
+        let token = await session.accessTokenIfAvailable()
+        XCTAssertNil(token)
+    }
 }
 
 private actor MockAuthService: AuthService {

@@ -22,12 +22,6 @@
   - DoD: settings persisted (local + server when sync exists); scheduler respects toggles and quiet hours; no duplicate fires.
   - Estimate: 1.5 days
 
-- [ ] RELI-01 Session refresh + critical-path error states
-  - Priority: P0
-  - Outcome: stale tokens recover or show a clear re-auth path; SOS/Chat/Home degrade gracefully offline.
-  - DoD: refresh or re-sign-in flow documented in code; no silent failures on 401 from PostgREST; spot-check Home/Chat/SOS.
-  - Estimate: 1.5 days
-
 - [ ] IOS-APP-01 Xcode app target + TestFlight path
   - Priority: P1
   - Outcome: installable iOS app from repo, ready for internal TestFlight.
@@ -84,6 +78,10 @@
 - [x] DATA-SYNC-01 Onboarding + sobriety profile in Supabase
   - Date: 2026-05-05
   - Notes: `SobrietySupabaseSync` patches `users` and current `sobriety_records`; `SobrietyCloudSync` runs after onboarding and after relapse (with JWT); banner on sync failure; Core uses `SobrietyProfileSnapshot` to avoid layering violations.
+
+- [x] RELI-01 Session refresh + critical-path error states
+  - Date: 2026-05-05
+  - Notes: Added `SessionState.handleUnauthorizedSession()` as re-sign-in path; 401 handling wired in cloud sync, profile ensure, and AI chat; offline fallbacks surfaced in Home/Chat/SOS copy without silent failures.
 
 - [x] HOME-01 Sobriety day counter on Home
   - Date: 2026-05-05

@@ -40,7 +40,7 @@ public final class SobrietyCloudSync: ObservableObject {
             )
             lastError = nil
         } catch {
-            lastError = EmpathyCopy.dataSyncFailedShort
+            await handleSyncError(error)
         }
     }
 
@@ -59,7 +59,7 @@ public final class SobrietyCloudSync: ObservableObject {
             )
             lastError = nil
         } catch {
-            lastError = EmpathyCopy.dataSyncFailedShort
+            await handleSyncError(error)
         }
     }
 
@@ -70,5 +70,29 @@ public final class SobrietyCloudSync: ObservableObject {
         else { return nil }
         let http = HTTPSupabaseService(baseURL: wiring.supabaseURL, anonKey: wiring.supabaseAnonKey)
         return (token, http)
+    }
+
+    private func handleSyncError(_ error: Error) async {
+        if case SupabaseHTTPServiceError.httpStatus(401) = error {
+            lastError = EmpathyCopy.sessionExpiredNeedsSignIn
+            await sessionState.handleUnauthorizedSession()
+            return
+        }
+        if let urlError = error as? URLError,
+           Self.isOfflineError(urlError)
+        {
+            lastError = EmpathyCopy.networkOfflineShort
+            return
+        }
+        lastError = EmpathyCopy.dataSyncFailedShort
+    }
+
+    private static func isOfflineError(_ error: URLError) -> Bool {
+        switch error.code {
+        case .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotFindHost, .cannotConnectToHost:
+            return true
+        default:
+            return false
+        }
     }
 }

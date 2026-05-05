@@ -55,4 +55,10 @@ public enum EmpathyCopy {
 
     public static let dataSyncFailedShort =
         "Could not sync your progress to the cloud. It is still saved on this device — you can try again later."
+
+    public static let sessionExpiredNeedsSignIn =
+        "Your session expired. Please sign in again to continue syncing."
+
+    public static let networkOfflineShort =
+        "No internet connection right now. Your data stays on this device and will sync when you're back online."
 }
