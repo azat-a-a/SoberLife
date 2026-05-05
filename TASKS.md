@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] REL-02 Relapse history in UI + multi-period stats
-  - Priority: P1
-  - Outcome: user sees past periods / markers without shame; stats stay interpretable after restarts.
-  - DoD: history list or compact timeline; fixtures/tests for multi-period streak math; no duplicate milestone badges.
-  - Estimate: 1.5 days
-
 - [ ] PUSH-02 Notification preferences and quiet hours
   - Priority: P1
   - Outcome: user controls daily time, quiet window, and categories (daily / milestone / re-engagement).
@@ -106,6 +100,10 @@
 - [x] REL-01 Relapse ("truth button") flow
   - Date: 2026-05-05
   - Notes: Honesty flow records `RelapseEvent`, shifts `sobrietyStartDate` to today without clearing `AchievementStore`; Stats show best streak and check-in count.
+
+- [x] REL-02 Relapse history in UI + multi-period stats
+  - Date: 2026-05-05
+  - Notes: `SobrietyJourney.periodSummaries` + Stats tab cards for current and past periods (newest-first); tests for ordering, multi-period stats wiring, and milestone persistence without duplicates after relapse.
 
 - [x] PUSH-01 Daily and milestone notifications
   - Date: 2026-05-05

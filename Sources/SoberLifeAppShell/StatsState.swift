@@ -12,6 +12,7 @@ public final class StatsState: ObservableObject {
     @Published public private(set) var progressPercent: Int = 0
     @Published public private(set) var unlockedMilestones: [Int] = []
     @Published public private(set) var newlyUnlockedMilestones: [Int] = []
+    @Published public private(set) var periodSummaries: [SobrietyPeriodSummary] = []
 
     private let userID: UUID
     private let store: OnboardingStore
@@ -48,17 +49,25 @@ public final class StatsState: ObservableObject {
             progressPercent = 0
             unlockedMilestones = []
             newlyUnlockedMilestones = []
+            periodSummaries = []
             return
         }
 
+        let now = nowProvider()
         currentStreakDays = SobrietyCounter.soberDays(
             since: profile.sobrietyStartDate,
-            now: nowProvider(),
+            now: now,
             calendar: calendar
         )
         longestStreakDays = SobrietyJourney.longestStreakDays(
             currentPeriodStart: profile.sobrietyStartDate,
-            now: nowProvider(),
+            now: now,
+            history: history,
+            calendar: calendar
+        )
+        periodSummaries = SobrietyJourney.periodSummaries(
+            currentPeriodStart: profile.sobrietyStartDate,
+            now: now,
             history: history,
             calendar: calendar
         )

@@ -30,4 +30,34 @@ final class SobrietyJourneyTests: XCTestCase {
         XCTAssertEqual(current, 2)
         XCTAssertEqual(longest, 20)
     }
+
+    func testPeriodSummariesOrdersCurrentFirstThenNewestPast() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let currentStart = Date(timeIntervalSince1970: 1_701_000_000)
+        let now = Date(timeIntervalSince1970: 1_701_086_400)
+        let older = RelapseEvent(
+            occurredAt: Date(timeIntervalSince1970: 1_700_500_000),
+            previousPeriodStart: Date(timeIntervalSince1970: 1_700_000_000),
+            streakAtRelapseDays: 5
+        )
+        let newer = RelapseEvent(
+            occurredAt: Date(timeIntervalSince1970: 1_700_900_000),
+            previousPeriodStart: Date(timeIntervalSince1970: 1_700_600_000),
+            streakAtRelapseDays: 10
+        )
+        let rows = SobrietyJourney.periodSummaries(
+            currentPeriodStart: currentStart,
+            now: now,
+            history: [older, newer],
+            calendar: calendar
+        )
+        XCTAssertEqual(rows.count, 3)
+        XCTAssertTrue(rows[0].isCurrent)
+        XCTAssertEqual(rows[0].periodStart, currentStart)
+        XCTAssertNil(rows[0].periodEnd)
+        XCTAssertEqual(rows[1].soberDaysCounted, 10)
+        XCTAssertEqual(rows[1].periodEnd, newer.occurredAt)
+        XCTAssertEqual(rows[2].soberDaysCounted, 5)
+    }
 }

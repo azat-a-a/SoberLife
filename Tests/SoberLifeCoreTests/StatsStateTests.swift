@@ -59,6 +59,7 @@ final class StatsStateTests: XCTestCase {
         XCTAssertEqual(state.savedMoney, 0)
         XCTAssertEqual(state.nextMilestoneDays, 7)
         XCTAssertEqual(state.progressPercent, 0)
+        XCTAssertTrue(state.periodSummaries.isEmpty)
     }
 
     func testMilestonesUnlockOnceOnly() {
@@ -137,6 +138,78 @@ final class StatsStateTests: XCTestCase {
         XCTAssertEqual(state.currentStreakDays, 2)
         XCTAssertEqual(state.longestStreakDays, 14)
         XCTAssertEqual(state.honestyCheckIns, 1)
+        XCTAssertEqual(state.periodSummaries.count, 2)
+        XCTAssertTrue(state.periodSummaries[0].isCurrent)
+        XCTAssertFalse(state.periodSummaries[1].isCurrent)
+        XCTAssertEqual(state.periodSummaries[1].soberDaysCounted, 14)
+    }
+
+    func testMilestonesPersistAcrossRelapseWithoutDuplicates() {
+        let userID = UUID()
+        let store = InMemoryStatsStore()
+        let achievementStore = InMemoryAchievementStore()
+        let relapseStore = InMemoryRelapseStore()
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let start = Date(timeIntervalSince1970: 1_700_000_000)
+        store.saveProfile(
+            OnboardingProfile(
+                userID: userID,
+                goal: .quit,
+                sobrietyStartDate: start,
+                dailyAlcoholCost: 0,
+                notificationsEnabled: true
+            )
+        )
+        let day7 = Date(timeIntervalSince1970: 1_700_518_400)
+
+        let stateAt7 = StatsState(
+            userID: userID,
+            store: store,
+            relapseStore: relapseStore,
+            achievementStore: achievementStore,
+            calendar: calendar,
+            nowProvider: { day7 }
+        )
+        stateAt7.load()
+        XCTAssertEqual(stateAt7.unlockedMilestones, [7])
+        XCTAssertEqual(stateAt7.newlyUnlockedMilestones, [7])
+
+        let relapseAt = Date(timeIntervalSince1970: 1_700_600_000)
+        relapseStore.append(
+            RelapseEvent(
+                occurredAt: relapseAt,
+                previousPeriodStart: start,
+                streakAtRelapseDays: 7
+            ),
+            userID: userID
+        )
+        store.saveProfile(
+            OnboardingProfile(
+                userID: userID,
+                goal: .quit,
+                sobrietyStartDate: relapseAt,
+                dailyAlcoholCost: 0,
+                notificationsEnabled: true
+            )
+        )
+        let shortlyAfter = Date(timeIntervalSince1970: 1_700_691_200)
+
+        let stateAfter = StatsState(
+            userID: userID,
+            store: store,
+            relapseStore: relapseStore,
+            achievementStore: achievementStore,
+            calendar: calendar,
+            nowProvider: { shortlyAfter }
+        )
+        stateAfter.load()
+        XCTAssertEqual(stateAfter.unlockedMilestones, [7])
+        XCTAssertTrue(stateAfter.newlyUnlockedMilestones.isEmpty)
+
+        stateAfter.load()
+        XCTAssertEqual(stateAfter.unlockedMilestones, [7])
+        XCTAssertTrue(stateAfter.newlyUnlockedMilestones.isEmpty)
     }
 }
 

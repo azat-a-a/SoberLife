@@ -61,4 +61,10 @@ public enum EmpathyCopy {
 
     public static let networkOfflineShort =
         "No internet connection right now. Your data stays on this device and will sync when you're back online."
+
+    public static let statsPeriodsHeading = "Your sober periods"
+    public static let statsPeriodsFootnote =
+        "Each row is a chapter, not a verdict. Milestones you already earned stay with you."
+    public static let statsPeriodCurrentBadge = "Current period"
+    public static let statsPeriodPastBadge = "Earlier period"
 }

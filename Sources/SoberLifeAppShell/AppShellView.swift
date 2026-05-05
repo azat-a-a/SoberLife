@@ -568,53 +568,97 @@ private struct StatsView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Stats")
-                    .font(.title2)
-                    .bold()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Stats")
+                        .font(.title2)
+                        .bold()
 
-                statRow(label: "Current period", value: "\(state.currentStreakDays) days")
-                statRow(label: "Best streak so far", value: "\(state.longestStreakDays) days")
-                statRow(label: "Times you chose honesty", value: "\(state.honestyCheckIns)")
-                statRow(label: "Estimated savings (period)", value: "\(Int(state.savedMoney))")
-                statRow(label: "Next milestone", value: "\(state.nextMilestoneDays) days")
-                statRow(label: "Progress", value: "\(state.progressPercent)%")
+                    statRow(label: "Current period", value: "\(state.currentStreakDays) days")
+                    statRow(label: "Best streak so far", value: "\(state.longestStreakDays) days")
+                    statRow(label: "Times you chose honesty", value: "\(state.honestyCheckIns)")
+                    statRow(label: "Estimated savings (period)", value: "\(Int(state.savedMoney))")
+                    statRow(label: "Next milestone", value: "\(state.nextMilestoneDays) days")
+                    statRow(label: "Progress", value: "\(state.progressPercent)%")
 
-                ProgressView(value: Double(state.progressPercent), total: 100)
+                    ProgressView(value: Double(state.progressPercent), total: 100)
 
-                if !state.unlockedMilestones.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Milestones you have earned")
-                            .font(.headline)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach(state.unlockedMilestones, id: \.self) { milestone in
-                                    Text("\(milestone)d")
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .background(.green.opacity(0.2), in: Capsule())
+                    if !state.unlockedMilestones.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Milestones you have earned")
+                                .font(.headline)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(state.unlockedMilestones, id: \.self) { milestone in
+                                        Text("\(milestone)d")
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 6)
+                                            .background(.green.opacity(0.2), in: Capsule())
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                if !state.newlyUnlockedMilestones.isEmpty {
-                    Text("Celebrating: \(state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", "))")
+                    if !state.newlyUnlockedMilestones.isEmpty {
+                        Text("Celebrating: \(state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", "))")
+                            .font(.footnote)
+                            .foregroundStyle(.green)
+                    }
+
+                    if !state.periodSummaries.isEmpty {
+                        Divider()
+                        Text(EmpathyCopy.statsPeriodsHeading)
+                            .font(.headline)
+                        Text(EmpathyCopy.statsPeriodsFootnote)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+
+                        ForEach(state.periodSummaries.indices, id: \.self) { idx in
+                            statsPeriodCard(state.periodSummaries[idx])
+                        }
+                    }
+
+                    Text("Honesty check-ins start a new sober period without removing badges you already unlocked.")
                         .font(.footnote)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(.secondary)
                 }
-
-                Text("Honesty check-ins start a new sober period without removing badges you already unlocked.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                .padding()
             }
-            .padding()
             .navigationTitle("Stats")
             .task(id: syncTick) {
                 state.load()
             }
         }
+    }
+
+    @ViewBuilder
+    private func statsPeriodCard(_ row: SobrietyPeriodSummary) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(row.isCurrent ? EmpathyCopy.statsPeriodCurrentBadge : EmpathyCopy.statsPeriodPastBadge)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("\(row.soberDaysCounted) days")
+                    .font(.subheadline)
+                    .bold()
+            }
+            if row.isCurrent {
+                Text("Since \(row.periodStart.formatted(date: .abbreviated, time: .omitted))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else if let end = row.periodEnd {
+                Text(
+                    "\(row.periodStart.formatted(date: .abbreviated, time: .omitted)) – \(end.formatted(date: .abbreviated, time: .omitted))"
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
     @ViewBuilder
