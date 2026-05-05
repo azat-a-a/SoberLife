@@ -59,4 +59,10 @@ public final class SessionState: ObservableObject {
             authErrorMessage = "Sign out failed. Please try again."
         }
     }
+
+    /// JWT for PostgREST when signed in (needed for `ai_conversations` RLS).
+    public func accessTokenIfAvailable() async -> String? {
+        guard let session = try? await authService.currentSession() else { return nil }
+        return session.accessToken
+    }
 }

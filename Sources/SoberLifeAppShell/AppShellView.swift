@@ -5,9 +5,11 @@ import SoberLifeCore
 public struct AppShellView: View {
     @ObservedObject private var sessionState: SessionState
     private let aiService: (any AIService)?
+    private let authWiring: AuthWiring?
 
     public init(sessionState: SessionState, authWiring: AuthWiring? = nil) {
         self.sessionState = sessionState
+        self.authWiring = authWiring
         self.aiService = authWiring.map { wiring in wiring.makeAIService() }
     }
 
@@ -25,8 +27,10 @@ public struct AppShellView: View {
                 )
             case let .signedIn(userID):
                 SignedInRootView(
+                    sessionState: sessionState,
                     userID: userID,
                     aiService: aiService,
+                    authWiring: authWiring,
                     onSignOutTap: {
                         Task {
                             await sessionState.signOut()
@@ -42,8 +46,10 @@ public struct AppShellView: View {
 }
 
 private struct SignedInRootView: View {
+    @ObservedObject var sessionState: SessionState
     let userID: UUID
     let aiService: (any AIService)?
+    let authWiring: AuthWiring?
     let onSignOutTap: () -> Void
     private let onboardingStore: OnboardingStore
     private let relapseStore: RelapseHistoryStore
@@ -53,9 +59,17 @@ private struct SignedInRootView: View {
 
     @StateObject private var onboardingState: OnboardingState
 
-    init(userID: UUID, aiService: (any AIService)?, onSignOutTap: @escaping () -> Void) {
+    init(
+        sessionState: SessionState,
+        userID: UUID,
+        aiService: (any AIService)?,
+        authWiring: AuthWiring?,
+        onSignOutTap: @escaping () -> Void
+    ) {
+        self.sessionState = sessionState
         self.userID = userID
         self.aiService = aiService
+        self.authWiring = authWiring
         self.onSignOutTap = onSignOutTap
         let store = UserDefaultsOnboardingStore()
         self.onboardingStore = store
@@ -75,6 +89,7 @@ private struct SignedInRootView: View {
         Group {
             if onboardingState.isCompleted {
                 MainTabView(
+                    sessionState: sessionState,
                     userID: userID,
                     onboardingStore: onboardingStore,
                     relapseStore: relapseStore,
@@ -82,6 +97,7 @@ private struct SignedInRootView: View {
                     achievementStore: achievementStore,
                     notificationService: notificationService,
                     aiService: aiService,
+                    authWiring: authWiring,
                     onSignOutTap: onSignOutTap
                 )
             } else {
@@ -92,6 +108,7 @@ private struct SignedInRootView: View {
 }
 
 private struct MainTabView: View {
+    @ObservedObject var sessionState: SessionState
     let userID: UUID
     let onboardingStore: OnboardingStore
     let relapseStore: RelapseHistoryStore
@@ -99,6 +116,7 @@ private struct MainTabView: View {
     let achievementStore: AchievementStore
     let notificationService: NotificationService
     let aiService: (any AIService)?
+    let authWiring: AuthWiring?
     let onSignOutTap: () -> Void
 
     @State private var notificationSyncTick: Int = 0
@@ -121,10 +139,16 @@ private struct MainTabView: View {
                 Label("Home", systemImage: "house")
             }
 
-            AIChatPlaceholderView()
-                .tabItem {
-                    Label("AI Chat", systemImage: "message")
-                }
+            AIChatTabView(
+                sessionState: sessionState,
+                userID: userID,
+                onboardingStore: onboardingStore,
+                aiService: aiService,
+                authWiring: authWiring
+            )
+            .tabItem {
+                Label("AI Chat", systemImage: "message")
+            }
 
             StatsView(
                 state: StatsState(
@@ -459,23 +483,6 @@ private struct HomeView: View {
             } message: {
                 Text(EmpathyCopy.relapseMessage)
             }
-        }
-    }
-}
-
-private struct AIChatPlaceholderView: View {
-    var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("AI Chat")
-                    .font(.title2)
-                    .bold()
-                Text("Everyday coaching chat will land here. For cravings right now, use SOS on Home — it is built to be fast and kind.")
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding()
-            .navigationTitle("AI Chat")
         }
     }
 }

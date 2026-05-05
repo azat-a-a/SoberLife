@@ -35,4 +35,19 @@ public enum EmpathyCopy {
     public static let profileSupportHeading = "SOS contact (optional)"
     public static let profileSupportHint =
         "Someone you trust for a quick call when things feel intense. Stored only on this device."
+
+    public static let chatNeedsBackend =
+        "To talk with the assistant, the app needs your Supabase project wired in (same setup as Apple sign-in)."
+
+    public static let chatCloudLoadFailed =
+        "We could not load your cloud history. Showing what is saved on this device."
+
+    public static let chatCloudSyncFailed =
+        "Your words are saved on this device; syncing to the cloud failed for a moment."
+
+    public static let chatSendFailed =
+        "The assistant could not answer just now. Your message is still here — try again when you feel ready."
+
+    public static let chatEmptyHint =
+        "This is a private space. There is no wrong thing to say. Short messages are fine."
 }

@@ -10,7 +10,7 @@
 
 ## Todo
 
-- Pull next committed work from `ROADMAP.md` / sprint files.
+- Pull next committed work from `ROADMAP.md` / sprint files (journal sync, quiet hours UI, TestFlight).
 
 ---
 
@@ -84,4 +84,8 @@
 - [x] SAFE-01 Safety and empathy copy pass
   - Date: 2026-05-05
   - Notes: `EmpathyCopy` + softer onboarding/Home/Stats strings; DeepSeek system prompt updated for anti-shame and crisis escalation; SOS UI includes emergency-care disclaimer.
+
+- [x] AI-02 Chat UI with cloud history
+  - Date: 2026-05-05
+  - Notes: AI Chat tab with message list, send + retry via resend, `New chat`; loads latest `ai_conversations` row (type `chat`) via user JWT + RLS; local `UserDefaults` fallback; `SessionState.accessTokenIfAvailable()` for PostgREST.
 

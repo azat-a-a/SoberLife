@@ -78,8 +78,87 @@ public final class HTTPSupabaseService: SupabaseService, @unchecked Sendable {
         }
     }
 
+    // MARK: - Authenticated REST (PostgREST + user JWT for RLS)
+
+    public func restSelectRaw(
+        table: String,
+        queryItems: [URLQueryItem],
+        bearerToken: String
+    ) async throws -> Data {
+        var components = URLComponents(
+            url: baseURL.appendingPathComponent("rest/v1/\(table)"),
+            resolvingAgainstBaseURL: false
+        )
+        components?.queryItems = queryItems.isEmpty ? nil : queryItems
+
+        guard let url = components?.url else {
+            throw SupabaseHTTPServiceError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        addUserRestHeaders(to: &request, bearerToken: bearerToken)
+
+        let (data, response) = try await session.data(for: request)
+        try validate(response: response)
+        return data
+    }
+
+    public func restInsert(
+        table: String,
+        jsonBody: Data,
+        bearerToken: String,
+        returnRepresentation: Bool
+    ) async throws -> Data {
+        let url = baseURL.appendingPathComponent("rest/v1/\(table)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        addUserRestHeaders(to: &request, bearerToken: bearerToken)
+        request.setValue(
+            returnRepresentation ? "return=representation" : "return=minimal",
+            forHTTPHeaderField: "Prefer"
+        )
+        request.httpBody = jsonBody
+
+        let (data, response) = try await session.data(for: request)
+        try validate(response: response)
+        return data
+    }
+
+    public func restPatch(
+        table: String,
+        filter: [String: String],
+        jsonBody: Data,
+        bearerToken: String
+    ) async throws {
+        var components = URLComponents(
+            url: baseURL.appendingPathComponent("rest/v1/\(table)"),
+            resolvingAgainstBaseURL: false
+        )
+        components?.queryItems = filter.map { URLQueryItem(name: $0.key, value: "eq.\($0.value)") }
+
+        guard let url = components?.url else {
+            throw SupabaseHTTPServiceError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        addUserRestHeaders(to: &request, bearerToken: bearerToken)
+        request.httpBody = jsonBody
+
+        let (_, response) = try await session.data(for: request)
+        try validate(response: response)
+    }
+
     private func addDefaultHeaders(to request: inout URLRequest) {
         request.setValue("Bearer \(anonKey)", forHTTPHeaderField: "Authorization")
+        request.setValue(anonKey, forHTTPHeaderField: "apikey")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+    }
+
+    private func addUserRestHeaders(to request: inout URLRequest, bearerToken: String) {
+        request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         request.setValue(anonKey, forHTTPHeaderField: "apikey")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")

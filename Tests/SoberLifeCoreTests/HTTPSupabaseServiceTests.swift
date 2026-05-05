@@ -41,6 +41,37 @@ final class HTTPSupabaseServiceTests: XCTestCase {
         XCTAssertEqual(response["access_token"], "abc")
     }
 
+    func testRestSelectUsesUserBearer() async throws {
+        let urlSession = makeSession()
+        let service = HTTPSupabaseService(
+            baseURL: URL(string: "https://project.supabase.co")!,
+            anonKey: "anon-key",
+            session: urlSession
+        )
+
+        MockURLProtocol.handler = { request in
+            XCTAssertEqual(request.httpMethod, "GET")
+            XCTAssertTrue(request.url?.absoluteString.contains("/rest/v1/ai_conversations") == true)
+            XCTAssertEqual(request.value(forHTTPHeaderField: "apikey"), "anon-key")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer user-jwt")
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            let body = #"[]"#.data(using: .utf8)!
+            return (response, body)
+        }
+
+        let data = try await service.restSelectRaw(
+            table: "ai_conversations",
+            queryItems: [URLQueryItem(name: "limit", value: "1")],
+            bearerToken: "user-jwt"
+        )
+        XCTAssertEqual(String(data: data, encoding: .utf8), "[]")
+    }
+
     func testInvokeNon2xxThrowsStatusError() async {
         let session = makeSession()
         let service = HTTPSupabaseService(

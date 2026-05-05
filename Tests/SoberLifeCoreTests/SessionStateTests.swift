@@ -73,6 +73,16 @@ final class SessionStateTests: XCTestCase {
         XCTAssertEqual(session.authState, .signedOut)
         XCTAssertEqual(session.authErrorMessage, "Sign in failed. Please try again.")
     }
+
+    func testAccessTokenAfterSignIn() async {
+        let session = SessionState(
+            authService: MockAuthService(signInUserID: UUID()),
+            appleSignInTokenProvider: MockAppleSignInTokenProvider()
+        )
+        await session.signInWithApple()
+        let token = await session.accessTokenIfAvailable()
+        XCTAssertEqual(token, "token")
+    }
 }
 
 private actor MockAuthService: AuthService {
