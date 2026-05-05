@@ -10,7 +10,41 @@
 
 ## Todo
 
-- Pull next committed work from `ROADMAP.md` / sprint files (journal sync, quiet hours UI, TestFlight).
+- [ ] DATA-SYNC-01 Onboarding + sobriety profile in Supabase
+  - Priority: P0
+  - Outcome: `public.users` / `sobriety_records` reflect the same truth as local onboarding and relapse flow.
+  - DoD: create/update current period on server after onboarding and after honesty flow; RLS passes with user JWT; basic error states in UI.
+  - Estimate: 2 days
+
+- [ ] REL-02 Relapse history in UI + multi-period stats
+  - Priority: P1
+  - Outcome: user sees past periods / markers without shame; stats stay interpretable after restarts.
+  - DoD: history list or compact timeline; fixtures/tests for multi-period streak math; no duplicate milestone badges.
+  - Estimate: 1.5 days
+
+- [ ] PUSH-02 Notification preferences and quiet hours
+  - Priority: P1
+  - Outcome: user controls daily time, quiet window, and categories (daily / milestone / re-engagement).
+  - DoD: settings persisted (local + server when sync exists); scheduler respects toggles and quiet hours; no duplicate fires.
+  - Estimate: 1.5 days
+
+- [ ] RELI-01 Session refresh + critical-path error states
+  - Priority: P0
+  - Outcome: stale tokens recover or show a clear re-auth path; SOS/Chat/Home degrade gracefully offline.
+  - DoD: refresh or re-sign-in flow documented in code; no silent failures on 401 from PostgREST; spot-check Home/Chat/SOS.
+  - Estimate: 1.5 days
+
+- [ ] IOS-APP-01 Xcode app target + TestFlight path
+  - Priority: P1
+  - Outcome: installable iOS app from repo, ready for internal TestFlight.
+  - DoD: app target builds, signs, uses package modules; `LAUNCH-CHECKLIST.md` pre-beta items ticked for build/signing.
+  - Estimate: 2 days
+
+- [ ] DATA-01 Analytics baseline (core events)
+  - Priority: P2
+  - Outcome: funnel events for onboarding, SOS, relapse, milestones (schema + one sink).
+  - DoD: events documented; single provider stub (e.g. logging or vendor); no duplicate fire on replay.
+  - Estimate: 1 day
 
 ---
 
