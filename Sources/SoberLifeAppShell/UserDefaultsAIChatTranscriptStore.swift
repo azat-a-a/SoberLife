@@ -13,25 +13,50 @@ public final class UserDefaultsAIChatTranscriptStore: @unchecked Sendable {
         decoder.dateDecodingStrategy = .iso8601
     }
 
-    public func load(userID: UUID) -> (remoteId: UUID?, messages: [ChatMessage]) {
+    public func load(userID: UUID) -> ChatLocalSnapshot {
         let key = keyPrefix + userID.uuidString
         guard let data = userDefaults.data(forKey: key),
               let bundle = try? decoder.decode(LocalTranscript.self, from: data)
         else {
-            return (nil, [])
+            return ChatLocalSnapshot()
         }
-        return (bundle.remoteId, bundle.messages)
+        return ChatLocalSnapshot(
+            remoteId: bundle.remoteId,
+            selectedConversationId: bundle.selectedConversationId,
+            messages: bundle.messages
+        )
     }
 
-    public func save(userID: UUID, remoteId: UUID?, messages: [ChatMessage]) {
+    public func save(_ snapshot: ChatLocalSnapshot, userID: UUID) {
         let key = keyPrefix + userID.uuidString
-        let bundle = LocalTranscript(remoteId: remoteId, messages: messages)
+        let bundle = LocalTranscript(
+            remoteId: snapshot.remoteId,
+            selectedConversationId: snapshot.selectedConversationId,
+            messages: snapshot.messages
+        )
         guard let data = try? encoder.encode(bundle) else { return }
         userDefaults.set(data, forKey: key)
     }
 }
 
+public struct ChatLocalSnapshot: Sendable, Equatable {
+    public var remoteId: UUID?
+    public var selectedConversationId: UUID?
+    public var messages: [ChatMessage]
+
+    public init(
+        remoteId: UUID? = nil,
+        selectedConversationId: UUID? = nil,
+        messages: [ChatMessage] = []
+    ) {
+        self.remoteId = remoteId
+        self.selectedConversationId = selectedConversationId
+        self.messages = messages
+    }
+}
+
 private struct LocalTranscript: Codable {
     var remoteId: UUID?
+    var selectedConversationId: UUID?
     var messages: [ChatMessage]
 }

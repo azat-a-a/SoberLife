@@ -41,6 +41,34 @@ final class HTTPSupabaseServiceTests: XCTestCase {
         XCTAssertEqual(response["access_token"], "abc")
     }
 
+    func testRestRPCVoidPostsToRpcEndpoint() async throws {
+        let urlSession = makeSession()
+        let service = HTTPSupabaseService(
+            baseURL: URL(string: "https://project.supabase.co")!,
+            anonKey: "anon-key",
+            session: urlSession
+        )
+
+        MockURLProtocol.handler = { request in
+            XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertEqual(request.url?.absoluteString, "https://project.supabase.co/rest/v1/rpc/ensure_user_profile")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer jwt")
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 204,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, Data())
+        }
+
+        try await service.restRPCVoid(
+            function: "ensure_user_profile",
+            jsonBody: Data("{}".utf8),
+            bearerToken: "jwt"
+        )
+    }
+
     func testRestSelectUsesUserBearer() async throws {
         let urlSession = makeSession()
         let service = HTTPSupabaseService(

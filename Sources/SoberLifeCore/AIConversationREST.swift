@@ -7,6 +7,29 @@ public struct AIConversationRowDTO: Decodable, Sendable {
     public let userId: UUID
     public let messages: [PersistedChatLineDTO]
     public let conversationType: String
+    public let createdAt: String?
+}
+
+public struct AIChatThread: Identifiable, Sendable, Equatable {
+    public let id: UUID
+    public let createdAt: Date?
+    public let messages: [ChatMessage]
+
+    public init(id: UUID, createdAt: Date?, messages: [ChatMessage]) {
+        self.id = id
+        self.createdAt = createdAt
+        self.messages = messages
+    }
+
+    public var preview: String {
+        if let last = messages.last {
+            let prefix = last.role == "user" ? "" : "Assistant: "
+            let trimmed = last.content.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty { return "Empty chat" }
+            return prefix + String(trimmed.prefix(88))
+        }
+        return "Empty chat"
+    }
 }
 
 public struct PersistedChatLineDTO: Codable, Sendable, Equatable {
@@ -83,11 +106,35 @@ public final class SupabaseAIChatHistoryStore: Sendable {
         self.decoder = decoder
     }
 
-    public func fetchLatestChat(userID: UUID, bearerToken: String) async throws -> (id: UUID, messages: [ChatMessage])? {
+    public func fetchChatThreads(
+        userID: UUID,
+        bearerToken: String,
+        limit: Int = 40
+    ) async throws -> [AIChatThread] {
         let items: [URLQueryItem] = [
             URLQueryItem(name: "user_id", value: "eq.\(userID.uuidString)"),
             URLQueryItem(name: "conversation_type", value: "eq.chat"),
             URLQueryItem(name: "order", value: "created_at.desc"),
+            URLQueryItem(name: "limit", value: "\(limit)")
+        ]
+        let data = try await http.restSelectRaw(
+            table: "ai_conversations",
+            queryItems: items,
+            bearerToken: bearerToken
+        )
+        let rows = try decoder.decode([AIConversationRowDTO].self, from: data)
+        return rows.map { row in
+            AIChatThread(
+                id: row.id,
+                createdAt: Self.parseCreatedAt(row.createdAt),
+                messages: AIConversationRESTMapper.decodeLines(row.messages)
+            )
+        }
+    }
+
+    public func fetchConversation(id: UUID, bearerToken: String) async throws -> AIChatThread? {
+        let items: [URLQueryItem] = [
+            URLQueryItem(name: "id", value: "eq.\(id.uuidString)"),
             URLQueryItem(name: "limit", value: "1")
         ]
         let data = try await http.restSelectRaw(
@@ -97,7 +144,17 @@ public final class SupabaseAIChatHistoryStore: Sendable {
         )
         let rows = try decoder.decode([AIConversationRowDTO].self, from: data)
         guard let row = rows.first else { return nil }
-        return (row.id, AIConversationRESTMapper.decodeLines(row.messages))
+        return AIChatThread(
+            id: row.id,
+            createdAt: Self.parseCreatedAt(row.createdAt),
+            messages: AIConversationRESTMapper.decodeLines(row.messages)
+        )
+    }
+
+    private static func parseCreatedAt(_ raw: String?) -> Date? {
+        guard let raw else { return nil }
+        return AIConversationRESTMapper.iso8601.date(from: raw)
+            ?? AIConversationRESTMapper.fallbackISO8601().date(from: raw)
     }
 
     public func insertChat(userID: UUID, messages: [ChatMessage], bearerToken: String) async throws -> UUID {

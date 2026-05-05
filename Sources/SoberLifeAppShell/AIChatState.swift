@@ -4,6 +4,8 @@ import SoberLifeCore
 
 @MainActor
 public final class AIChatState: ObservableObject {
+    @Published public private(set) var threads: [AIChatThread] = []
+    @Published public private(set) var selectedConversationId: UUID?
     @Published public private(set) var messages: [ChatMessage] = []
     @Published public private(set) var remoteConversationId: UUID?
     @Published public private(set) var isLoading = false
@@ -34,10 +36,19 @@ public final class AIChatState: ObservableObject {
         self.localStore = localStore
     }
 
+    public var canRetryAssistant: Bool {
+        errorMessage != nil
+            && !messages.isEmpty
+            && messages.last?.role == "user"
+            && aiService != nil
+    }
+
     public func load() async {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
+
+        let local = localStore.load(userID: userID)
 
         if let token = await tokenProvider(),
            SupabaseJWT.isLikelyUserAccessToken(token),
@@ -45,20 +56,69 @@ public final class AIChatState: ObservableObject {
         {
             let store = SupabaseAIChatHistoryStore(http: http)
             do {
-                if let pair = try await store.fetchLatestChat(userID: userID, bearerToken: token) {
-                    remoteConversationId = pair.id
-                    messages = pair.messages
-                    localStore.save(userID: userID, remoteId: pair.id, messages: pair.messages)
-                    return
+                let list = try await store.fetchChatThreads(userID: userID, bearerToken: token)
+                threads = list
+
+                let preferredId = local.selectedConversationId
+                let chosen: AIChatThread? = {
+                    if let preferredId, let thread = list.first(where: { $0.id == preferredId }) {
+                        return thread
+                    }
+                    return list.first
+                }()
+
+                if let thread = chosen {
+                    applyThread(thread)
+                } else {
+                    selectedConversationId = nil
+                    remoteConversationId = nil
+                    messages = []
                 }
+                persistLocalSnapshot()
+                return
             } catch {
                 errorMessage = EmpathyCopy.chatCloudLoadFailed
             }
         }
 
-        let local = localStore.load(userID: userID)
+        threads = []
+        selectedConversationId = local.selectedConversationId
         remoteConversationId = local.remoteId
         messages = local.messages
+    }
+
+    public func selectThread(_ id: UUID?) async {
+        errorMessage = nil
+        guard let id else {
+            selectedConversationId = nil
+            remoteConversationId = nil
+            messages = []
+            persistLocalSnapshot()
+            return
+        }
+
+        if let existing = threads.first(where: { $0.id == id }) {
+            applyThread(existing)
+            persistLocalSnapshot()
+            return
+        }
+
+        guard let token = await tokenProvider(),
+              SupabaseJWT.isLikelyUserAccessToken(token),
+              let http = supabaseHTTP
+        else { return }
+
+        let store = SupabaseAIChatHistoryStore(http: http)
+        guard let thread = try? await store.fetchConversation(id: id, bearerToken: token) else { return }
+
+        if let idx = threads.firstIndex(where: { $0.id == id }) {
+            threads[idx] = thread
+        } else {
+            threads.insert(thread, at: 0)
+            threads.sort { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
+        }
+        applyThread(thread)
+        persistLocalSnapshot()
     }
 
     public func sendDraft() async {
@@ -78,6 +138,26 @@ public final class AIChatState: ObservableObject {
         messages.append(userMsg)
         await persist()
 
+        await requestAssistantReply(using: aiService)
+    }
+
+    public func retryAssistantReply() async {
+        guard let aiService, canRetryAssistant else { return }
+        isSending = true
+        errorMessage = nil
+        defer { isSending = false }
+        await requestAssistantReply(using: aiService)
+    }
+
+    public func startNewConversation() {
+        selectedConversationId = nil
+        remoteConversationId = nil
+        messages = []
+        errorMessage = nil
+        persistLocalSnapshot()
+    }
+
+    private func requestAssistantReply(using aiService: any AIService) async {
         let context = AIContext(
             soberDays: currentSoberDays(),
             recentTriggers: [],
@@ -94,17 +174,11 @@ public final class AIChatState: ObservableObject {
             let assistant = ChatMessage(role: "assistant", content: reply.reply, timestamp: Date())
             messages.append(assistant)
             await persist()
+            refreshThreadInList()
             errorMessage = nil
         } catch {
             errorMessage = EmpathyCopy.chatSendFailed
         }
-    }
-
-    public func startNewConversation() {
-        messages = []
-        remoteConversationId = nil
-        localStore.save(userID: userID, remoteId: nil, messages: [])
-        errorMessage = nil
     }
 
     private func currentSoberDays() -> Int? {
@@ -112,8 +186,35 @@ public final class AIChatState: ObservableObject {
         return SobrietyCounter.soberDays(since: profile.sobrietyStartDate, now: Date(), calendar: .current)
     }
 
+    private func applyThread(_ thread: AIChatThread) {
+        selectedConversationId = thread.id
+        remoteConversationId = thread.id
+        messages = thread.messages
+    }
+
+    private func refreshThreadInList() {
+        guard let id = remoteConversationId else { return }
+        let created = threads.first(where: { $0.id == id })?.createdAt
+        let updated = AIChatThread(id: id, createdAt: created ?? Date(), messages: messages)
+        if let idx = threads.firstIndex(where: { $0.id == id }) {
+            threads[idx] = updated
+        } else {
+            threads.insert(updated, at: 0)
+        }
+        threads.sort { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
+    }
+
+    private func persistLocalSnapshot() {
+        let snapshot = ChatLocalSnapshot(
+            remoteId: remoteConversationId,
+            selectedConversationId: selectedConversationId,
+            messages: messages
+        )
+        localStore.save(snapshot, userID: userID)
+    }
+
     private func persist() async {
-        localStore.save(userID: userID, remoteId: remoteConversationId, messages: messages)
+        persistLocalSnapshot()
 
         guard let token = await tokenProvider(),
               SupabaseJWT.isLikelyUserAccessToken(token),
@@ -127,7 +228,16 @@ public final class AIChatState: ObservableObject {
             } else if !messages.isEmpty {
                 let id = try await store.insertChat(userID: userID, messages: messages, bearerToken: token)
                 remoteConversationId = id
-                localStore.save(userID: userID, remoteId: id, messages: messages)
+                selectedConversationId = id
+                let priorCreated = threads.first(where: { $0.id == id })?.createdAt
+                let thread = AIChatThread(id: id, createdAt: priorCreated ?? Date(), messages: messages)
+                if let idx = threads.firstIndex(where: { $0.id == id }) {
+                    threads[idx] = thread
+                } else {
+                    threads.insert(thread, at: 0)
+                }
+                threads.sort { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
+                persistLocalSnapshot()
             }
         } catch {
             errorMessage = EmpathyCopy.chatCloudSyncFailed

@@ -88,4 +88,5 @@
 - [x] AI-02 Chat UI with cloud history
   - Date: 2026-05-05
   - Notes: AI Chat tab with message list, send + retry via resend, `New chat`; loads latest `ai_conversations` row (type `chat`) via user JWT + RLS; local `UserDefaults` fallback; `SessionState.accessTokenIfAvailable()` for PostgREST.
+  - Notes (follow-up): Sidebar list of recent threads (`NavigationSplitView`), **Try again** after failed assistant reply, `ensure_user_profile` RPC + auth trigger migration for `public.users` FK, `MainTabView` calls profile sync on appear.
 

@@ -175,6 +175,18 @@ private struct MainTabView: View {
         .task(id: notificationSyncTick) {
             await runNotificationSync()
         }
+        .task {
+            await syncUserProfileIfPossible()
+        }
+    }
+
+    private func syncUserProfileIfPossible() async {
+        guard let wiring = authWiring,
+              let token = await sessionState.accessTokenIfAvailable(),
+              SupabaseJWT.isLikelyUserAccessToken(token)
+        else { return }
+        let http = HTTPSupabaseService(baseURL: wiring.supabaseURL, anonKey: wiring.supabaseAnonKey)
+        try? await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
     }
 
     private func runNotificationSync() async {

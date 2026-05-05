@@ -48,6 +48,8 @@ public enum EmpathyCopy {
     public static let chatSendFailed =
         "The assistant could not answer just now. Your message is still here — try again when you feel ready."
 
+    public static let chatRetryAction = "Try again"
+
     public static let chatEmptyHint =
         "This is a private space. There is no wrong thing to say. Short messages are fine."
 }
