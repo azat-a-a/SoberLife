@@ -46,6 +46,24 @@
 - Impact: Faster delivery, lower moderation/privacy burden initially.
 - Status: Accepted
 
+## 2026-05-05 - D-010
+- Decision: Keep `OnboardingProfile` in AppShell; expose Supabase sync inputs via `SobrietyProfileSnapshot` in `SoberLifeCore`.
+- Why: `SoberLifeAppShell` depends on `SoberLifeCore`, not the reverse; sync helpers must not reference app-layer models.
+- Impact: Thin mapping (`OnboardingProfile.sobrietySnapshot`) at call sites; Core stays reusable and testable.
+- Status: Accepted
+
+## 2026-05-05 - D-011
+- Decision: Treat PostgREST **401** as “session no longer valid”: clear auth state, set user-facing re-sign-in copy, do not swallow the error on critical cloud paths (sync, chat history, profile ensure).
+- Why: Silent failures strand users with broken RLS and unexplained empty state; explicit re-auth is safer and easier to support.
+- Impact: User may see sign-in screen after expiry; local data remains; placeholder auth still skips real JWT paths without error spam.
+- Status: Accepted
+
+## 2026-05-05 - D-012
+- Decision: Stats “sober periods” timeline is derived from the **current** `sobrietyStartDate` plus `RelapseEvent` history: current row first, closed periods ordered by `occurredAt` descending.
+- Why: Matches mental model “now + past chapters”; reuses existing persisted honesty events without a new server table for MVP.
+- Impact: UI lists only what is on device (and later synced profile/records); ordering is stable and covered by tests.
+- Status: Accepted
+
 ## Open Decisions
 - D-007 Pricing model details for premium limits (message caps, feature gates).
 - D-008 Analytics stack selection (self-hosted vs third-party).
