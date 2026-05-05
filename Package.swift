@@ -11,15 +11,23 @@ let package = Package(
         .library(
             name: "SoberLifeCore",
             targets: ["SoberLifeCore"]
+        ),
+        .library(
+            name: "SoberLifeAppShell",
+            targets: ["SoberLifeAppShell"]
         )
     ],
     targets: [
         .target(
             name: "SoberLifeCore"
         ),
+        .target(
+            name: "SoberLifeAppShell",
+            dependencies: ["SoberLifeCore"]
+        ),
         .testTarget(
             name: "SoberLifeCoreTests",
-            dependencies: ["SoberLifeCore"]
+            dependencies: ["SoberLifeCore", "SoberLifeAppShell"]
         )
     ]
 )

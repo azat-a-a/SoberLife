@@ -74,10 +74,10 @@
 
 ## In Progress
 
-- [ ] IOS-01 App skeleton
+- [ ] ONB-01 Onboarding (goal, sobriety start date, daily alcohol cost)
   - Priority: P0
-  - Outcome: running iOS shell with tabs/navigation and placeholder screens.
-  - DoD: app launches and navigation works across core sections.
+  - Outcome: user completes onboarding in 3-4 screens.
+  - DoD: data persisted, skip option available, completion route to Home.
   - Estimate: 2 days
 
 ---
@@ -102,4 +102,12 @@
 - [x] SEC-01 RLS and access policies
   - Date: 2026-05-05
   - Notes: RLS enabled and owner-based policies added for all core tables using auth.uid().
+
+- [x] IOS-01 App skeleton
+  - Date: 2026-05-05
+  - Notes: SwiftUI app shell added with tab navigation, placeholder screens, and session-state auth placeholder flow.
+
+- [x] AUTH-01 Apple Sign-In integration
+  - Date: 2026-05-05
+  - Notes: Apple Sign-In token provider, live iOS token bridge, Supabase auth exchange service, and session wiring factory added with tests.
 
