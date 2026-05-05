@@ -94,7 +94,12 @@ private struct MainTabView: View {
                     Label("AI Chat", systemImage: "message")
                 }
 
-            StatsPlaceholderView()
+            StatsView(
+                state: StatsState(
+                    userID: userID,
+                    store: onboardingStore
+                )
+            )
                 .tabItem {
                     Label("Stats", systemImage: "chart.bar")
                 }
@@ -331,19 +336,47 @@ private struct AIChatPlaceholderView: View {
     }
 }
 
-private struct StatsPlaceholderView: View {
+private struct StatsView: View {
+    @StateObject private var state: StatsState
+
+    init(state: StatsState) {
+        _state = StateObject(wrappedValue: state)
+    }
+
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("Stats")
                     .font(.title2)
                     .bold()
-                Text("Saved money, streak trends, and achievements are planned for Sprint 02.")
+
+                statRow(label: "Current streak", value: "\(state.currentStreakDays) days")
+                statRow(label: "Saved money", value: "\(Int(state.savedMoney))")
+                statRow(label: "Next milestone", value: "\(state.nextMilestoneDays) days")
+                statRow(label: "Progress", value: "\(state.progressPercent)%")
+
+                ProgressView(value: Double(state.progressPercent), total: 100)
+
+                Text("Stats are calculated from your onboarding start date and daily cost.")
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding()
             .navigationTitle("Stats")
+            .task {
+                state.load()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func statRow(label: String, value: String) -> some View {
+        HStack {
+            Text(label)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .bold()
         }
     }
 }

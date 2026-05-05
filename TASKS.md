@@ -74,10 +74,10 @@
 
 ## In Progress
 
-- [ ] STATS-01 Basic stats (current streak, saved money)
-  - Priority: P0
-  - Outcome: meaningful progress indicators for motivation.
-  - DoD: calculations validated against test fixtures.
+- [ ] ACH-01 Milestones (7, 30, 90, 365)
+  - Priority: P1
+  - Outcome: user receives achievement badges on milestones.
+  - DoD: unlock once-only logic verified.
   - Estimate: 1 day
 
 ---
@@ -118,4 +118,8 @@
 - [x] HOME-01 Sobriety day counter on Home
   - Date: 2026-05-05
   - Notes: Home now reads onboarding profile, computes sobriety days via SobrietyCounter, and shows next milestone progress.
+
+- [x] STATS-01 Basic stats (current streak, saved money)
+  - Date: 2026-05-05
+  - Notes: Stats tab now computes current streak, saved money, next milestone, and progress percentage from onboarding profile.
 
