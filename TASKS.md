@@ -74,10 +74,10 @@
 
 ## In Progress
 
-- [ ] DB-01 Supabase schema v1
+- [ ] IOS-01 App skeleton
   - Priority: P0
-  - Outcome: database ready for onboarding and sobriety core.
-  - DoD: migrations run cleanly and seed script works.
+  - Outcome: running iOS shell with tabs/navigation and placeholder screens.
+  - DoD: app launches and navigation works across core sections.
   - Estimate: 2 days
 
 ---
@@ -94,4 +94,12 @@
 - [x] ARCH-01 Architecture baseline
   - Date: 2026-05-05
   - Notes: architecture document added, service contracts defined (Auth, Supabase, AI, Notification), edge function drafts captured.
+
+- [x] DB-01 Supabase schema v1
+  - Date: 2026-05-05
+  - Notes: initial migration and seed script added under supabase/ with core tables, constraints, and indexes.
+
+- [x] SEC-01 RLS and access policies
+  - Date: 2026-05-05
+  - Notes: RLS enabled and owner-based policies added for all core tables using auth.uid().
 
