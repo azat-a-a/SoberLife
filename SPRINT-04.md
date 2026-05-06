@@ -12,6 +12,7 @@
 2. Daily and milestone push notifications
 3. Reliability hardening for auth/data/AI boundaries
 4. Analytics baseline for retention and SOS outcomes
+5. Multilingual UI (system language)
 
 ## Committed Tasks
 
@@ -83,6 +84,18 @@
   - Events are emitted once per user action.
   - Event schema is documented and versioned.
   - Dashboard shows at least D1, D7, SOS-return metric trend.
+
+### I18N-01 Multilingual UI (system language)
+- Outcome: app UI automatically adapts to the device language with localized strings.
+- Tasks:
+  - Introduce `Resources/<locale>.lproj/Localizable.strings` for `en` and `ru`.
+  - Replace user-facing strings across onboarding/home/stats/chat/sos/profile/auth with localized keys.
+  - Add basic developer workflow: how to add new strings and keep parity between locales.
+- DoD:
+  - App follows system language (default iOS behavior) and displays `ru` when device language is Russian.
+  - No user-facing hardcoded strings remain in SwiftUI views (MVP surfaces).
+  - `en` and `ru` are complete for all shipped screens.
+  - Smoke test: switch simulator language and verify key screens render localized copy.
 
 ### QA-01 End-to-End Smoke for Relapse + Notifications
 - Outcome: confidence before beta stabilization sprint.

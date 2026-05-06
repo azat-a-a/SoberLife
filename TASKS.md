@@ -16,6 +16,16 @@
   - DoD: events documented; single provider stub (e.g. logging or vendor); no duplicate fire on replay.
   - Estimate: 1 day
 
+- [ ] I18N-01 Multilingual UI (system language)
+  - Priority: P1
+  - Outcome: app UI automatically uses the device language and has a scalable localization setup.
+  - DoD:
+    - All user-facing strings are moved into `Localizable.strings` (SwiftUI) with no hardcoded UI copy left in views.
+    - App respects system language by default (no in-app language selector for MVP).
+    - At least 2 locales shipped: `en` and `ru` with complete coverage for MVP screens.
+    - CI check prevents new hardcoded strings (lint or review checklist item).
+  - Estimate: 2 days
+
 ---
 
 ## In Progress
