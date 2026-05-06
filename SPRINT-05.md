@@ -7,6 +7,11 @@
 - Start: 2026-07-01
 - End: 2026-07-14
 
+## Current Status (as of 2026-05-06)
+- Done in this sprint scope: `QA-02`, `STORE-01`, `I18N-02`, `REL-01`, `BETA-01`.
+- In progress: `BUG-01`.
+- Open quality follow-up: CI queue reliability (`BUG-S05-001`) tracked in `BUG-BURNDOWN-S05.md`.
+
 ## Top Priorities
 1. Beta hardening for core user journeys
 2. Structured QA and bug burn-down
@@ -76,9 +81,11 @@
 ### REL-01 TestFlight Pipeline
 - Outcome: repeatable beta distribution process.
 - Tasks:
-  - Automate/archive beta build process.
-  - Configure tester groups and release notes template.
-  - Add rollback guidance for bad beta builds.
+  - Automate/archive beta build process (`ios/scripts/testflight_archive.sh`).
+  - Configure tester groups and release notes template (`ios/TESTFLIGHT-RELEASE-NOTES-TEMPLATE.md`).
+  - Add rollback guidance for bad beta builds (`ios/TESTFLIGHT-ROLLBACK.md`).
+  - Document full flow in `ios/TESTFLIGHT-PIPELINE.md`.
+  - Record drill and archive evidence in `ios/TESTFLIGHT-DRILL-RESULTS.md`.
 - DoD:
   - Build successfully distributed to TestFlight group.
   - Release notes generated from template.
@@ -87,9 +94,9 @@
 ### STORE-01 App Store Prep (Draft)
 - Outcome: release artifacts are mostly ready before final sprint.
 - Tasks:
-  - Prepare screenshots, subtitle, and app description drafts.
-  - Finalize privacy nutrition labels draft.
-  - Validate policy-sensitive language (medical disclaimer, safety wording).
+  - Prepare screenshots, subtitle, and app description drafts (`APP-STORE-METADATA-S05.md`).
+  - Finalize privacy nutrition labels draft (`APP-STORE-METADATA-S05.md`).
+  - Validate policy-sensitive language (medical disclaimer, safety wording) and map it to app surfaces (`APP-STORE-METADATA-S05.md`).
 - DoD:
   - Metadata draft complete and reviewable.
   - Required legal text mapped to in-app screens.

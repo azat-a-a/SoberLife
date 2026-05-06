@@ -38,9 +38,19 @@ Validation:
 - Run `swift test`.
 - In simulator, switch language to Russian and verify core screens (Auth, Home, Chat, Stats, Profile, SOS).
 
-## TestFlight (outline)
+## TestFlight pipeline (REL-01)
 1. Create an App ID + App in App Store Connect matching **Bundle Identifier** (`com.soberlife.app` by default, change in target settings if needed).
-2. Archive: **Product → Archive** with a **Release** configuration and a real **Development Team**.
-3. Distribute to TestFlight; complete export compliance and beta review as required.
+2. Build archive from repo root:
+
+```bash
+bash ios/scripts/testflight_archive.sh
+```
+
+3. Upload via Xcode Organizer (**Distribute App** -> **App Store Connect** -> **Upload**) and complete export compliance prompts.
+4. Fill tester-facing notes using `ios/TESTFLIGHT-RELEASE-NOTES-TEMPLATE.md`.
+5. If a bad build is shipped, follow `ios/TESTFLIGHT-ROLLBACK.md`.
+6. Complete manual ASC upload/distribution checklist in `ios/TESTFLIGHT-UPLOAD-CHECKLIST.md`.
+
+Reference runbook: `ios/TESTFLIGHT-PIPELINE.md`.
 
 The Swift package at the repo root (`Package.swift`) is linked as a **local Swift Package** (`relativePath = ..` from this `ios` folder).

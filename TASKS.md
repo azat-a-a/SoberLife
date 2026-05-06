@@ -10,24 +10,6 @@
 
 ## Todo
 
-- [ ] REL-01 TestFlight pipeline hardening (Sprint 05)
-  - Priority: P1
-  - Outcome: repeatable beta distribution workflow.
-  - DoD: build distributed to tester group; release notes template used; rollback steps validated once.
-  - Estimate: 1 day
-
-- [ ] STORE-01 App Store metadata prep (Sprint 05)
-  - Priority: P2
-  - Outcome: submission artifacts are review-ready ahead of release sprint.
-  - DoD: screenshots/description/privacy labels draft complete and mapped to checklist.
-  - Estimate: 1 day
-
-- [ ] I18N-02 In-app language switch in Profile (Sprint 05)
-  - Priority: P1
-  - Outcome: user can choose app language from Profile (`System`/`English`/`Russian`).
-  - DoD: runtime switch works across main screens; preference persists; `System` restores device language behavior.
-  - Estimate: 1 day
-
 - [ ] I18N-03 Add more languages (Sprint 06)
   - Priority: P1
   - Outcome: support additional locales: European languages + Chinese + Thai + Japanese.
@@ -38,20 +20,14 @@
 
 ## In Progress
 
-- [ ] BETA-01 Closed beta readiness gate (Sprint 05)
-  - Started: 2026-05-06
-  - Plan:
-    - Freeze beta scope and document acceptance criteria (`BETA-READINESS.md`).
-    - Prepare candidate build notes + known limitations.
-    - Align launch checklist items required before inviting testers.
-  - Exit criteria: readiness checklist approved and candidate build identified.
-
 - [ ] BUG-01 Bug burn-down and stability fixes (Sprint 05)
   - Started: 2026-05-06
   - Plan:
     - Maintain live defect queue in `BUG-BURNDOWN-S05.md` with severity/owner/status.
     - Prioritize P0/P1 fixes first; verify with focused reruns.
     - Track crash/error trend against beta target and update mitigation notes.
+  - Progress:
+    - 2026-05-06: fixed `BUG-S05-002` (archive orientation warning), validated with successful re-archive.
   - Exit criteria: no open P0/P1; triaged P2 list with owners; stability trend acceptable for beta candidate.
 
 ---
@@ -136,6 +112,22 @@
 - [x] IOS-APP-01 Xcode app target + TestFlight path
   - Date: 2026-05-05
   - Notes: `ios/SoberLife.xcodeproj` hosts the iOS 17+ app, local SPM dependency on repo root; `SoberLifeApp` wires live/placeholder `SessionState` from Info.plist Supabase keys; CI job `ios-xcodebuild` on `macos-latest`; see `ios/README.md` and `LAUNCH-CHECKLIST.md` for TestFlight prep (team, icon 1024, capabilities).
+
+- [x] STORE-01 App Store metadata prep (Sprint 05)
+  - Date: 2026-05-06
+  - Notes: Draft metadata package completed in `APP-STORE-METADATA-S05.md` (subtitle/description/keywords, screenshot plan, privacy labels draft, policy-sensitive language mapping, launch checklist coverage).
+
+- [x] I18N-02 In-app language switch in Profile (Sprint 05)
+  - Date: 2026-05-06
+  - Notes: Profile language selector implemented with `LocalizationSettings` (`System`/`English`/`Russian`), runtime app-wide switch, persistence via `UserDefaults`, and localization resources updated for selector labels.
+
+- [x] REL-01 TestFlight pipeline hardening (Sprint 05)
+  - Date: 2026-05-06
+  - Notes: Archive automation and release operations docs completed (`ios/scripts/testflight_archive.sh`, `ios/TESTFLIGHT-PIPELINE.md`, `ios/TESTFLIGHT-RELEASE-NOTES-TEMPLATE.md`, `ios/TESTFLIGHT-ROLLBACK.md`); upload/distribution confirmed in `ios/TESTFLIGHT-UPLOAD-CHECKLIST.md`.
+
+- [x] BETA-01 Closed beta readiness gate (Sprint 05)
+  - Date: 2026-05-06
+  - Notes: Gate criteria completed and decision set to GO in `BETA-READINESS.md`; precheck evidence consolidated in `BETA-GO-NOGO-PRECHECK-S05.md`.
 
 - [x] SAFE-01 Safety and empathy copy pass
   - Date: 2026-05-05

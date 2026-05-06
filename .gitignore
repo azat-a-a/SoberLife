@@ -16,6 +16,8 @@ DerivedData/
 fastlane/report.xml
 fastlane/Preview.html
 *.ipa
+ios/build/
+*.xcarchive
 
 # Local env files
 .env
