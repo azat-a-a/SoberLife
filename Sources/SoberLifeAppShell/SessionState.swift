@@ -13,13 +13,16 @@ public final class SessionState: ObservableObject {
     @Published public private(set) var authErrorMessage: String?
 
     private let authService: AuthService
+    private let analytics: AnalyticsTracker
 
     public init(
         authService: AuthService,
-        authState: AuthFlowState = .signedOut
+        authState: AuthFlowState = .signedOut,
+        analytics: AnalyticsTracker = .shared
     ) {
         self.authService = authService
         self.authState = authState
+        self.analytics = analytics
     }
 
     public func restoreSession() async {
@@ -41,6 +44,10 @@ public final class SessionState: ObservableObject {
             let session = try await authService.signIn(email: email, password: password)
             authState = .signedIn(userID: session.userID)
             authErrorMessage = nil
+            analytics.track(
+                name: "auth_success",
+                properties: ["method": "email_password_signin"]
+            )
         } catch let error as AuthServiceError {
             authState = .signedOut
             switch error {
@@ -62,6 +69,10 @@ public final class SessionState: ObservableObject {
             let session = try await authService.signUp(email: email, password: password)
             authState = .signedIn(userID: session.userID)
             authErrorMessage = nil
+            analytics.track(
+                name: "auth_success",
+                properties: ["method": "email_password_signup"]
+            )
         } catch let error as AuthServiceError {
             authState = .signedOut
             switch error {
