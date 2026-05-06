@@ -35,6 +35,7 @@ This checklist covers preparation and execution from pre-beta to the first 48 ho
 - [ ] Edge function secrets configured for stage/prod.
 - [ ] Database migrations are up-to-date and reproducible.
 - [ ] RLS policies validated for all user data tables.
+- [ ] After DB-02 tables (`notification_preferences`, `support_contacts`): run **`OPS-DB02-ROLLOUT.md`** before widening beta/production exposure.
 
 ### QA
 - [ ] Regression suite executed on simulator and at least one real device.

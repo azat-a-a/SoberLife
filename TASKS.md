@@ -10,6 +10,20 @@
 
 ## Todo
 
+- [ ] OPS-01 DB-02 rollout verification
+  - Priority: P1
+  - Outcome: migrations and client sync verified in staging/prod; manual matrix done.
+  - DoD: `OPS-DB02-ROLLOUT.md` completion record filled; issues triaged.
+  - Estimate: 0.5 day
+  - Notes: run before treating cloud parity as production-safe.
+
+- [ ] S07-01 Execute Sprint 07 committed scope
+  - Priority: P1
+  - Outcome: ops gate closed, sync QA documented, i18n safety review started, one perf/obs item closed, analytics decision recorded.
+  - DoD: see `SPRINT-07.md` (Gate 0 + committed work).
+  - Estimate: 2 weeks
+  - Notes: QA artifact `QA-SYNC-S07.md` / `QA-SYNC-S07-RESULTS.md`.
+
 ---
 
 ## In Progress
