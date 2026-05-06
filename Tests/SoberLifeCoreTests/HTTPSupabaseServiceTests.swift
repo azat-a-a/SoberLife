@@ -100,6 +100,41 @@ final class HTTPSupabaseServiceTests: XCTestCase {
         XCTAssertEqual(String(data: data, encoding: .utf8), "[]")
     }
 
+    func testRestUpsertMergePostsWithMergeDuplicatesPrefer() async throws {
+        let urlSession = makeSession()
+        let service = HTTPSupabaseService(
+            baseURL: URL(string: "https://project.supabase.co")!,
+            anonKey: "anon-key",
+            session: urlSession
+        )
+
+        MockURLProtocol.handler = { request in
+            XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertEqual(
+                request.url?.absoluteString,
+                "https://project.supabase.co/rest/v1/notification_preferences"
+            )
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer user-jwt")
+            XCTAssertEqual(
+                request.value(forHTTPHeaderField: "Prefer"),
+                "return=minimal,resolution=merge-duplicates"
+            )
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 201,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, Data())
+        }
+
+        try await service.restUpsertMerge(
+            table: "notification_preferences",
+            jsonBody: Data(#"{"user_id":"00000000-0000-0000-0000-000000000001"}"#.utf8),
+            bearerToken: "user-jwt"
+        )
+    }
+
     func testInvokeNon2xxThrowsStatusError() async {
         let session = makeSession()
         let service = HTTPSupabaseService(

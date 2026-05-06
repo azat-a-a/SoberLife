@@ -64,6 +64,7 @@ private struct SignedInRootView: View {
 
     @StateObject private var onboardingState: OnboardingState
     @StateObject private var sobrietyCloudSync: SobrietyCloudSync
+    @StateObject private var userSettingsCloudSync: UserSettingsCloudSync
 
     init(
         sessionState: SessionState,
@@ -80,10 +81,12 @@ private struct SignedInRootView: View {
         let store = UserDefaultsOnboardingStore()
         self.onboardingStore = store
         self.relapseStore = UserDefaultsRelapseHistoryStore()
-        self.supportContactStore = UserDefaultsSupportContactStore()
+        let supportStore = UserDefaultsSupportContactStore()
+        let notificationStore = UserDefaultsNotificationPreferencesStore()
+        self.supportContactStore = supportStore
         self.achievementStore = UserDefaultsAchievementStore()
         self.notificationService = UNNotificationCenterService()
-        self.notificationPreferencesStore = UserDefaultsNotificationPreferencesStore()
+        self.notificationPreferencesStore = notificationStore
         _onboardingState = StateObject(
             wrappedValue: OnboardingState(
                 userID: userID,
@@ -96,6 +99,15 @@ private struct SignedInRootView: View {
                 authWiring: authWiring,
                 sessionState: sessionState,
                 onboardingStore: store
+            )
+        )
+        _userSettingsCloudSync = StateObject(
+            wrappedValue: UserSettingsCloudSync(
+                userID: userID,
+                authWiring: authWiring,
+                sessionState: sessionState,
+                notificationPreferencesStore: notificationStore,
+                supportContactStore: supportStore
             )
         )
     }
@@ -115,6 +127,7 @@ private struct SignedInRootView: View {
                     aiService: aiService,
                     authWiring: authWiring,
                     cloudSync: sobrietyCloudSync,
+                    userSettingsCloudSync: userSettingsCloudSync,
                     onSignOutTap: onSignOutTap
                 )
             } else {
@@ -146,6 +159,7 @@ private struct MainTabView: View {
     let aiService: (any AIService)?
     let authWiring: AuthWiring?
     let cloudSync: SobrietyCloudSync
+    let userSettingsCloudSync: UserSettingsCloudSync
     let onSignOutTap: () -> Void
     private let analytics: AnalyticsTracker = .shared
 
@@ -169,6 +183,24 @@ private struct MainTabView: View {
                 .padding(10)
                 .frame(maxWidth: .infinity)
                 .background(Color.orange.opacity(0.18))
+            }
+
+            if let message = userSettingsCloudSync.lastError {
+                HStack(alignment: .top, spacing: 8) {
+                    Text(message)
+                        .font(.footnote)
+                        .foregroundStyle(.primary)
+                    Spacer(minLength: 8)
+                    Button {
+                        userSettingsCloudSync.clearError()
+                    } label: {
+                        Text("common.dismiss", bundle: .module)
+                    }
+                    .font(.footnote)
+                }
+                .padding(10)
+                .frame(maxWidth: .infinity)
+                .background(Color.orange.opacity(0.15))
             }
 
             TabView {
@@ -228,6 +260,7 @@ private struct MainTabView: View {
                 userID: userID,
                 supportContactStore: supportContactStore,
                 notificationPreferencesStore: notificationPreferencesStore,
+                userSettingsCloudSync: userSettingsCloudSync,
                 onNotificationPreferencesChanged: { notificationSyncTick += 1 },
                 onSignOutTap: onSignOutTap
             )
@@ -241,11 +274,16 @@ private struct MainTabView: View {
             }
         }
         .environmentObject(cloudSync)
+        .environmentObject(userSettingsCloudSync)
         .task(id: notificationSyncTick) {
             await runNotificationSync()
         }
+        .onChange(of: userSettingsCloudSync.settingsRevision) { _, _ in
+            notificationSyncTick += 1
+        }
         .task {
             await syncUserProfileIfPossible()
+            await userSettingsCloudSync.bootstrapFromCloudIfPossible()
         }
         .task {
             let dayKey = Self.dayKey(Date())
@@ -837,6 +875,7 @@ private struct ProfileView: View {
     let userID: UUID
     let supportContactStore: SupportContactStore
     let notificationPreferencesStore: NotificationPreferencesStore
+    let userSettingsCloudSync: UserSettingsCloudSync
     let onNotificationPreferencesChanged: () -> Void
     let onSignOutTap: () -> Void
     @EnvironmentObject private var localizationSettings: LocalizationSettings
@@ -951,10 +990,11 @@ private struct ProfileView: View {
 
                 Section {
                     Button {
-                        supportContactStore.saveContact(
-                            SupportContact(trustedName: trustedName, trustedPhone: trustedPhone),
-                            userID: userID
-                        )
+                        let contact = SupportContact(trustedName: trustedName, trustedPhone: trustedPhone)
+                        supportContactStore.saveContact(contact, userID: userID)
+                        Task {
+                            await userSettingsCloudSync.pushSupportContact(contact)
+                        }
                     } label: {
                         L10n.text("profile.sos_contact.save")
                     }
@@ -968,12 +1008,19 @@ private struct ProfileView: View {
             }
             .navigationTitle(L10n.text("profile.title"))
             .onAppear {
-                let c = supportContactStore.loadContact(userID: userID)
-                trustedName = c.trustedName
-                trustedPhone = c.trustedPhone
-                loadNotificationForm()
+                applyStoresToForm()
+            }
+            .onChange(of: userSettingsCloudSync.settingsRevision) { _, _ in
+                applyStoresToForm()
             }
         }
+    }
+
+    private func applyStoresToForm() {
+        let c = supportContactStore.loadContact(userID: userID)
+        trustedName = c.trustedName
+        trustedPhone = c.trustedPhone
+        loadNotificationForm()
     }
 
     private var dailyEnabledBinding: Binding<Bool> {
@@ -1052,6 +1099,9 @@ private struct ProfileView: View {
         notificationPrefs = prefs
         notificationPreferencesStore.save(prefs, userID: userID)
         onNotificationPreferencesChanged()
+        Task {
+            await userSettingsCloudSync.pushNotificationPreferences(prefs)
+        }
     }
 
     private func persistQuietHoursIfOn() {

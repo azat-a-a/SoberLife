@@ -201,6 +201,23 @@ public final class HTTPSupabaseService: SupabaseService, @unchecked Sendable {
         try validate(response: response)
     }
 
+    /// PostgREST upsert on primary key / unique constraints (`Prefer: resolution=merge-duplicates`).
+    public func restUpsertMerge(
+        table: String,
+        jsonBody: Data,
+        bearerToken: String
+    ) async throws {
+        let url = baseURL.appendingPathComponent("rest/v1/\(table)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        addUserRestHeaders(to: &request, bearerToken: bearerToken)
+        request.setValue("return=minimal,resolution=merge-duplicates", forHTTPHeaderField: "Prefer")
+        request.httpBody = jsonBody
+
+        let (_, response) = try await session.data(for: request)
+        try validate(response: response)
+    }
+
     private func addDefaultHeaders(to request: inout URLRequest) {
         request.setValue("Bearer \(anonKey)", forHTTPHeaderField: "Authorization")
         request.setValue(anonKey, forHTTPHeaderField: "apikey")

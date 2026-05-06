@@ -130,6 +130,20 @@ public struct NotificationPreferences: Sendable, Equatable, Codable {
     }
 }
 
+public struct SupportContact: Codable, Sendable, Equatable {
+    public var trustedName: String
+    public var trustedPhone: String
+
+    public init(trustedName: String = "", trustedPhone: String = "") {
+        self.trustedName = trustedName
+        self.trustedPhone = trustedPhone
+    }
+
+    public var hasCallableNumber: Bool {
+        trustedPhone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+    }
+}
+
 public enum ConversationType: String, Sendable {
     case chat
     case sos

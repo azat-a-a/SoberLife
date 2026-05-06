@@ -14,6 +14,14 @@
 
 ## In Progress
 
+- [ ] DB-02 Cloud state parity for profile/progress (Sprint 07)
+  - Priority: P1
+  - Outcome: signed-in users keep profile and progress across reinstall/new device.
+  - DoD: notification prefs + SOS contact + relapse/stats parity + achievements sync available from Supabase with offline fallback.
+  - Estimate: 3 days
+  - Plan artifact: `MIGRATION-PLAN-S07.md`
+  - Progress (2026-05-06): Supabase tables `notification_preferences` + `support_contacts` (migration `20260506201000_...`); app bootstrap/pull-merge + dual-write via `UserSettingsSupabaseSync` / `UserSettingsCloudSync`. Remaining: stats/relapse cloud read, achievements sync.
+
 ---
 
 ## Done

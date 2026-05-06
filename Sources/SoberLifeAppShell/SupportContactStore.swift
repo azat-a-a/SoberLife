@@ -1,18 +1,5 @@
 import Foundation
-
-public struct SupportContact: Codable, Sendable, Equatable {
-    public var trustedName: String
-    public var trustedPhone: String
-
-    public init(trustedName: String = "", trustedPhone: String = "") {
-        self.trustedName = trustedName
-        self.trustedPhone = trustedPhone
-    }
-
-    public var hasCallableNumber: Bool {
-        trustedPhone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-    }
-}
+import SoberLifeCore
 
 public protocol SupportContactStore: Sendable {
     func loadContact(userID: UUID) -> SupportContact
