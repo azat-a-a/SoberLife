@@ -12,7 +12,7 @@
 
 ## 2026-05-05 - D-001
 - Decision: Build iOS app with SwiftUI as primary client.
-- Why: Fast iteration for native UX, good fit for Apple Sign-In and notifications.
+- Why: Fast iteration for native UX, strong fit for notifications and a single cohesive mobile UI.
 - Impact: iOS-first scope for MVP; Android postponed.
 - Status: Accepted
 
@@ -68,6 +68,12 @@
 - Decision: Host the installable iOS client in `ios/` as an Xcode project that depends on the repo-root Swift package (`Package.swift`) via `XCLocalSwiftPackageReference`, rather than converting the whole repo to an Xcode-only layout.
 - Why: Keeps `swift build` / `swift test` workflows for Core and AppShell while still delivering a signed app archive from Xcode.
 - Impact: Developers open `ios/SoberLife.xcodeproj`; package paths assume the standard layout (`ios` sibling of `Package.swift`).
+- Status: Accepted
+
+## 2026-05-06 - D-014
+- Decision: Use **Supabase email/password** auth in the client (password grant + sign-up) instead of Sign in with Apple.
+- Why: Simpler Apple Developer setup (no Sign in with Apple capability), one fewer moving part in native code, and email/password is sufficient for MVP while Supabase still issues standard JWTs for RLS.
+- Impact: Users must enable **Email** provider in Supabase; `public.users.apple_id` remains a legacy column name but is populated from auth metadata or email via existing triggers/RPC; the old `auth-exchange-apple` edge path is unused by the app.
 - Status: Accepted
 
 ## Open Decisions

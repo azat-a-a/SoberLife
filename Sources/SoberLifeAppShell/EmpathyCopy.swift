@@ -37,7 +37,10 @@ public enum EmpathyCopy {
         "Someone you trust for a quick call when things feel intense. Stored only on this device."
 
     public static let chatNeedsBackend =
-        "To talk with the assistant, the app needs your Supabase project wired in (same setup as Apple sign-in)."
+        "To talk with the assistant, the app needs your Supabase project wired in (same setup as email sign-in)."
+
+    public static let emailConfirmationRequired =
+        "Check your email to confirm your account, then sign in here."
 
     public static let chatCloudLoadFailed =
         "We could not load your cloud history. Showing what is saved on this device."

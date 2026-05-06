@@ -3,11 +3,13 @@
 ## Open and run
 1. Open `SoberLife.xcodeproj` in Xcode (16+ recommended).
 2. Set your **Team** on the `SoberLife` target (Signing & Capabilities).
-3. Add **Sign in with Apple** capability if Xcode prompts (entitlements file already includes it).
+3. In the Supabase dashboard, enable **Email** under **Authentication → Providers** (and adjust sign-up / email confirmation to match how you want onboarding to behave).
 4. Configure Supabase for real auth/chat:
    - Either edit **Build Settings** → User-Defined: `SUPABASE_URL`, `SUPABASE_ANON_KEY`,  
-   - Or copy `Config/Shared.xcconfig` to a **local** `Config/Local.xcconfig` (gitignored), put secrets there, and set **Based on Configuration File** for the project to that file.
+   - Or copy `Config/Secrets.example.xcconfig` to **`Config/Secrets.xcconfig`** (gitignored), put secrets there, and set **Based on Configuration File** for Debug/Release to that file.
 5. Add a **1024×1024** icon under `App/Assets.xcassets/AppIcon` before archiving for TestFlight (App Store Connect rejects missing marketing icon).
+
+The app signs in with **email and password** via Supabase Auth (`/auth/v1/token` password grant and `/auth/v1/signup`). There is no Sign in with Apple entitlement in this target.
 
 ## Command-line build (Simulator)
 From repo root:

@@ -4,12 +4,9 @@ import Foundation
 public extension SessionStateFactory {
     static func makePlaceholderSessionState(
         wiring: AuthWiring,
-        shouldFailTokenRequest: Bool = false
+        shouldFailSignIn: Bool = false
     ) -> SessionState {
-        let tokenProvider = PlaceholderAppleSignInTokenProvider(shouldFail: shouldFailTokenRequest)
-        return makeSessionState(
-            wiring: wiring,
-            tokenProvider: tokenProvider
-        )
+        let authService = PlaceholderAuthService(shouldFailSignIn: shouldFailSignIn)
+        return SessionState(authService: authService)
     }
 }

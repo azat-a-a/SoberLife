@@ -46,6 +46,17 @@ public struct UserSession: Sendable, Equatable {
     }
 }
 
+/// Result of Supabase Auth password grant or sign-up when a session is issued.
+public struct SupabasePasswordAuthResult: Sendable, Equatable {
+    public let accessToken: String
+    public let userID: UUID
+
+    public init(accessToken: String, userID: UUID) {
+        self.accessToken = accessToken
+        self.userID = userID
+    }
+}
+
 public struct NotificationPayload: Sendable, Equatable {
     public let title: String
     public let body: String
@@ -133,7 +144,8 @@ public enum NotificationCategory: Sendable, Equatable {
 }
 
 public protocol AuthService: Sendable {
-    func signInWithApple(idToken: String, nonce: String?) async throws -> UserSession
+    func signIn(email: String, password: String) async throws -> UserSession
+    func signUp(email: String, password: String) async throws -> UserSession
     func signOut() async throws
     func currentSession() async throws -> UserSession?
 }
@@ -142,6 +154,8 @@ public protocol SupabaseService: Sendable {
     func select(table: String, filter: [String: String]) async throws -> [[String: String]]
     func insert(table: String, values: [String: String]) async throws
     func invoke(function: String, payload: [String: String]) async throws -> [String: String]
+    func authSignIn(email: String, password: String) async throws -> SupabasePasswordAuthResult
+    func authSignUp(email: String, password: String) async throws -> SupabasePasswordAuthResult
 }
 
 public protocol AIService: Sendable {

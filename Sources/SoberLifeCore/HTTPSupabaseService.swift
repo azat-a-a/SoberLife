@@ -5,6 +5,8 @@ public enum SupabaseHTTPServiceError: Error, Equatable {
     case invalidResponse
     case httpStatus(Int)
     case decodingFailed
+    /// Auth response included a user but no `access_token` (typical when email confirmation is required).
+    case authPendingEmailConfirmation
 }
 
 public final class HTTPSupabaseService: SupabaseService, @unchecked Sendable {
@@ -76,6 +78,40 @@ public final class HTTPSupabaseService: SupabaseService, @unchecked Sendable {
         } catch {
             throw SupabaseHTTPServiceError.decodingFailed
         }
+    }
+
+    // MARK: - Supabase Auth (email / password)
+
+    public func authSignIn(email: String, password: String) async throws -> SupabasePasswordAuthResult {
+        var components = URLComponents(
+            url: baseURL.appendingPathComponent("auth/v1/token"),
+            resolvingAgainstBaseURL: false
+        )
+        components?.queryItems = [URLQueryItem(name: "grant_type", value: "password")]
+        guard let url = components?.url else {
+            throw SupabaseHTTPServiceError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        addDefaultHeaders(to: &request)
+        request.httpBody = try jsonEncoder.encode(AuthEmailPasswordBody(email: email, password: password))
+
+        let (data, response) = try await session.data(for: request)
+        try validateAuth(response: response)
+        return try decodeAuthSession(data: data)
+    }
+
+    public func authSignUp(email: String, password: String) async throws -> SupabasePasswordAuthResult {
+        let url = baseURL.appendingPathComponent("auth/v1/signup")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        addDefaultHeaders(to: &request)
+        request.httpBody = try jsonEncoder.encode(AuthEmailPasswordBody(email: email, password: password))
+
+        let (data, response) = try await session.data(for: request)
+        try validateAuth(response: response)
+        return try decodeAuthSession(data: data)
     }
 
     // MARK: - Authenticated REST (PostgREST + user JWT for RLS)
@@ -187,4 +223,52 @@ public final class HTTPSupabaseService: SupabaseService, @unchecked Sendable {
             throw SupabaseHTTPServiceError.httpStatus(http.statusCode)
         }
     }
+
+    private func validateAuth(response: URLResponse) throws {
+        guard let http = response as? HTTPURLResponse else {
+            throw SupabaseHTTPServiceError.invalidResponse
+        }
+        guard (200...299).contains(http.statusCode) else {
+            throw SupabaseHTTPServiceError.httpStatus(http.statusCode)
+        }
+    }
+
+    private func decodeAuthSession(data: Data) throws -> SupabasePasswordAuthResult {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        do {
+            let dto = try decoder.decode(AuthSessionDTO.self, from: data)
+            let idString = dto.user?.id ?? dto.id
+            guard let idString, let userID = UUID(uuidString: idString) else {
+                throw SupabaseHTTPServiceError.decodingFailed
+            }
+            guard let token = dto.accessToken, !token.isEmpty else {
+                throw SupabaseHTTPServiceError.authPendingEmailConfirmation
+            }
+            return SupabasePasswordAuthResult(accessToken: token, userID: userID)
+        } catch is DecodingError {
+            throw SupabaseHTTPServiceError.decodingFailed
+        } catch let error as SupabaseHTTPServiceError {
+            throw error
+        } catch {
+            throw SupabaseHTTPServiceError.decodingFailed
+        }
+    }
+}
+
+private struct AuthEmailPasswordBody: Encodable {
+    let email: String
+    let password: String
+}
+
+private struct AuthSessionDTO: Decodable {
+    let accessToken: String?
+    let user: AuthUserDTO?
+    /// Present on some sign-up responses when the user object is returned at the root without a `user` wrapper.
+    let id: String?
+}
+
+private struct AuthUserDTO: Decodable {
+    let id: String
 }

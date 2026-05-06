@@ -19,10 +19,11 @@ public struct AppShellView: View {
             case .signedOut:
                 SignedOutPlaceholderView(
                     errorMessage: sessionState.authErrorMessage,
-                    onSignInTap: {
-                        Task {
-                            await sessionState.signInWithApple()
-                        }
+                    onSignIn: { email, password in
+                        await sessionState.signIn(email: email, password: password)
+                    },
+                    onSignUp: { email, password in
+                        await sessionState.signUp(email: email, password: password)
                     }
                 )
             case let .signedIn(userID):
@@ -400,7 +401,12 @@ private struct OnboardingFlowView: View {
 
 private struct SignedOutPlaceholderView: View {
     let errorMessage: String?
-    let onSignInTap: () -> Void
+    let onSignIn: (String, String) async -> Void
+    let onSignUp: (String, String) async -> Void
+
+    @State private var email = ""
+    @State private var password = ""
+    @State private var isBusy = false
 
     var body: some View {
         NavigationStack {
@@ -409,9 +415,32 @@ private struct SignedOutPlaceholderView: View {
                     .font(.largeTitle)
                     .bold()
 
-                Text("Sign in to save your progress. If sign-in feels like a lot right now, you can still explore the flow when you are ready.")
+                Text("Sign in with email to save your progress. If signing in feels like a lot right now, you can still come back when you are ready.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
+
+                Group {
+                    #if os(iOS)
+                    TextField("Email", text: $email)
+                        .textContentType(.username)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.emailAddress)
+                        .autocorrectionDisabled()
+                    #else
+                    TextField("Email", text: $email)
+                    #endif
+                }
+                .textFieldStyle(.roundedBorder)
+
+                Group {
+                    #if os(iOS)
+                    SecureField("Password", text: $password)
+                        .textContentType(.password)
+                    #else
+                    SecureField("Password", text: $password)
+                    #endif
+                }
+                .textFieldStyle(.roundedBorder)
 
                 if let errorMessage {
                     Text(errorMessage)
@@ -420,8 +449,30 @@ private struct SignedOutPlaceholderView: View {
                         .multilineTextAlignment(.center)
                 }
 
-                Button("Continue with Apple", action: onSignInTap)
-                    .buttonStyle(.borderedProminent)
+                Button("Sign in") {
+                    Task {
+                        isBusy = true
+                        await onSignIn(
+                            email.trimmingCharacters(in: .whitespacesAndNewlines),
+                            password
+                        )
+                        isBusy = false
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(isBusy)
+
+                Button("Create account") {
+                    Task {
+                        isBusy = true
+                        await onSignUp(
+                            email.trimmingCharacters(in: .whitespacesAndNewlines),
+                            password
+                        )
+                        isBusy = false
+                    }
+                }
+                .disabled(isBusy)
             }
             .padding(24)
             .navigationTitle("Welcome")

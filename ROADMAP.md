@@ -34,7 +34,7 @@
 - Get user from install to active home screen in under 2 minutes.
 
 **Deliverables**
-- Apple Sign-In integration.
+- Supabase email/password auth integration.
 - Minimal onboarding (3-4 screens).
 - Sobriety start date and daily alcohol cost saved.
 - Notification permissions screen.

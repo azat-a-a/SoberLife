@@ -3,6 +3,8 @@ import Foundation
 public enum AuthServiceError: Error, Equatable {
     case invalidCredentials
     case invalidResponse
+    /// Sign-up returned a user without a session (e.g. email confirmation required in Supabase).
+    case emailNotConfirmed
 }
 
 public actor SupabaseAuthService: AuthService {
@@ -13,30 +15,51 @@ public actor SupabaseAuthService: AuthService {
         self.supabaseService = supabaseService
     }
 
-    public func signInWithApple(idToken: String, nonce: String?) async throws -> UserSession {
-        guard !idToken.isEmpty else {
+    public func signIn(email: String, password: String) async throws -> UserSession {
+        let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedEmail.isEmpty, !password.isEmpty else {
             throw AuthServiceError.invalidCredentials
         }
 
-        var payload: [String: String] = ["id_token": idToken]
-        if let nonce {
-            payload["nonce"] = nonce
-        }
-
-        let response = try await supabaseService.invoke(function: "auth-exchange-apple", payload: payload)
-
-        guard
-            let userIDRaw = response["user_id"],
-            let userID = UUID(uuidString: userIDRaw),
-            let accessToken = response["access_token"],
-            !accessToken.isEmpty
-        else {
+        do {
+            let result = try await supabaseService.authSignIn(email: trimmedEmail, password: password)
+            let session = UserSession(userID: result.userID, accessToken: result.accessToken)
+            cachedSession = session
+            return session
+        } catch let error as SupabaseHTTPServiceError {
+            throw mapSupabaseHTTPAuthError(error)
+        } catch {
             throw AuthServiceError.invalidResponse
         }
+    }
 
-        let session = UserSession(userID: userID, accessToken: accessToken)
-        cachedSession = session
-        return session
+    public func signUp(email: String, password: String) async throws -> UserSession {
+        let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedEmail.isEmpty, !password.isEmpty else {
+            throw AuthServiceError.invalidCredentials
+        }
+
+        do {
+            let result = try await supabaseService.authSignUp(email: trimmedEmail, password: password)
+            let session = UserSession(userID: result.userID, accessToken: result.accessToken)
+            cachedSession = session
+            return session
+        } catch let error as SupabaseHTTPServiceError {
+            throw mapSupabaseHTTPAuthError(error)
+        } catch {
+            throw AuthServiceError.invalidResponse
+        }
+    }
+
+    private func mapSupabaseHTTPAuthError(_ error: SupabaseHTTPServiceError) -> AuthServiceError {
+        switch error {
+        case .httpStatus(let code) where [400, 401, 422].contains(code):
+            return .invalidCredentials
+        case .authPendingEmailConfirmation:
+            return .emailNotConfirmed
+        default:
+            return .invalidResponse
+        }
     }
 
     public func signOut() async throws {

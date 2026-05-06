@@ -1,6 +1,4 @@
 import SwiftUI
-import AuthenticationServices
-import UIKit
 import SoberLifeAppShell
 import SoberLifeCore
 
@@ -23,9 +21,7 @@ private final class AppRootState: ObservableObject {
     init() {
         if let wiring = Self.loadAuthWiring() {
             authWiring = wiring
-            sessionState = SessionStateFactory.makeLiveSessionState(wiring: wiring) {
-                Self.presentationAnchor()
-            }
+            sessionState = SessionStateFactory.makeSessionState(wiring: wiring)
         } else {
             authWiring = nil
             let fallback = AuthWiring(
@@ -46,19 +42,5 @@ private final class AppRootState: ObservableObject {
             !key.isEmpty
         else { return nil }
         return AuthWiring(supabaseURL: url, supabaseAnonKey: key)
-    }
-
-    private static func presentationAnchor() -> ASPresentationAnchor {
-        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-        for scene in scenes {
-            if let window = scene.windows.first(where: \.isKeyWindow) {
-                return window
-            }
-        }
-        if let window = scenes.first?.windows.first {
-            return window
-        }
-        // Before the first window exists (rare); Sign in with Apple may need a second tap.
-        return UIWindow(frame: UIScreen.main.bounds)
     }
 }

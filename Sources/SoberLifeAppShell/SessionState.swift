@@ -13,15 +13,12 @@ public final class SessionState: ObservableObject {
     @Published public private(set) var authErrorMessage: String?
 
     private let authService: AuthService
-    private let appleSignInTokenProvider: AppleSignInTokenProvider
 
     public init(
         authService: AuthService,
-        appleSignInTokenProvider: AppleSignInTokenProvider,
         authState: AuthFlowState = .signedOut
     ) {
         self.authService = authService
-        self.appleSignInTokenProvider = appleSignInTokenProvider
         self.authState = authState
     }
 
@@ -39,14 +36,45 @@ public final class SessionState: ObservableObject {
         }
     }
 
-    public func signInWithApple() async {
+    public func signIn(email: String, password: String) async {
         do {
-            let token = try await appleSignInTokenProvider.requestToken()
-            let session = try await authService.signInWithApple(idToken: token.idToken, nonce: token.nonce)
+            let session = try await authService.signIn(email: email, password: password)
             authState = .signedIn(userID: session.userID)
             authErrorMessage = nil
+        } catch let error as AuthServiceError {
+            authState = .signedOut
+            switch error {
+            case .invalidCredentials:
+                authErrorMessage = "Incorrect email or password."
+            case .emailNotConfirmed:
+                authErrorMessage = EmpathyCopy.emailConfirmationRequired
+            case .invalidResponse:
+                authErrorMessage = "Sign in failed. Please try again."
+            }
         } catch {
+            authState = .signedOut
             authErrorMessage = "Sign in failed. Please try again."
+        }
+    }
+
+    public func signUp(email: String, password: String) async {
+        do {
+            let session = try await authService.signUp(email: email, password: password)
+            authState = .signedIn(userID: session.userID)
+            authErrorMessage = nil
+        } catch let error as AuthServiceError {
+            authState = .signedOut
+            switch error {
+            case .emailNotConfirmed:
+                authErrorMessage = EmpathyCopy.emailConfirmationRequired
+            case .invalidCredentials:
+                authErrorMessage = "Check your email and password and try again."
+            case .invalidResponse:
+                authErrorMessage = "Could not create account. Please try again."
+            }
+        } catch {
+            authState = .signedOut
+            authErrorMessage = "Could not create account. Please try again."
         }
     }
 
@@ -66,13 +94,8 @@ public final class SessionState: ObservableObject {
         return session.accessToken
     }
 
-    /// Clears local auth state and prompts the user to re-auth after API 401.
     public func handleUnauthorizedSession() async {
-        do {
-            try await authService.signOut()
-        } catch {
-            // Even if remote/local sign-out fails, we still force signed-out UI state.
-        }
+        try? await authService.signOut()
         authState = .signedOut
         authErrorMessage = EmpathyCopy.sessionExpiredNeedsSignIn
     }

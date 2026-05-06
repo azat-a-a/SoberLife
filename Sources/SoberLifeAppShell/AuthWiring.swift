@@ -13,18 +13,12 @@ public struct AuthWiring {
 
 @MainActor
 public enum SessionStateFactory {
-    public static func makeSessionState(
-        wiring: AuthWiring,
-        tokenProvider: AppleSignInTokenProvider
-    ) -> SessionState {
+    public static func makeSessionState(wiring: AuthWiring) -> SessionState {
         let supabaseService = HTTPSupabaseService(
             baseURL: wiring.supabaseURL,
             anonKey: wiring.supabaseAnonKey
         )
         let authService = SupabaseAuthService(supabaseService: supabaseService)
-        return SessionState(
-            authService: authService,
-            appleSignInTokenProvider: tokenProvider
-        )
+        return SessionState(authService: authService)
     }
 }

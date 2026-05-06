@@ -9,14 +9,18 @@ public actor PlaceholderAuthService: AuthService {
         self.shouldFailSignIn = shouldFailSignIn
     }
 
-    public func signInWithApple(idToken: String, nonce: String?) async throws -> UserSession {
-        if shouldFailSignIn || idToken.isEmpty {
-            throw NSError(domain: "PlaceholderAuthService", code: 401)
+    public func signIn(email: String, password: String) async throws -> UserSession {
+        if shouldFailSignIn || email.isEmpty || password.isEmpty {
+            throw AuthServiceError.invalidCredentials
         }
 
         let session = UserSession(userID: UUID(), accessToken: "placeholder-token")
         storedSession = session
         return session
+    }
+
+    public func signUp(email: String, password: String) async throws -> UserSession {
+        try await signIn(email: email, password: password)
     }
 
     public func signOut() async throws {

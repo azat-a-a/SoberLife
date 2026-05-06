@@ -22,7 +22,7 @@ final class HTTPSupabaseServiceTests: XCTestCase {
         )
 
         MockURLProtocol.handler = { request in
-            XCTAssertEqual(request.url?.absoluteString, "https://project.supabase.co/functions/v1/auth-exchange-apple")
+            XCTAssertEqual(request.url?.absoluteString, "https://project.supabase.co/functions/v1/example-fn")
             XCTAssertEqual(request.value(forHTTPHeaderField: "apikey"), "anon-key")
             XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer anon-key")
 
@@ -36,8 +36,8 @@ final class HTTPSupabaseServiceTests: XCTestCase {
             return (response, body)
         }
 
-        let payload = ["id_token": "apple-token"]
-        let response = try await service.invoke(function: "auth-exchange-apple", payload: payload)
+        let payload = ["hello": "world"]
+        let response = try await service.invoke(function: "example-fn", payload: payload)
         XCTAssertEqual(response["access_token"], "abc")
     }
 
@@ -119,7 +119,7 @@ final class HTTPSupabaseServiceTests: XCTestCase {
         }
 
         do {
-            _ = try await service.invoke(function: "auth-exchange-apple", payload: [:])
+            _ = try await service.invoke(function: "example-fn", payload: [:])
             XCTFail("Expected error")
         } catch let error as SupabaseHTTPServiceError {
             XCTAssertEqual(error, .httpStatus(401))

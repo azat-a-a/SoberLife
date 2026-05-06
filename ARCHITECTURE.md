@@ -38,8 +38,8 @@
 ## Service Interfaces (Protocol-First)
 
 - `AuthService`
-  - Sign in/out and session retrieval.
-  - Apple Sign-In orchestration lives behind this interface.
+  - Sign in, sign up, sign out, and session retrieval.
+  - Implemented with Supabase Auth **email/password** (`HTTPSupabaseService` calls `/auth/v1/token` and `/auth/v1/signup`); JWT is cached for PostgREST / RLS.
 
 - `SupabaseService`
   - Generic gateway for table operations and edge function invocation.

@@ -8,19 +8,18 @@
 - End: 2026-06-02
 
 ## Top Priorities
-1. Apple Sign-In end-to-end
+1. Email/password sign-in end-to-end (Supabase Auth)
 2. Minimal onboarding (3-4 screens)
 3. Home screen with sobriety day counter
 4. Basic stats and first milestone logic
 
 ## Committed Tasks
 
-### AUTH-01 Apple Sign-In Integration
+### AUTH-01 Email/Password Integration
 - Outcome: user signs in securely and reaches app shell.
 - Tasks:
-  - Integrate Sign in with Apple in iOS app.
-  - Connect provider to Supabase Auth.
-  - Handle login errors and canceled flow.
+  - Integrate Supabase email/password sign-up and sign-in in the app.
+  - Enable Email provider in Supabase; handle wrong credentials and email-confirmation flows.
   - Implement logout and session invalidation.
 - DoD:
   - Login works on real device.
@@ -96,7 +95,7 @@
 - Social feed and friends
 
 ## Demo Checklist (End of Sprint)
-- Show Apple Sign-In and logout.
+- Show email/password sign-in, optional sign-up, and logout.
 - Show onboarding completion and DB persisted values.
 - Show Home counter accuracy with mocked dates.
 - Show milestone unlock for 7-day user fixture.

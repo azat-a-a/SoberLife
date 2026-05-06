@@ -112,4 +112,12 @@ private actor MockAISupabaseService: SupabaseService {
             return value
         }
     }
+
+    func authSignIn(email: String, password: String) async throws -> SupabasePasswordAuthResult {
+        SupabasePasswordAuthResult(accessToken: "", userID: UUID())
+    }
+
+    func authSignUp(email: String, password: String) async throws -> SupabasePasswordAuthResult {
+        SupabasePasswordAuthResult(accessToken: "", userID: UUID())
+    }
 }

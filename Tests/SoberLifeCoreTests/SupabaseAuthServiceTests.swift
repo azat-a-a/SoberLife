@@ -3,17 +3,14 @@ import Foundation
 @testable import SoberLifeCore
 
 final class SupabaseAuthServiceTests: XCTestCase {
-    func testSignInWithAppleReturnsSessionFromEdgeResponse() async throws {
+    func testSignInReturnsSessionFromPasswordGrant() async throws {
         let userID = UUID()
         let supabase = MockSupabaseService(
-            invokeResult: [
-                "user_id": userID.uuidString,
-                "access_token": "token-123"
-            ]
+            signIn: .success(SupabasePasswordAuthResult(accessToken: "token-123", userID: userID))
         )
         let service = SupabaseAuthService(supabaseService: supabase)
 
-        let session = try await service.signInWithApple(idToken: "apple-token", nonce: "nonce")
+        let session = try await service.signIn(email: "a@b.co", password: "secret")
 
         XCTAssertEqual(session.userID, userID)
         XCTAssertEqual(session.accessToken, "token-123")
@@ -21,11 +18,11 @@ final class SupabaseAuthServiceTests: XCTestCase {
         XCTAssertEqual(currentSession, session)
     }
 
-    func testSignInWithAppleEmptyTokenThrows() async {
-        let service = SupabaseAuthService(supabaseService: MockSupabaseService(invokeResult: [:]))
+    func testSignInEmptyPasswordThrows() async {
+        let service = SupabaseAuthService(supabaseService: MockSupabaseService())
 
         do {
-            _ = try await service.signInWithApple(idToken: "", nonce: nil)
+            _ = try await service.signIn(email: "a@b.co", password: "")
             XCTFail("Expected error")
         } catch let error as AuthServiceError {
             XCTAssertEqual(error, .invalidCredentials)
@@ -34,16 +31,35 @@ final class SupabaseAuthServiceTests: XCTestCase {
         }
     }
 
-    func testSignInWithAppleInvalidResponseThrows() async {
+    func testSignInMapsHttp400ToInvalidCredentials() async {
         let service = SupabaseAuthService(
-            supabaseService: MockSupabaseService(invokeResult: ["unexpected": "value"])
+            supabaseService: MockSupabaseService(
+                signIn: .failure(SupabaseHTTPServiceError.httpStatus(400))
+            )
         )
 
         do {
-            _ = try await service.signInWithApple(idToken: "apple-token", nonce: nil)
+            _ = try await service.signIn(email: "a@b.co", password: "bad")
             XCTFail("Expected error")
         } catch let error as AuthServiceError {
-            XCTAssertEqual(error, .invalidResponse)
+            XCTAssertEqual(error, .invalidCredentials)
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
+    }
+
+    func testSignUpMapsPendingConfirmationToEmailNotConfirmed() async {
+        let service = SupabaseAuthService(
+            supabaseService: MockSupabaseService(
+                signUp: .failure(SupabaseHTTPServiceError.authPendingEmailConfirmation)
+            )
+        )
+
+        do {
+            _ = try await service.signUp(email: "a@b.co", password: "secret")
+            XCTFail("Expected error")
+        } catch let error as AuthServiceError {
+            XCTAssertEqual(error, .emailNotConfirmed)
         } catch {
             XCTFail("Unexpected error type: \(error)")
         }
@@ -53,14 +69,11 @@ final class SupabaseAuthServiceTests: XCTestCase {
         let userID = UUID()
         let service = SupabaseAuthService(
             supabaseService: MockSupabaseService(
-                invokeResult: [
-                    "user_id": userID.uuidString,
-                    "access_token": "token-123"
-                ]
+                signIn: .success(SupabasePasswordAuthResult(accessToken: "token-123", userID: userID))
             )
         )
 
-        _ = try await service.signInWithApple(idToken: "apple-token", nonce: nil)
+        _ = try await service.signIn(email: "a@b.co", password: "secret")
         try await service.signOut()
 
         let current = try await service.currentSession()
@@ -69,19 +82,47 @@ final class SupabaseAuthServiceTests: XCTestCase {
 }
 
 private actor MockSupabaseService: SupabaseService {
-    private let invokeResult: [String: String]
+    private let signIn: Result<SupabasePasswordAuthResult, Error>
+    private let signUp: Result<SupabasePasswordAuthResult, Error>
 
-    init(invokeResult: [String: String]) {
-        self.invokeResult = invokeResult
+    init(
+        signIn: Result<SupabasePasswordAuthResult, Error> = .success(
+            SupabasePasswordAuthResult(
+                accessToken: "token-123",
+                userID: UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+            )
+        ),
+        signUp: Result<SupabasePasswordAuthResult, Error>? = nil
+    ) {
+        self.signIn = signIn
+        self.signUp = signUp ?? signIn
     }
 
-    func select(table: String, filter: [String : String]) async throws -> [[String : String]] {
+    func select(table: String, filter: [String: String]) async throws -> [[String: String]] {
         []
     }
 
-    func insert(table: String, values: [String : String]) async throws {}
+    func insert(table: String, values: [String: String]) async throws {}
 
-    func invoke(function: String, payload: [String : String]) async throws -> [String : String] {
-        invokeResult
+    func invoke(function: String, payload: [String: String]) async throws -> [String: String] {
+        [:]
+    }
+
+    func authSignIn(email: String, password: String) async throws -> SupabasePasswordAuthResult {
+        switch signIn {
+        case let .success(value):
+            return value
+        case let .failure(error):
+            throw error
+        }
+    }
+
+    func authSignUp(email: String, password: String) async throws -> SupabasePasswordAuthResult {
+        switch signUp {
+        case let .success(value):
+            return value
+        case let .failure(error):
+            throw error
+        }
     }
 }

@@ -49,9 +49,9 @@
   - Date: 2026-05-05
   - Notes: SwiftUI app shell added with tab navigation, placeholder screens, and session-state auth placeholder flow.
 
-- [x] AUTH-01 Apple Sign-In integration
-  - Date: 2026-05-05
-  - Notes: Apple Sign-In token provider, live iOS token bridge, Supabase auth exchange service, and session wiring factory added with tests.
+- [x] AUTH-01 Email/password auth (Supabase)
+  - Date: 2026-05-06 (replaces Apple Sign-In from 2026-05-05)
+  - Notes: Client uses Supabase Auth email+password (`/auth/v1/token`, `/auth/v1/signup`); welcome screen with sign-in and create-account; D-014. Enable Email provider in Supabase project settings.
 
 - [x] ONB-01 Onboarding (goal, sobriety start date, daily alcohol cost)
   - Date: 2026-05-05
