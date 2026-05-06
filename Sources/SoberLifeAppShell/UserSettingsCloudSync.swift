@@ -32,11 +32,13 @@ public final class UserSettingsCloudSync: ObservableObject {
         lastError = nil
     }
 
-    public func bootstrapFromCloudIfPossible() async {
+    public func bootstrapFromCloudIfPossible(skipEnsureProfile: Bool = false) async {
         guard let (token, http) = await makeClient() else { return }
         let sync = UserSettingsSupabaseSync(http: http)
         do {
-            try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+            if !skipEnsureProfile {
+                try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+            }
             let localPrefs = notificationPreferencesStore.load(userID: userID)
             let resolvedPrefs = try await sync.resolveNotificationPreferences(
                 userId: userID,

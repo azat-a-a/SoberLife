@@ -4,7 +4,13 @@ Use this immediately after merging DB-02 code, before treating sync as “produc
 
 Date context: created 2026-05-07.
 
-## 1) Supabase (all target environments)
+## 0) Repository / CI (no Supabase access required)
+
+- [x] All DB-02 migrations present under `supabase/migrations/` (including `20260506201000_notification_preferences_and_support_contacts.sql`).
+- [x] `swift test` passes on current `main` (59 tests) — run locally after each relevant change.
+- [ ] Install [Supabase CLI](https://supabase.com/docs/guides/cli) if you use `supabase db push` / linked projects; this environment had no `supabase` binary.
+
+## 1) Supabase (all target environments) — **owner**
 
 - [ ] Migrations applied through **`20260506201000_notification_preferences_and_support_contacts.sql`** (and any prior required files) on **staging**, then **production**.
 - [ ] Confirm tables exist: `public.notification_preferences`, `public.support_contacts`; **`public.achievements`** and **`public.sobriety_records`** unchanged but RLS still enabled.

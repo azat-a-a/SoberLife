@@ -11,6 +11,14 @@
 - Start: **2026-05-07**
 - End: **2026-05-20**
 
+## Progress (engineering repo, 2026-05-07)
+
+- [x] **Gate 0 (partial):** `OPS-DB02-ROLLOUT.md` §0 completed in repo; §1–§5 remain **owner** (Supabase + devices).
+- [x] **QA-03 (template):** `QA-SYNC-S07-RESULTS.md` created — fill after manual run.
+- [x] **I18N-04 (template):** `I18N-REVIEW-S07.md` created — assign reviewers.
+- [x] **TECH-01 (one item):** Main tab cloud bootstrap calls `ensure_user_profile` once per successful wake, then settings + achievements bootstraps skip duplicate ensure (`skipEnsureProfile`).
+- [x] **DATA-02:** **D-015** in `DECISIONS.md`; `ANALYTICS.md` updated.
+
 ## Relationship to other sprint docs
 
 - **`SPRINT-05.md`**: beta/TestFlight hardening (largely done).

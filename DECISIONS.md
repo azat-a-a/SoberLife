@@ -76,9 +76,15 @@
 - Impact: Users must enable **Email** provider in Supabase; `public.users.apple_id` remains a legacy column name but is populated from auth metadata or email via existing triggers/RPC; the old `auth-exchange-apple` edge path is unused by the app.
 - Status: Accepted
 
+## 2026-05-07 - D-015
+- Decision: Keep **logging-only** analytics (`LoggingAnalyticsSink`) through Sprint 07; choose vendor or self-hosted pipeline in Sprint 08 after privacy/App Store posture is clear.
+- Why: DB-02 rollout and field QA take precedence; event names and call sites are already stable per `ANALYTICS.md`.
+- Impact: No production funnel dashboards from the app until a sink is integrated; beta relies on console logs, TestFlight feedback, and any backend logs.
+- Status: Accepted
+
 ## Open Decisions
 - D-007 Pricing model details for premium limits (message caps, feature gates).
-- D-008 Analytics stack selection (self-hosted vs third-party).
+- D-008 Analytics stack selection (self-hosted vs third-party) — **target decision Sprint 08**; interim behavior per **D-015**.
 - D-009 Localization strategy after RU (EN first or simultaneous rollout).
 
 ## Revisit Triggers

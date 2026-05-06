@@ -28,11 +28,13 @@ public final class AchievementsCloudSync: ObservableObject {
         lastError = nil
     }
 
-    public func bootstrapFromCloudIfPossible() async {
+    public func bootstrapFromCloudIfPossible(skipEnsureProfile: Bool = false) async {
         guard let (token, http) = await makeClient() else { return }
         let sync = AchievementSupabaseSync(http: http)
         do {
-            try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+            if !skipEnsureProfile {
+                try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+            }
             let cloud = try await sync.fetchUnlockedMilestoneDays(userId: userID, bearerToken: token)
             let local = achievementStore.unlockedMilestones(userID: userID)
             let merged = cloud.union(local)

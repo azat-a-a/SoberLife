@@ -59,3 +59,4 @@ Current properties by event:
 
 ## Next Step (post-baseline)
 - Replace `LoggingAnalyticsSink` with a real provider (e.g. Supabase event table, PostHog, Amplitude) without changing call sites.
+- **2026-05-07:** Interim policy **D-015** (`DECISIONS.md`) — logging-only through Sprint 07; vendor choice scheduled for Sprint 08.

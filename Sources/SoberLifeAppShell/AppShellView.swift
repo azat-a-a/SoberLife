@@ -322,9 +322,7 @@ private struct MainTabView: View {
             notificationSyncTick += 1
         }
         .task {
-            await syncUserProfileIfPossible()
-            await userSettingsCloudSync.bootstrapFromCloudIfPossible()
-            await achievementsCloudSync.bootstrapFromCloudIfPossible()
+            await runMainTabInitialCloudSync()
         }
         .task {
             let dayKey = Self.dayKey(Date())
@@ -336,21 +334,27 @@ private struct MainTabView: View {
         }
     }
 
-    private func syncUserProfileIfPossible() async {
+    /// Single `ensure_user_profile` before settings + achievements bootstrap when JWT is valid; bootstraps retry ensure if this fails transiently.
+    private func runMainTabInitialCloudSync() async {
         guard let wiring = authWiring,
               let token = await sessionState.accessTokenIfAvailable(),
               SupabaseJWT.isLikelyUserAccessToken(token)
         else { return }
         let http = HTTPSupabaseService(baseURL: wiring.supabaseURL, anonKey: wiring.supabaseAnonKey)
+        var profileEnsured = false
         do {
             try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
+            profileEnsured = true
         } catch let error as SupabaseHTTPServiceError {
             if case .httpStatus(401) = error {
                 await sessionState.handleUnauthorizedSession()
+                return
             }
         } catch {
-            // Ignore transient errors here; onboarding/relapse sync paths surface user-facing messages.
+            // Transient errors: bootstraps may call ensureProfileExists themselves.
         }
+        await userSettingsCloudSync.bootstrapFromCloudIfPossible(skipEnsureProfile: profileEnsured)
+        await achievementsCloudSync.bootstrapFromCloudIfPossible(skipEnsureProfile: profileEnsured)
     }
 
     private func runNotificationSync() async {

@@ -10,19 +10,19 @@
 
 ## Todo
 
-- [ ] OPS-01 DB-02 rollout verification
+- [ ] OPS-01 DB-02 rollout verification (owner: staging/prod + devices)
   - Priority: P1
   - Outcome: migrations and client sync verified in staging/prod; manual matrix done.
-  - DoD: `OPS-DB02-ROLLOUT.md` completion record filled; issues triaged.
+  - DoD: `OPS-DB02-ROLLOUT.md` §1–§5 + completion record; issues triaged.
   - Estimate: 0.5 day
-  - Notes: run before treating cloud parity as production-safe.
+  - Notes: §0 repo/CI done in `OPS-DB02-ROLLOUT.md`. Supabase CLI optional for `db push`.
 
-- [ ] S07-01 Execute Sprint 07 committed scope
+- [ ] S07-01 Execute Sprint 07 — remaining manual work
   - Priority: P1
-  - Outcome: ops gate closed, sync QA documented, i18n safety review started, one perf/obs item closed, analytics decision recorded.
-  - DoD: see `SPRINT-07.md` (Gate 0 + committed work).
-  - Estimate: 2 weeks
-  - Notes: QA artifact `QA-SYNC-S07.md` / `QA-SYNC-S07-RESULTS.md`.
+  - Outcome: QA sync results filed; i18n review sheet progressed; observability item from Sprint 05 picked up if time.
+  - DoD: `QA-SYNC-S07-RESULTS.md` filled; `I18N-REVIEW-S07.md` signed or blockers in `TASKS.md`.
+  - Estimate: through 2026-05-20
+  - Notes: see `SPRINT-07.md` Progress block for what is already done in-repo.
 
 ---
 
