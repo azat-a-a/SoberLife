@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "SoberLifeCore",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v17),
         .macOS(.v14)
@@ -23,7 +24,10 @@ let package = Package(
         ),
         .target(
             name: "SoberLifeAppShell",
-            dependencies: ["SoberLifeCore"]
+            dependencies: ["SoberLifeCore"],
+            resources: [
+                .process("Resources")
+            ]
         ),
         .testTarget(
             name: "SoberLifeCoreTests",

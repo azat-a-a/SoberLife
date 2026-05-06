@@ -155,8 +155,10 @@ private struct MainTabView: View {
                         .font(.footnote)
                         .foregroundStyle(.primary)
                     Spacer(minLength: 8)
-                    Button("Dismiss") {
+                    Button {
                         cloudSync.clearError()
+                    } label: {
+                        Text("common.dismiss", bundle: .module)
                     }
                     .font(.footnote)
                 }
@@ -179,7 +181,11 @@ private struct MainTabView: View {
                 notificationSyncTick: $notificationSyncTick
             )
             .tabItem {
-                Label("Home", systemImage: "house")
+                Label {
+                    Text("tab.home", bundle: .module)
+                } icon: {
+                    Image(systemName: "house")
+                }
             }
 
             AIChatTabView(
@@ -190,7 +196,11 @@ private struct MainTabView: View {
                 authWiring: authWiring
             )
             .tabItem {
-                Label("AI Chat", systemImage: "message")
+                Label {
+                    Text("tab.chat", bundle: .module)
+                } icon: {
+                    Image(systemName: "message")
+                }
             }
 
             StatsView(
@@ -203,7 +213,11 @@ private struct MainTabView: View {
                 syncTick: notificationSyncTick
             )
             .tabItem {
-                Label("Stats", systemImage: "chart.bar")
+                Label {
+                    Text("tab.stats", bundle: .module)
+                } icon: {
+                    Image(systemName: "chart.bar")
+                }
             }
 
             ProfileView(
@@ -214,7 +228,11 @@ private struct MainTabView: View {
                 onSignOutTap: onSignOutTap
             )
             .tabItem {
-                Label("Profile", systemImage: "person")
+                Label {
+                    Text("tab.profile", bundle: .module)
+                } icon: {
+                    Image(systemName: "person")
+                }
             }
             }
         }
@@ -279,7 +297,13 @@ private struct OnboardingFlowView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("Onboarding \(state.currentStep + 1)/\(state.totalSteps)")
+                Text(
+                    L10n.format(
+                        "onboarding.progress",
+                        "\(state.currentStep + 1)",
+                        "\(state.totalSteps)"
+                    )
+                )
                     .font(.footnote)
                     .foregroundStyle(.secondary)
 
@@ -295,8 +319,10 @@ private struct OnboardingFlowView: View {
 
                 HStack {
                     if state.currentStep > 0 {
-                        Button("Back") {
+                        Button {
                             state.back()
+                        } label: {
+                            L10n.text("common.back")
                         }
                         .buttonStyle(.bordered)
                     }
@@ -304,17 +330,25 @@ private struct OnboardingFlowView: View {
                     Spacer()
 
                     if state.currentStep == 0 || state.currentStep == 2 {
-                        Button("Skip") {
+                        Button {
                             state.skipCurrentStep()
+                        } label: {
+                            L10n.text("common.skip")
                         }
                         .buttonStyle(.bordered)
                     }
 
-                    Button(state.currentStep == state.totalSteps - 1 ? "Finish" : "Continue") {
+                    Button {
                         if state.currentStep == state.totalSteps - 1 {
                             state.complete()
                         } else {
                             state.next()
+                        }
+                    } label: {
+                        if state.currentStep == state.totalSteps - 1 {
+                            L10n.text("common.finish")
+                        } else {
+                            L10n.text("common.continue")
                         }
                     }
                     .buttonStyle(.borderedProminent)
@@ -322,13 +356,13 @@ private struct OnboardingFlowView: View {
                 }
             }
             .padding()
-            .navigationTitle("Welcome")
+            .navigationTitle(L10n.text("onboarding.title"))
         }
     }
 
     private var goalStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("What feels right as a direction?")
+            L10n.text("onboarding.goal.question")
                 .font(.title2)
                 .bold()
 
@@ -337,7 +371,7 @@ private struct OnboardingFlowView: View {
                     state.selectedGoal = goal
                 } label: {
                     HStack {
-                        Text(goal.rawValue)
+                        Text(goal.localizedTitle)
                         Spacer()
                         if state.selectedGoal == goal {
                             Image(systemName: "checkmark.circle.fill")
@@ -349,7 +383,7 @@ private struct OnboardingFlowView: View {
                 .buttonStyle(.plain)
             }
 
-            Text("There is no wrong answer, and you can change your mind later.")
+            L10n.text("onboarding.goal.helper")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -357,30 +391,27 @@ private struct OnboardingFlowView: View {
 
     private var dateStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("When does this sober period start?")
+            L10n.text("onboarding.startdate.title")
                 .font(.title2)
                 .bold()
-            DatePicker(
-                "Start date",
-                selection: $state.sobrietyStartDate,
-                in: ...Date(),
-                displayedComponents: .date
-            )
+            DatePicker(selection: $state.sobrietyStartDate, in: ...Date(), displayedComponents: .date) {
+                L10n.text("onboarding.startdate.field")
+            }
             .datePickerStyle(.graphical)
         }
     }
 
     private var costStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Average daily alcohol spend")
+            L10n.text("onboarding.cost.title")
                 .font(.title2)
                 .bold()
 
-            TextField("Optional (e.g. 850)", text: $state.dailyAlcoholCostText)
+            TextField(L10n.string("onboarding.cost.placeholder"), text: $state.dailyAlcoholCostText)
                 .padding(12)
                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
 
-            Text("Used to calculate your savings. You can skip this step.")
+            L10n.text("onboarding.cost.helper")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -388,11 +419,11 @@ private struct OnboardingFlowView: View {
 
     private var notificationsStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Daily reminders")
+            L10n.text("onboarding.notifications.title")
                 .font(.title2)
                 .bold()
-            Toggle("Gentle daily reminders", isOn: $state.notificationsEnabled)
-            Text("You can change this anytime. We keep reminders short and skip shaming language.")
+            Toggle(L10n.string("onboarding.notifications.toggle"), isOn: $state.notificationsEnabled)
+            L10n.text("onboarding.notifications.helper")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -411,33 +442,33 @@ private struct SignedOutPlaceholderView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
-                Text("SoberLife")
+                L10n.text("app.name")
                     .font(.largeTitle)
                     .bold()
 
-                Text("Sign in with email to save your progress. If signing in feels like a lot right now, you can still come back when you are ready.")
+                L10n.text("auth.welcome.body")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
 
                 Group {
                     #if os(iOS)
-                    TextField("Email", text: $email)
+                    TextField(L10n.string("auth.email"), text: $email)
                         .textContentType(.username)
                         .textInputAutocapitalization(.never)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled()
                     #else
-                    TextField("Email", text: $email)
+                    TextField(L10n.string("auth.email"), text: $email)
                     #endif
                 }
                 .textFieldStyle(.roundedBorder)
 
                 Group {
                     #if os(iOS)
-                    SecureField("Password", text: $password)
+                    SecureField(L10n.string("auth.password"), text: $password)
                         .textContentType(.password)
                     #else
-                    SecureField("Password", text: $password)
+                    SecureField(L10n.string("auth.password"), text: $password)
                     #endif
                 }
                 .textFieldStyle(.roundedBorder)
@@ -449,7 +480,7 @@ private struct SignedOutPlaceholderView: View {
                         .multilineTextAlignment(.center)
                 }
 
-                Button("Sign in") {
+                Button {
                     Task {
                         isBusy = true
                         await onSignIn(
@@ -458,11 +489,13 @@ private struct SignedOutPlaceholderView: View {
                         )
                         isBusy = false
                     }
+                } label: {
+                    L10n.text("auth.signin")
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(isBusy)
 
-                Button("Create account") {
+                Button {
                     Task {
                         isBusy = true
                         await onSignUp(
@@ -471,11 +504,13 @@ private struct SignedOutPlaceholderView: View {
                         )
                         isBusy = false
                     }
+                } label: {
+                    L10n.text("auth.create_account")
                 }
                 .disabled(isBusy)
             }
             .padding(24)
-            .navigationTitle("Welcome")
+            .navigationTitle(L10n.text("onboarding.title"))
         }
     }
 }
@@ -517,31 +552,45 @@ private struct HomeView: View {
                 Button {
                     showSOS = true
                 } label: {
-                    Label("SOS — quick help", systemImage: "lifepreserver")
+                    Label {
+                        L10n.text("home.sos")
+                    } icon: {
+                        Image(systemName: "lifepreserver")
+                    }
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.orange)
 
-                Text("Sobriety")
+                L10n.text("home.sobriety.heading")
                     .font(.headline)
                     .foregroundStyle(.secondary)
 
-                Text("\(state.soberDays) days")
+                Text(L10n.format("home.days", "\(state.soberDays)"))
                     .font(.system(size: 42, weight: .bold))
 
                 if let dailyAlcoholCost = state.dailyAlcoholCost {
-                    Text("Estimated savings: \(Int(Double(state.soberDays) * dailyAlcoholCost))")
+                    Text(
+                        L10n.format(
+                            "home.estimated_savings",
+                            "\(Int(Double(state.soberDays) * dailyAlcoholCost))"
+                        )
+                    )
                         .font(.subheadline)
                 }
 
                 if let startDate = state.sobrietyStartDate {
-                    Text("This period started: \(startDate.formatted(date: .abbreviated, time: .omitted))")
+                    Text(
+                        L10n.format(
+                            "home.period_started",
+                            startDate.formatted(date: .abbreviated, time: .omitted)
+                        )
+                    )
                         .foregroundStyle(.secondary)
                 }
 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Next milestone: \(state.nextMilestoneDays) days")
+                    Text(L10n.format("home.next_milestone", "\(state.nextMilestoneDays)"))
                         .font(.subheadline)
                     ProgressView(value: state.milestoneProgress)
                 }
@@ -553,14 +602,14 @@ private struct HomeView: View {
                 }
                 .buttonStyle(.bordered)
 
-                Text("Your milestones stay with you. Starting a new period does not erase what you have already learned.")
+                L10n.text("home.relapse_helper")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
 
                 Spacer()
             }
             .padding()
-            .navigationTitle("Home")
+            .navigationTitle(L10n.text("home.title"))
             .task {
                 state.load()
             }
@@ -572,11 +621,13 @@ private struct HomeView: View {
                         soberDays: state.soberDays,
                         aiService: aiService
                     )
-                    .navigationTitle("SOS")
+                    .navigationTitle(L10n.text("sos.title"))
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Close") {
+                            Button {
                                 showSOS = false
+                            } label: {
+                                L10n.text("common.close")
                             }
                         }
                     }
@@ -629,22 +680,22 @@ private struct StatsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Stats")
+                    L10n.text("stats.title")
                         .font(.title2)
                         .bold()
 
-                    statRow(label: "Current period", value: "\(state.currentStreakDays) days")
-                    statRow(label: "Best streak so far", value: "\(state.longestStreakDays) days")
-                    statRow(label: "Times you chose honesty", value: "\(state.honestyCheckIns)")
-                    statRow(label: "Estimated savings (period)", value: "\(Int(state.savedMoney))")
-                    statRow(label: "Next milestone", value: "\(state.nextMilestoneDays) days")
-                    statRow(label: "Progress", value: "\(state.progressPercent)%")
+                    statRow(labelKey: "stats.current_period", value: L10n.format("stats.period_row.days", "\(state.currentStreakDays)"))
+                    statRow(labelKey: "stats.best_streak", value: L10n.format("stats.period_row.days", "\(state.longestStreakDays)"))
+                    statRow(labelKey: "stats.honesty_times", value: "\(state.honestyCheckIns)")
+                    statRow(labelKey: "stats.savings_period", value: "\(Int(state.savedMoney))")
+                    statRow(labelKey: "stats.next_milestone", value: L10n.format("stats.period_row.days", "\(state.nextMilestoneDays)"))
+                    statRow(labelKey: "stats.progress", value: "\(state.progressPercent)%")
 
                     ProgressView(value: Double(state.progressPercent), total: 100)
 
                     if !state.unlockedMilestones.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Milestones you have earned")
+                            L10n.text("stats.milestones_earned")
                                 .font(.headline)
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 8) {
@@ -660,7 +711,12 @@ private struct StatsView: View {
                     }
 
                     if !state.newlyUnlockedMilestones.isEmpty {
-                        Text("Celebrating: \(state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", "))")
+                        Text(
+                            L10n.format(
+                                "stats.celebrating",
+                                state.newlyUnlockedMilestones.map { "\($0)d" }.joined(separator: ", ")
+                            )
+                        )
                             .font(.footnote)
                             .foregroundStyle(.green)
                     }
@@ -678,13 +734,13 @@ private struct StatsView: View {
                         }
                     }
 
-                    Text("Honesty check-ins start a new sober period without removing badges you already unlocked.")
+                    L10n.text("stats.relapse_helper")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
                 .padding()
             }
-            .navigationTitle("Stats")
+            .navigationTitle(L10n.text("stats.title"))
             .task(id: syncTick) {
                 state.load()
             }
@@ -699,12 +755,17 @@ private struct StatsView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text("\(row.soberDaysCounted) days")
+                Text(L10n.format("stats.period_row.days", "\(row.soberDaysCounted)"))
                     .font(.subheadline)
                     .bold()
             }
             if row.isCurrent {
-                Text("Since \(row.periodStart.formatted(date: .abbreviated, time: .omitted))")
+                Text(
+                    L10n.format(
+                        "stats.period_row.since",
+                        row.periodStart.formatted(date: .abbreviated, time: .omitted)
+                    )
+                )
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else if let end = row.periodEnd {
@@ -721,9 +782,9 @@ private struct StatsView: View {
     }
 
     @ViewBuilder
-    private func statRow(label: String, value: String) -> some View {
+    private func statRow(labelKey: String, value: String) -> some View {
         HStack {
-            Text(label)
+            L10n.text(labelKey)
                 .foregroundStyle(.secondary)
             Spacer()
             Text(value)
@@ -751,7 +812,7 @@ private struct ProfileView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("More settings will arrive later. What you add here stays on this device unless you sign in and sync in a future release.")
+                    L10n.text("profile.more_settings")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
@@ -828,8 +889,8 @@ private struct ProfileView: View {
                 }
 
                 Section {
-                    TextField("Name or nickname", text: $trustedName)
-                    TextField("Phone number", text: $trustedPhone)
+                    TextField(L10n.string("profile.contact.name"), text: $trustedName)
+                    TextField(L10n.string("profile.contact.phone"), text: $trustedPhone)
                         .textContentType(.telephoneNumber)
                 } header: {
                     Text(EmpathyCopy.profileSupportHeading)
@@ -838,19 +899,23 @@ private struct ProfileView: View {
                 }
 
                 Section {
-                    Button("Save SOS contact") {
+                    Button {
                         supportContactStore.saveContact(
                             SupportContact(trustedName: trustedName, trustedPhone: trustedPhone),
                             userID: userID
                         )
+                    } label: {
+                        L10n.text("profile.sos_contact.save")
                     }
                 }
 
                 Section {
-                    Button("Sign out", action: onSignOutTap)
+                    Button(action: onSignOutTap) {
+                        L10n.text("profile.signout")
+                    }
                 }
             }
-            .navigationTitle("Profile")
+            .navigationTitle(L10n.text("profile.title"))
             .onAppear {
                 let c = supportContactStore.loadContact(userID: userID)
                 trustedName = c.trustedName

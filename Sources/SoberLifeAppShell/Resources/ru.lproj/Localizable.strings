@@ -1,0 +1,148 @@
+"app.name" = "SoberLife";
+
+// Tabs
+"tab.home" = "Главная";
+"tab.chat" = "AI-чат";
+"tab.stats" = "Статистика";
+"tab.profile" = "Профиль";
+
+// Common
+"common.close" = "Закрыть";
+"common.dismiss" = "Закрыть";
+"common.back" = "Назад";
+"common.skip" = "Пропустить";
+"common.continue" = "Далее";
+"common.finish" = "Готово";
+"common.save" = "Сохранить";
+
+// Onboarding
+"onboarding.title" = "Добро пожаловать";
+"onboarding.progress" = "Онбординг %@/%@";
+"onboarding.goal.question" = "Какое направление сейчас кажется правильным?";
+"onboarding.goal.helper" = "Здесь нет неправильного ответа — и мнение можно поменять позже.";
+"onboarding.goal.reduce" = "Сократить";
+"onboarding.goal.quit" = "Полностью отказаться";
+"onboarding.startdate.title" = "С какого дня начинается этот трезвый период?";
+"onboarding.startdate.field" = "Дата начала";
+"onboarding.cost.title" = "Средние траты на алкоголь в день";
+"onboarding.cost.placeholder" = "Необязательно (например, 850)";
+"onboarding.cost.helper" = "Нужно для расчёта экономии. Этот шаг можно пропустить.";
+"onboarding.notifications.title" = "Ежедневные напоминания";
+"onboarding.notifications.toggle" = "Мягкое ежедневное напоминание";
+"onboarding.notifications.helper" = "Это можно изменить в любой момент. Напоминания короткие и без стыда.";
+
+// Auth
+"auth.welcome.body" = "Войдите по email, чтобы сохранять прогресс. Если сейчас это кажется тяжёлым — можно вернуться позже, когда будете готовы.";
+"auth.email" = "Email";
+"auth.password" = "Пароль";
+"auth.signin" = "Войти";
+"auth.create_account" = "Создать аккаунт";
+"auth.error.restore_failed" = "Не удалось восстановить сессию.";
+"auth.error.invalid_credentials" = "Неверный email или пароль.";
+"auth.error.signin_failed" = "Не удалось войти. Попробуйте ещё раз.";
+"auth.error.signup_check_email" = "Проверьте email и пароль и попробуйте ещё раз.";
+"auth.error.signup_failed" = "Не удалось создать аккаунт. Попробуйте ещё раз.";
+"auth.error.signout_failed" = "Не удалось выйти. Попробуйте ещё раз.";
+
+// Home
+"home.title" = "Главная";
+"home.sobriety.heading" = "Трезвость";
+"home.days" = "%@ дн.";
+"home.estimated_savings" = "Примерная экономия: %@";
+"home.period_started" = "Период начался: %@";
+"home.next_milestone" = "Следующая цель: %@ дн.";
+"home.relapse_helper" = "Ваши достижения остаются с вами. Новый период не стирает то, что вы уже прошли.";
+"home.sos" = "SOS — быстрая помощь";
+
+// Stats
+"stats.title" = "Статистика";
+"stats.current_period" = "Текущий период";
+"stats.best_streak" = "Лучший результат";
+"stats.honesty_times" = "Сколько раз вы выбрали честность";
+"stats.savings_period" = "Экономия за период";
+"stats.next_milestone" = "Следующая цель";
+"stats.progress" = "Прогресс";
+"stats.milestones_earned" = "Заработанные достижения";
+"stats.celebrating" = "Отмечаем: %@";
+"stats.relapse_helper" = "Честность запускает новый трезвый период, но не забирает уже полученные значки.";
+"stats.period_row.days" = "%@ дн.";
+"stats.period_row.since" = "С %@";
+
+// Profile
+"profile.title" = "Профиль";
+"profile.more_settings" = "Позже появится больше настроек. Всё, что вы добавляете здесь, хранится на этом устройстве (если в будущем вы не войдёте и не включите синхронизацию).";
+"profile.sos_contact.save" = "Сохранить SOS‑контакт";
+"profile.signout" = "Выйти";
+"profile.contact.name" = "Имя или прозвище";
+"profile.contact.phone" = "Телефон";
+
+// Chat
+"chat.nav_title" = "AI-чат";
+"chat.chats" = "Чаты";
+"chat.new_chat" = "Новый чат";
+"chat.new_message" = "Новое сообщение";
+"chat.recent" = "Недавние";
+"chat.message.placeholder" = "Сообщение";
+"chat.send" = "Отправить";
+
+// SOS
+"sos.title" = "SOS";
+"sos.contact.title" = "Человек, которому вы доверяете";
+"sos.contact.placeholder" = "Ваш контакт";
+"sos.call" = "Позвонить";
+"sos.message" = "Сообщение";
+"sos.helpline" = "Найти линию помощи (международная)";
+"sos.ai.prompt" = "Сейчас у меня сильная тяга. Пожалуйста, ответь коротко и по-доброму, чтобы поддержать меня.";
+
+// Notifications
+"notif.daily.title" = "Нежное напоминание";
+"notif.daily.body" = "Сегодня можно прожить момент за моментом. Откройте SoberLife, когда будете готовы.";
+"notif.milestone.title" = "Цель уже близко";
+"notif.milestone.body" = "Вы почти у цели: %@ дн. Как бы ни ощущался этот день, ваши усилия важны.";
+"notif.reengagement.title" = "Мы рядом";
+"notif.reengagement.body" = "Без давления — откройте приложение, когда захотите немного поддержки.";
+
+// EmpathyCopy
+"empathy.sos.title" = "Вы не одни";
+"empathy.sos.subtitle" = "Тяга бывает очень тяжёлой, и просить о помощи — это смело. Ничего из этого не отменяет ваш прогресс.";
+"empathy.sos.breathing.title" = "Медленное дыхание";
+"empathy.sos.breathing.detail" = "Вдох на 4 счёта, пауза 2, выдох 6. Повторите несколько раз. Спешить не нужно.";
+"empathy.sos.water.title" = "Вода";
+"empathy.sos.water.detail" = "Стакан воды может стать маленьким перезапуском. Вы заслуживаете заботы в простых шагах.";
+"empathy.sos.grounding.title" = "Заземление";
+"empathy.sos.grounding.detail" = "Назовите: 5 вещей, которые видите, 4 — которые можете потрогать, 3 — которые слышите, 2 — которые чувствуете по запаху, 1 — на вкус.";
+"empathy.sos.ai.button" = "Получить поддерживающее сообщение";
+"empathy.sos.ai.loading" = "Подбираю тёплые слова…";
+"empathy.sos.ai.fallback" = "Этот момент неприятный, но он пройдёт. Вы уже умеете поддерживать себя. Достаточно одного следующего правильного шага.";
+"empathy.sos.crisis.section" = "Если вы можете причинить вред себе или другим";
+"empathy.sos.crisis.body" = "Пожалуйста, прямо сейчас обратитесь в экстренные службы или на линию помощи. Это приложение не заменяет профессиональную или экстренную помощь.";
+"empathy.relapse.button" = "Я выпил(а) (новый период)";
+"empathy.relapse.title" = "Спасибо, что сказали правду";
+"empathy.relapse.message" = "Срыв не стирает ни вас, ни то, что вы уже сделали. Мы начнём новый трезвый период, сохранив достижения и историю.";
+"empathy.relapse.confirm" = "Начать заново с сегодняшнего дня";
+"empathy.relapse.cancel" = "Не сейчас";
+"empathy.profile.support.heading" = "SOS‑контакт (необязательно)";
+"empathy.profile.support.hint" = "Человек, которому можно быстро позвонить, когда становится тяжело. Хранится только на этом устройстве.";
+"empathy.chat.needs_backend" = "Чтобы общаться с ассистентом, нужно подключить ваш проект Supabase (так же, как для входа по email).";
+"empathy.auth.email_confirmation" = "Подтвердите аккаунт по письму на почте, затем войдите здесь.";
+"empathy.chat.cloud_load_failed" = "Не удалось загрузить историю из облака. Показываем то, что сохранено на этом устройстве.";
+"empathy.chat.cloud_sync_failed" = "Ваши слова сохранены на этом устройстве; синхронизация с облаком временно не удалась.";
+"empathy.chat.send_failed" = "Ассистент сейчас не смог ответить. Ваше сообщение на месте — попробуйте ещё раз, когда будете готовы.";
+"empathy.chat.retry" = "Попробовать ещё раз";
+"empathy.chat.empty_hint" = "Это приватное пространство. Нельзя сказать «неправильно». Можно писать коротко.";
+"empathy.data.sync_failed_short" = "Не удалось синхронизировать прогресс с облаком. Он сохранён на этом устройстве — попробуйте позже.";
+"empathy.session.expired" = "Сессия истекла. Войдите снова, чтобы продолжить синхронизацию.";
+"empathy.network.offline" = "Сейчас нет интернета. Данные остаются на устройстве и синхронизируются, когда связь появится.";
+"empathy.stats.periods.heading" = "Ваши трезвые периоды";
+"empathy.stats.periods.footnote" = "Каждая строка — это глава, а не приговор. Уже полученные достижения остаются с вами.";
+"empathy.stats.period.badge.current" = "Текущий период";
+"empathy.stats.period.badge.past" = "Прошлый период";
+"empathy.profile.notifications.heading" = "Уведомления";
+"empathy.profile.notifications.hint" = "Сохраняется на этом устройстве. По возможности не беспокоим в тихие часы.";
+"empathy.profile.notifications.daily" = "Ежедневное мягкое напоминание";
+"empathy.profile.notifications.milestone" = "Напоминания о целях";
+"empathy.profile.notifications.reengagement" = "Мягкий «возврат», если вы давно не заходили";
+"empathy.profile.notifications.time" = "Время напоминания";
+"empathy.profile.notifications.quiet" = "Тихие часы";
+"empathy.profile.notifications.quiet_start" = "Тихо с (час)";
+"empathy.profile.notifications.quiet_end" = "Тихо до (час)";

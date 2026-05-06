@@ -34,10 +34,14 @@ struct AIChatTabView: View {
                 Button {
                     state.startNewConversation()
                 } label: {
-                    Label("New message", systemImage: "square.and.pencil")
+                    Label {
+                        L10n.text("chat.new_message")
+                    } icon: {
+                        Image(systemName: "square.and.pencil")
+                    }
                 }
 
-                Section("Recent") {
+                Section {
                     ForEach(state.threads) { thread in
                         Button {
                             Task { await state.selectThread(thread.id) }
@@ -59,9 +63,11 @@ struct AIChatTabView: View {
                                 : Color.clear
                         )
                     }
+                } header: {
+                    L10n.text("chat.recent")
                 }
             }
-            .navigationTitle("Chats")
+            .navigationTitle(L10n.text("chat.chats"))
         } detail: {
             chatDetail
         }
@@ -116,7 +122,7 @@ struct AIChatTabView: View {
             }
 
             HStack(alignment: .bottom, spacing: 10) {
-                TextField("Message", text: $state.draft, axis: .vertical)
+                TextField(L10n.string("chat.message.placeholder"), text: $state.draft, axis: .vertical)
                     .lineLimit(1...6)
                     .padding(10)
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
@@ -132,16 +138,18 @@ struct AIChatTabView: View {
                     state.draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                         || state.isSending
                 )
-                .accessibilityLabel("Send")
+                .accessibilityLabel(L10n.string("chat.send"))
             }
             .padding()
             .background(.background)
         }
-        .navigationTitle("AI Chat")
+        .navigationTitle(L10n.text("chat.nav_title"))
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("New chat") {
+                Button {
                     state.startNewConversation()
+                } label: {
+                    L10n.text("chat.new_chat")
                 }
             }
         }
