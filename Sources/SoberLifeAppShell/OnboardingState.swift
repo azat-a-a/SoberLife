@@ -13,12 +13,18 @@ public final class OnboardingState: ObservableObject {
 
     private let userID: UUID
     private let store: OnboardingStore
+    private let analytics: AnalyticsTracker
 
     public let totalSteps = 4
 
-    public init(userID: UUID, store: OnboardingStore) {
+    public init(
+        userID: UUID,
+        store: OnboardingStore,
+        analytics: AnalyticsTracker = .shared
+    ) {
         self.userID = userID
         self.store = store
+        self.analytics = analytics
         self.sobrietyStartDate = Date()
 
         if let profile = store.loadProfile(userID: userID) {
@@ -78,6 +84,15 @@ public final class OnboardingState: ObservableObject {
             notificationsEnabled: notificationsEnabled
         )
         store.saveProfile(profile)
+        analytics.trackOnce(
+            name: "onboarding_complete",
+            dedupeKey: "onboarding_complete.\(userID.uuidString)",
+            properties: [
+                "goal_selected": selectedGoal == nil ? "false" : "true",
+                "daily_cost_provided": cost == nil ? "false" : "true",
+                "notifications_enabled": notificationsEnabled ? "true" : "false"
+            ]
+        )
         isCompleted = true
     }
 }

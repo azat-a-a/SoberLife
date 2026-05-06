@@ -16,21 +16,17 @@
   - DoD: events documented; single provider stub (e.g. logging or vendor); no duplicate fire on replay.
   - Estimate: 1 day
 
-- [ ] I18N-01 Multilingual UI (system language)
-  - Priority: P1
-  - Outcome: app UI automatically uses the device language and has a scalable localization setup.
-  - DoD:
-    - All user-facing strings are moved into `Localizable.strings` (SwiftUI) with no hardcoded UI copy left in views.
-    - App respects system language by default (no in-app language selector for MVP).
-    - At least 2 locales shipped: `en` and `ru` with complete coverage for MVP screens.
-    - CI check prevents new hardcoded strings (lint or review checklist item).
-  - Estimate: 2 days
-
 ---
 
 ## In Progress
 
-- None
+- [ ] DATA-01 Analytics baseline (core events)
+  - Started: 2026-05-06
+  - Plan:
+    - Define event schema v1 and payload fields for onboarding/SOS/relapse/milestones.
+    - Add one provider stub and central tracking API to avoid duplicate firing.
+    - Instrument key user actions and document event map.
+  - Exit criteria: events are emitted once per action and validated with a lightweight smoke checklist.
 
 ---
 
@@ -122,4 +118,8 @@
 - [x] AI-02 Chat UI with cloud history
   - Date: 2026-05-05
   - Notes: AI Chat with `NavigationSplitView` thread list (up to 40), detail composer, **Try again** on failed assistant reply, `New chat` / New message; cloud load via user JWT + RLS; `UserDefaults` fallback; `ensure_user_profile` RPC + auth trigger migration for `public.users`; profile sync on `MainTabView` appear when JWT valid.
+
+- [x] I18N-01 Multilingual UI (system language)
+  - Date: 2026-05-06
+  - Notes: Added package localization resources (`en`, `ru`) with `defaultLocalization = "en"`; introduced `L10n` helper; localized AppShell/Auth/Home/Chat/Stats/Profile/SOS and notification/auth copy paths (`EmpathyCopy`, `SessionState`, `NotificationScheduleSync`); added localization workflow notes in `ios/README.md`.
 
