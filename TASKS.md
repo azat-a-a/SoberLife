@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] BUG-01 Bug burn-down and stability fixes (Sprint 05)
-  - Priority: P1
-  - Outcome: reduced crash/error risk on beta candidate.
-  - DoD: crash-free sessions trend >= 99% on candidate; no critical data-loss paths.
-  - Estimate: 2 days
-
 - [ ] REL-01 TestFlight pipeline hardening (Sprint 05)
   - Priority: P1
   - Outcome: repeatable beta distribution workflow.
@@ -51,6 +45,14 @@
     - Prepare candidate build notes + known limitations.
     - Align launch checklist items required before inviting testers.
   - Exit criteria: readiness checklist approved and candidate build identified.
+
+- [ ] BUG-01 Bug burn-down and stability fixes (Sprint 05)
+  - Started: 2026-05-06
+  - Plan:
+    - Maintain live defect queue in `BUG-BURNDOWN-S05.md` with severity/owner/status.
+    - Prioritize P0/P1 fixes first; verify with focused reruns.
+    - Track crash/error trend against beta target and update mitigation notes.
+  - Exit criteria: no open P0/P1; triaged P2 list with owners; stability trend acceptable for beta candidate.
 
 ---
 

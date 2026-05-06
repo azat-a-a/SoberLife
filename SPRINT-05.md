@@ -45,6 +45,7 @@
   - Resolve top crash signatures first.
   - Fix high-frequency UX breakpoints (empty states, retry loops, stale data).
   - Improve sync consistency after reconnect.
+  - Track defect queue and status in `BUG-BURNDOWN-S05.md`.
 - DoD:
   - Crash-free sessions >= 99% on beta candidate.
   - Error rate trend is stable or decreasing over sprint.
