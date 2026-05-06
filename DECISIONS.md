@@ -82,9 +82,15 @@
 - Impact: No production funnel dashboards from the app until a sink is integrated; beta relies on console logs, TestFlight feedback, and any backend logs.
 - Status: Accepted
 
+## 2026-05-07 - D-016
+- Decision: Accept **Sprint 07** closure for **Gate 0 (OPS)**, **QA-03 (cross-device / sync regression)**, and **I18N-04 (safety-critical copy review for extended locales)** as documented: `OPS-DB02-ROLLOUT.md` completed for staging and production; `QA-SYNC-S07.md` / `QA-SYNC-S07-RESULTS.md` passed with no P0/P1; `I18N-REVIEW-S07.md` signed off with no blockers.
+- Why: Field verification and repeatable QA artifacts remove launch risk on cloud parity and sync; i18n review is complete for the current bar, with optional native-speaker pass before wide non–EN/RU rollout (`I18N-COVERAGE-S06.md`).
+- Impact: Engineering priority shifts to **Pre-Beta** items in `LAUNCH-CHECKLIST.md` and Sprint 08 planning; analytics destination remains **D-015** / **D-008** until Sprint 08.
+- Status: Accepted
+
 ## Open Decisions
 - D-007 Pricing model details for premium limits (message caps, feature gates).
-- D-008 Analytics stack selection (self-hosted vs third-party) — **target decision Sprint 08**; interim behavior per **D-015**.
+- D-008 Analytics stack selection (self-hosted vs third-party) — **target decision Sprint 08**; interim behavior per **D-015**; Sprint 07 ops/QA/i18n closure recorded as **D-016**.
 - D-009 Localization strategy after RU (EN first or simultaneous rollout).
 
 ## Revisit Triggers
