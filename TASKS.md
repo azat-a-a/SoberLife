@@ -10,11 +10,7 @@
 
 ## Todo
 
-- [ ] DATA-01 Analytics baseline (core events)
-  - Priority: P2
-  - Outcome: funnel events for onboarding, SOS, relapse, milestones (schema + one sink).
-  - DoD: events documented; single provider stub (e.g. logging or vendor); no duplicate fire on replay.
-  - Estimate: 1 day
+- None
 
 ---
 
