@@ -6,9 +6,11 @@ DerivedData/
 *.xcuserstate
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
+**/xcuserdata/
 
 # SwiftPM
 .build/
+.swiftpm/xcode/xcuserdata/
 
 # Fastlane / artifacts
 fastlane/report.xml

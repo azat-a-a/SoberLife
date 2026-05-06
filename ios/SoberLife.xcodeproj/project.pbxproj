@@ -207,8 +207,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.soberlife.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlneGx2Zml0dmtianZlbG9vcHZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjAzOTYsImV4cCI6MjA5MzU5NjM5Nn0.MsNi0IApn2LoKlHhqkZXWI2fnI43p9UoLDRZVgGhqUc;
-				SUPABASE_URL = "https://ygxlvfitvkbjveloopvq.supabase.co";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -234,8 +232,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.soberlife.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlneGx2Zml0dmtianZlbG9vcHZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjAzOTYsImV4cCI6MjA5MzU5NjM5Nn0.MsNi0IApn2LoKlHhqkZXWI2fnI43p9UoLDRZVgGhqUc;
-				SUPABASE_URL = "https://ygxlvfitvkbjveloopvq.supabase.co";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
