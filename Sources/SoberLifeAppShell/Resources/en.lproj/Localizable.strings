@@ -75,6 +75,10 @@
 "profile.signout" = "Sign out";
 "profile.contact.name" = "Name or nickname";
 "profile.contact.phone" = "Phone number";
+"profile.language" = "App language";
+"profile.language.system" = "System";
+"profile.language.english" = "English";
+"profile.language.russian" = "Russian";
 
 // Chat
 "chat.nav_title" = "AI Chat";

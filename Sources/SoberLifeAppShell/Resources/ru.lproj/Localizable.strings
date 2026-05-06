@@ -75,6 +75,10 @@
 "profile.signout" = "Выйти";
 "profile.contact.name" = "Имя или прозвище";
 "profile.contact.phone" = "Телефон";
+"profile.language" = "Язык приложения";
+"profile.language.system" = "Как в системе";
+"profile.language.english" = "English";
+"profile.language.russian" = "Русский";
 
 // Chat
 "chat.nav_title" = "AI-чат";

@@ -4,6 +4,7 @@ import SoberLifeCore
 
 public struct AppShellView: View {
     @ObservedObject private var sessionState: SessionState
+    @StateObject private var localizationSettings = LocalizationSettings()
     private let aiService: (any AIService)?
     private let authWiring: AuthWiring?
 
@@ -40,6 +41,8 @@ public struct AppShellView: View {
                 )
             }
         }
+        .environmentObject(localizationSettings)
+        .environment(\.locale, localizationSettings.locale)
         .task {
             await sessionState.restoreSession()
         }
@@ -836,6 +839,7 @@ private struct ProfileView: View {
     let notificationPreferencesStore: NotificationPreferencesStore
     let onNotificationPreferencesChanged: () -> Void
     let onSignOutTap: () -> Void
+    @EnvironmentObject private var localizationSettings: LocalizationSettings
 
     @State private var trustedName: String = ""
     @State private var trustedPhone: String = ""
@@ -852,6 +856,16 @@ private struct ProfileView: View {
                     L10n.text("profile.more_settings")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                }
+
+                Section {
+                    Picker(selection: $localizationSettings.selectedLanguage) {
+                        ForEach(AppLanguage.allCases) { language in
+                            L10n.text(language.labelKey).tag(language)
+                        }
+                    } label: {
+                        L10n.text("profile.language")
+                    }
                 }
 
                 Section {
