@@ -5,22 +5,26 @@ import SoberLifeCore
 @MainActor
 public final class SobrietyCloudSync: ObservableObject {
     @Published public private(set) var lastError: String?
+    @Published public private(set) var historyRevision: UInt = 0
 
     private let userID: UUID
     private let authWiring: AuthWiring?
     private let sessionState: SessionState
     private let onboardingStore: OnboardingStore
+    private let relapseStore: RelapseHistoryStore
 
     public init(
         userID: UUID,
         authWiring: AuthWiring?,
         sessionState: SessionState,
-        onboardingStore: OnboardingStore
+        onboardingStore: OnboardingStore,
+        relapseStore: RelapseHistoryStore
     ) {
         self.userID = userID
         self.authWiring = authWiring
         self.sessionState = sessionState
         self.onboardingStore = onboardingStore
+        self.relapseStore = relapseStore
     }
 
     public func clearError() {
@@ -31,8 +35,9 @@ public final class SobrietyCloudSync: ObservableObject {
         guard let (token, http) = await makeClient() else { return }
         do {
             try await UserProfileSync.ensureProfileExists(http: http, bearerToken: token)
-            guard let profile = onboardingStore.loadProfile(userID: userID) else { return }
             let sync = SobrietySupabaseSync(http: http)
+            try await hydrateLocalHistoryFromCloud(sync: sync, bearerToken: token)
+            guard let profile = onboardingStore.loadProfile(userID: userID) else { return }
             try await sync.syncOnboardingProfile(
                 userId: userID,
                 profile: profile.sobrietySnapshot,
@@ -60,6 +65,33 @@ public final class SobrietyCloudSync: ObservableObject {
             lastError = nil
         } catch {
             await handleSyncError(error)
+        }
+    }
+
+    private func hydrateLocalHistoryFromCloud(sync: SobrietySupabaseSync, bearerToken: String) async throws {
+        guard let snapshot = try await sync.fetchHistorySnapshot(userId: userID, bearerToken: bearerToken) else {
+            return
+        }
+        let existingHistory = relapseStore.events(userID: userID)
+        if existingHistory != snapshot.relapseEvents {
+            relapseStore.replaceEvents(snapshot.relapseEvents, userID: userID)
+            historyRevision &+= 1
+        }
+
+        if let currentProfile = onboardingStore.loadProfile(userID: userID) {
+            if currentProfile.sobrietyStartDate != snapshot.currentStartDate {
+                onboardingStore.saveProfile(
+                    OnboardingProfile(
+                        userID: currentProfile.userID,
+                        goal: currentProfile.goal,
+                        sobrietyStartDate: snapshot.currentStartDate,
+                        dailyAlcoholCost: currentProfile.dailyAlcoholCost,
+                        notificationsEnabled: currentProfile.notificationsEnabled,
+                        createdAt: currentProfile.createdAt
+                    )
+                )
+                historyRevision &+= 1
+            }
         }
     }
 

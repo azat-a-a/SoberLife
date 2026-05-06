@@ -223,6 +223,10 @@ private final class InMemoryRelapseStore: RelapseHistoryStore, @unchecked Sendab
     func append(_ event: RelapseEvent, userID: UUID) {
         storage[userID, default: []].append(event)
     }
+
+    func replaceEvents(_ events: [RelapseEvent], userID: UUID) {
+        storage[userID] = events
+    }
 }
 
 private final class InMemoryStatsStore: OnboardingStore, @unchecked Sendable {

@@ -64,4 +64,8 @@ private final class InMemoryRelapseEventStore: RelapseHistoryStore, @unchecked S
     func append(_ event: RelapseEvent, userID: UUID) {
         storage[userID, default: []].append(event)
     }
+
+    func replaceEvents(_ events: [RelapseEvent], userID: UUID) {
+        storage[userID] = events
+    }
 }

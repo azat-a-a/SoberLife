@@ -79,8 +79,9 @@ private struct SignedInRootView: View {
         self.authWiring = authWiring
         self.onSignOutTap = onSignOutTap
         let store = UserDefaultsOnboardingStore()
+        let relapseStore = UserDefaultsRelapseHistoryStore()
         self.onboardingStore = store
-        self.relapseStore = UserDefaultsRelapseHistoryStore()
+        self.relapseStore = relapseStore
         let supportStore = UserDefaultsSupportContactStore()
         let notificationStore = UserDefaultsNotificationPreferencesStore()
         self.supportContactStore = supportStore
@@ -98,7 +99,8 @@ private struct SignedInRootView: View {
                 userID: userID,
                 authWiring: authWiring,
                 sessionState: sessionState,
-                onboardingStore: store
+                onboardingStore: store,
+                relapseStore: relapseStore
             )
         )
         _userSettingsCloudSync = StateObject(
@@ -279,6 +281,9 @@ private struct MainTabView: View {
             await runNotificationSync()
         }
         .onChange(of: userSettingsCloudSync.settingsRevision) { _, _ in
+            notificationSyncTick += 1
+        }
+        .onChange(of: cloudSync.historyRevision) { _, _ in
             notificationSyncTick += 1
         }
         .task {

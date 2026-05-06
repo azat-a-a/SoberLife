@@ -221,6 +221,33 @@ final class SobrietySupabaseSyncTests: XCTestCase {
         XCTAssertEqual(step, 4)
     }
 
+    func testFetchHistorySnapshotMapsClosedRecordsToRelapseEvents() async throws {
+        let userId = UUID(uuidString: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE")!
+        SyncMockURLProtocol.handler = { request in
+            XCTAssertEqual(request.httpMethod, "GET")
+            XCTAssertTrue(request.url!.absoluteString.contains("/rest/v1/sobriety_records"))
+            let body =
+                #"[{"id":"10000000-0000-0000-0000-000000000001","user_id":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE","start_date":"2024-01-01T00:00:00Z","end_date":"2024-01-10T00:00:00Z","is_current":false},{"id":"10000000-0000-0000-0000-000000000002","user_id":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE","start_date":"2024-01-11T00:00:00Z","end_date":null,"is_current":true}]"#
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(body.utf8))
+        }
+
+        let sync = SobrietySupabaseSync(http: HTTPSupabaseService(
+            baseURL: URL(string: "https://project.supabase.co")!,
+            anonKey: "anon-key",
+            session: makeSession()
+        ))
+        let snapshot = try await sync.fetchHistorySnapshot(userId: userId, bearerToken: "jwt")
+        XCTAssertNotNil(snapshot)
+        XCTAssertEqual(snapshot?.relapseEvents.count, 1)
+        XCTAssertEqual(snapshot?.relapseEvents.first?.streakAtRelapseDays, 10)
+    }
+
     private func makeSession() -> URLSession {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [SyncMockURLProtocol.self]

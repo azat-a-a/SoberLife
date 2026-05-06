@@ -10,4 +10,15 @@ public enum SobrietyAPIFormatting {
         fallback.formatOptions = [.withInternetDateTime]
         return fallback.string(from: date)
     }
+
+    public static func date(fromISO8601 value: String) -> Date? {
+        let primary = ISO8601DateFormatter()
+        primary.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let parsed = primary.date(from: value) {
+            return parsed
+        }
+        let fallback = ISO8601DateFormatter()
+        fallback.formatOptions = [.withInternetDateTime]
+        return fallback.date(from: value)
+    }
 }

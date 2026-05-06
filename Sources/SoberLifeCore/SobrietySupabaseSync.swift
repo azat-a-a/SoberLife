@@ -10,6 +10,16 @@ public struct SobrietyRecordRowDTO: Decodable, Sendable {
     public let isCurrent: Bool
 }
 
+public struct SobrietyHistorySnapshot: Sendable, Equatable {
+    public let currentStartDate: Date
+    public let relapseEvents: [RelapseEvent]
+
+    public init(currentStartDate: Date, relapseEvents: [RelapseEvent]) {
+        self.currentStartDate = currentStartDate
+        self.relapseEvents = relapseEvents
+    }
+}
+
 // MARK: - Encodable payloads (explicit keys for PostgREST)
 
 private struct UserSobrietyPatchBody: Encodable {
@@ -166,6 +176,52 @@ public final class SobrietySupabaseSync: Sendable {
             jsonBody: encodedUser,
             bearerToken: bearerToken
         )
+    }
+
+    /// Reads all periods from `sobriety_records` and converts them into current period start + relapse events.
+    public func fetchHistorySnapshot(userId: UUID, bearerToken: String) async throws -> SobrietyHistorySnapshot? {
+        let items: [URLQueryItem] = [
+            URLQueryItem(name: "user_id", value: "eq.\(userId.uuidString)"),
+            URLQueryItem(name: "order", value: "start_date.asc")
+        ]
+        let data = try await http.restSelectRaw(
+            table: "sobriety_records",
+            queryItems: items,
+            bearerToken: bearerToken
+        )
+        let rows = try decoder.decode([SobrietyRecordRowDTO].self, from: data)
+        guard rows.isEmpty == false else { return nil }
+
+        guard let current = rows.first(where: \.isCurrent),
+              let currentStart = SobrietyAPIFormatting.date(fromISO8601: current.startDate)
+        else {
+            return nil
+        }
+
+        let relapseEvents = rows
+            .filter { $0.isCurrent == false }
+            .compactMap { row -> RelapseEvent? in
+                guard
+                    let start = SobrietyAPIFormatting.date(fromISO8601: row.startDate),
+                    let endISO = row.endDate,
+                    let end = SobrietyAPIFormatting.date(fromISO8601: endISO)
+                else {
+                    return nil
+                }
+                let streakDays = SobrietyCounter.soberDays(
+                    since: start,
+                    now: end,
+                    calendar: .current
+                )
+                return RelapseEvent(
+                    occurredAt: end,
+                    previousPeriodStart: start,
+                    streakAtRelapseDays: streakDays
+                )
+            }
+            .sorted { $0.occurredAt < $1.occurredAt }
+
+        return SobrietyHistorySnapshot(currentStartDate: currentStart, relapseEvents: relapseEvents)
     }
 
     private func fetchCurrentRecord(userId: UUID, bearerToken: String) async throws -> SobrietyRecordRowDTO? {
