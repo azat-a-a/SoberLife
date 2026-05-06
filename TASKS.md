@@ -117,3 +117,7 @@
   - Date: 2026-05-06
   - Notes: Added centralized `AnalyticsTracker` with logging sink and `trackOnce` dedupe; instrumented `auth_started`, `auth_success`, `onboarding_complete`, `active_use_24h`, `sos_opened`, `relapse_logged`, `milestone_unlocked`; documented schema in `ANALYTICS.md` and weekly review template in `ANALYTICS-WEEKLY-NOTES.md`.
 
+- [x] QA-01 End-to-End Smoke for Relapse + Notifications
+  - Date: 2026-05-06
+  - Notes: Manual smoke completed on simulator and real iPhone via `QA-SMOKE-S04.md`; results captured in `QA-SMOKE-S04-RESULTS.md`; no blocking P0/P1 issues reported.
+
