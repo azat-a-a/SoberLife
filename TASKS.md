@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] QA-02 Full regression on core flows (Sprint 05)
-  - Priority: P1
-  - Outcome: confidence across auth/onboarding/home/stats/chat/SOS/relapse/notifications before wider beta.
-  - DoD: 100% P0/P1 scenarios executed; no open P0; any P1 has owner + mitigation.
-  - Estimate: 2 days
-
 - [ ] BUG-01 Bug burn-down and stability fixes (Sprint 05)
   - Priority: P1
   - Outcome: reduced crash/error risk on beta candidate.
@@ -160,4 +154,8 @@
 - [x] QA-01 End-to-End Smoke for Relapse + Notifications
   - Date: 2026-05-06
   - Notes: Manual smoke completed on simulator and real iPhone via `QA-SMOKE-S04.md`; results captured in `QA-SMOKE-S04-RESULTS.md`; no blocking P0/P1 issues reported.
+
+- [x] QA-02 Full regression on core flows (Sprint 05)
+  - Date: 2026-05-06
+  - Notes: Automated regression (`swift test`) plus manual simulator/real-device pass completed via `QA-REGRESSION-S05.md`; results in `QA-REGRESSION-S05-RESULTS.md`; no open P0/P1 issues reported.
 

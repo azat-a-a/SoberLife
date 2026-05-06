@@ -33,6 +33,7 @@
   - Execute regression suite: auth, onboarding, home counter, stats, AI chat, SOS, relapse, notifications.
   - Add reproducible bug reports with severity labels.
   - Retest fixes before closure.
+  - Run `QA-REGRESSION-S05.md` and capture results in `QA-REGRESSION-S05-RESULTS.md`.
 - DoD:
   - 100% of P0/P1 scenarios tested.
   - No open P0 defects.
