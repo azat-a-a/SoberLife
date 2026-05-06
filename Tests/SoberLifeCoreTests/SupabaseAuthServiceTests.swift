@@ -79,6 +79,33 @@ final class SupabaseAuthServiceTests: XCTestCase {
         let current = try await service.currentSession()
         XCTAssertNil(current)
     }
+
+    func testSessionPersistsAcrossServiceRecreation() async throws {
+        let suiteName = "SupabaseAuthServiceTests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let userID = UUID()
+        let persistence = UserDefaultsAuthSessionPersistence(
+            userDefaults: defaults,
+            key: "session"
+        )
+        let service = SupabaseAuthService(
+            supabaseService: MockSupabaseService(
+                signIn: .success(SupabasePasswordAuthResult(accessToken: "token-123", userID: userID))
+            ),
+            sessionPersistence: persistence
+        )
+        _ = try await service.signIn(email: "a@b.co", password: "secret")
+
+        let recreated = SupabaseAuthService(
+            supabaseService: MockSupabaseService(),
+            sessionPersistence: persistence
+        )
+        let restored = try await recreated.currentSession()
+        XCTAssertEqual(restored?.userID, userID)
+        XCTAssertEqual(restored?.accessToken, "token-123")
+    }
 }
 
 private actor MockSupabaseService: SupabaseService {

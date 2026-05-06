@@ -18,7 +18,10 @@ public enum SessionStateFactory {
             baseURL: wiring.supabaseURL,
             anonKey: wiring.supabaseAnonKey
         )
-        let authService = SupabaseAuthService(supabaseService: supabaseService)
+        let authService = SupabaseAuthService(
+            supabaseService: supabaseService,
+            sessionPersistence: UserDefaultsAuthSessionPersistence()
+        )
         return SessionState(authService: authService)
     }
 }
