@@ -5,7 +5,7 @@
 2. Set your **Team** on the `SoberLife` target (Signing & Capabilities).
 3. In the Supabase dashboard, enable **Email** under **Authentication → Providers** (and adjust sign-up / email confirmation to match how you want onboarding to behave).
 4. Configure Supabase for real auth/chat:
-   - Either edit **Build Settings** → User-Defined: `SUPABASE_URL`, `SUPABASE_ANON_KEY`,  
+   - Either edit **Build Settings** → User-Defined: `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
    - Or copy `Config/Secrets.example.xcconfig` to **`Config/Secrets.xcconfig`** (gitignored), put secrets there, and set **Based on Configuration File** for Debug/Release to that file.
 5. Add a **1024×1024** icon under `App/Assets.xcassets/AppIcon` before archiving for TestFlight (App Store Connect rejects missing marketing icon).
 
@@ -17,7 +17,7 @@ From repo root:
 ```bash
 cd ios
 xcodebuild -project SoberLife.xcodeproj -scheme SoberLife \
-  -destination 'platform=iOS Simulator,name=iPhone 16' \
+  -destination 'generic/platform=iOS Simulator' \
   -configuration Debug build
 ```
 
