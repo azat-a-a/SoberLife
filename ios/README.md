@@ -28,6 +28,8 @@ Pick any installed simulator from **Xcode → Window → Devices and Simulators*
 
 Shipped locales: `en`, `ru`, `de`, `fr`, `es`, `it`, `pl`, `zh-Hans`, `th`, `ja` (see `I18N-COVERAGE-S06.md`).
 
+**System language:** With Profile set to **System**, strings load from the packaged `.lproj` that best matches `Locale.preferredLanguages` (SwiftPM’s `Bundle.module` does not reliably follow the OS if you only call `NSLocalizedString`). The app `Info.plist` lists supported languages via `CFBundleLocalizations`.
+
 Rules for adding/changing copy:
 1. Add or update the key in `en.lproj/Localizable.strings` (source of truth for key order).
 2. Update `ru.lproj` and each `scripts/i18n/<locale>.txt` line (same order as English — one translation per line).
