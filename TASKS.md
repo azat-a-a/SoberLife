@@ -14,14 +14,6 @@
 
 ## In Progress
 
-- [ ] DB-02 Cloud state parity for profile/progress (Sprint 07)
-  - Priority: P1
-  - Outcome: signed-in users keep profile and progress across reinstall/new device.
-  - DoD: notification prefs + SOS contact + relapse/stats parity + achievements sync available from Supabase with offline fallback.
-  - Estimate: 3 days
-  - Plan artifact: `MIGRATION-PLAN-S07.md`
-  - Progress (2026-05-06): Supabase tables `notification_preferences` + `support_contacts` (migration `20260506201000_...`); app bootstrap/pull-merge + dual-write via `UserSettingsSupabaseSync` / `UserSettingsCloudSync`. Stats/relapse: `SobrietySupabaseSync.fetchHistorySnapshot` + hydrate in `SobrietyCloudSync` before onboarding sync (`historyRevision` → Stats/notifications refresh). Remaining: achievements cloud sync.
-
 ---
 
 ## Done
@@ -40,6 +32,11 @@
 - [x] DB-01 Supabase schema v1
   - Date: 2026-05-05
   - Notes: initial migration and seed script added under supabase/ with core tables, constraints, and indexes.
+
+- [x] DB-02 Cloud state parity for profile/progress (Sprint 07)
+  - Date: 2026-05-06
+  - Priority was: P1
+  - Notes: `notification_preferences` + `support_contacts` migration; `UserSettingsCloudSync` + `AchievementsCloudSync`; sobriety timeline hydrate from `sobriety_records` (`fetchHistorySnapshot`); milestones as `achievements.type` = `milestone_<days>` with merge-duplicates upsert. Plan: `MIGRATION-PLAN-S07.md`. Offline: local stores remain cache; sync errors non-fatal with banners.
 
 - [x] SEC-01 RLS and access policies
   - Date: 2026-05-05

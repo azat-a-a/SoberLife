@@ -65,6 +65,7 @@ private struct SignedInRootView: View {
     @StateObject private var onboardingState: OnboardingState
     @StateObject private var sobrietyCloudSync: SobrietyCloudSync
     @StateObject private var userSettingsCloudSync: UserSettingsCloudSync
+    @StateObject private var achievementsCloudSync: AchievementsCloudSync
 
     init(
         sessionState: SessionState,
@@ -85,7 +86,8 @@ private struct SignedInRootView: View {
         let supportStore = UserDefaultsSupportContactStore()
         let notificationStore = UserDefaultsNotificationPreferencesStore()
         self.supportContactStore = supportStore
-        self.achievementStore = UserDefaultsAchievementStore()
+        let achievementStore = UserDefaultsAchievementStore()
+        self.achievementStore = achievementStore
         self.notificationService = UNNotificationCenterService()
         self.notificationPreferencesStore = notificationStore
         _onboardingState = StateObject(
@@ -112,6 +114,14 @@ private struct SignedInRootView: View {
                 supportContactStore: supportStore
             )
         )
+        _achievementsCloudSync = StateObject(
+            wrappedValue: AchievementsCloudSync(
+                userID: userID,
+                authWiring: authWiring,
+                sessionState: sessionState,
+                achievementStore: achievementStore
+            )
+        )
     }
 
     var body: some View {
@@ -130,6 +140,7 @@ private struct SignedInRootView: View {
                     authWiring: authWiring,
                     cloudSync: sobrietyCloudSync,
                     userSettingsCloudSync: userSettingsCloudSync,
+                    achievementsCloudSync: achievementsCloudSync,
                     onSignOutTap: onSignOutTap
                 )
             } else {
@@ -162,6 +173,7 @@ private struct MainTabView: View {
     let authWiring: AuthWiring?
     let cloudSync: SobrietyCloudSync
     let userSettingsCloudSync: UserSettingsCloudSync
+    let achievementsCloudSync: AchievementsCloudSync
     let onSignOutTap: () -> Void
     private let analytics: AnalyticsTracker = .shared
 
@@ -203,6 +215,24 @@ private struct MainTabView: View {
                 .padding(10)
                 .frame(maxWidth: .infinity)
                 .background(Color.orange.opacity(0.15))
+            }
+
+            if let message = achievementsCloudSync.lastError {
+                HStack(alignment: .top, spacing: 8) {
+                    Text(message)
+                        .font(.footnote)
+                        .foregroundStyle(.primary)
+                    Spacer(minLength: 8)
+                    Button {
+                        achievementsCloudSync.clearError()
+                    } label: {
+                        Text("common.dismiss", bundle: .module)
+                    }
+                    .font(.footnote)
+                }
+                .padding(10)
+                .frame(maxWidth: .infinity)
+                .background(Color.orange.opacity(0.12))
             }
 
             TabView {
@@ -248,6 +278,7 @@ private struct MainTabView: View {
                     relapseStore: relapseStore,
                     achievementStore: achievementStore
                 ),
+                achievementsCloudSync: achievementsCloudSync,
                 syncTick: notificationSyncTick
             )
             .tabItem {
@@ -277,6 +308,7 @@ private struct MainTabView: View {
         }
         .environmentObject(cloudSync)
         .environmentObject(userSettingsCloudSync)
+        .environmentObject(achievementsCloudSync)
         .task(id: notificationSyncTick) {
             await runNotificationSync()
         }
@@ -286,9 +318,13 @@ private struct MainTabView: View {
         .onChange(of: cloudSync.historyRevision) { _, _ in
             notificationSyncTick += 1
         }
+        .onChange(of: achievementsCloudSync.achievementsRevision) { _, _ in
+            notificationSyncTick += 1
+        }
         .task {
             await syncUserProfileIfPossible()
             await userSettingsCloudSync.bootstrapFromCloudIfPossible()
+            await achievementsCloudSync.bootstrapFromCloudIfPossible()
         }
         .task {
             let dayKey = Self.dayKey(Date())
@@ -752,10 +788,12 @@ private struct HomeView: View {
 
 private struct StatsView: View {
     @StateObject private var state: StatsState
+    let achievementsCloudSync: AchievementsCloudSync
     let syncTick: Int
 
-    init(state: StatsState, syncTick: Int) {
+    init(state: StatsState, achievementsCloudSync: AchievementsCloudSync, syncTick: Int) {
         _state = StateObject(wrappedValue: state)
+        self.achievementsCloudSync = achievementsCloudSync
         self.syncTick = syncTick
     }
 
@@ -826,6 +864,7 @@ private struct StatsView: View {
             .navigationTitle(L10n.text("stats.title"))
             .task(id: syncTick) {
                 state.load()
+                await achievementsCloudSync.pushMilestones(days: Set(state.newlyUnlockedMilestones))
             }
         }
     }
