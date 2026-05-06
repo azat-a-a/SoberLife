@@ -18,6 +18,7 @@ public final class StatsState: ObservableObject {
     private let store: OnboardingStore
     private let relapseStore: RelapseHistoryStore
     private let achievementStore: AchievementStore
+    private let analytics: AnalyticsTracker
     private let calendar: Calendar
     private let nowProvider: () -> Date
 
@@ -26,6 +27,7 @@ public final class StatsState: ObservableObject {
         store: OnboardingStore,
         relapseStore: RelapseHistoryStore = UserDefaultsRelapseHistoryStore(),
         achievementStore: AchievementStore = UserDefaultsAchievementStore(),
+        analytics: AnalyticsTracker = .shared,
         calendar: Calendar = .current,
         nowProvider: @escaping () -> Date = Date.init
     ) {
@@ -33,6 +35,7 @@ public final class StatsState: ObservableObject {
         self.store = store
         self.relapseStore = relapseStore
         self.achievementStore = achievementStore
+        self.analytics = analytics
         self.calendar = calendar
         self.nowProvider = nowProvider
     }
@@ -84,6 +87,16 @@ public final class StatsState: ObservableObject {
         achievementStore.saveUnlockedMilestones(merged, userID: userID)
         unlockedMilestones = Array(merged).sorted()
         newlyUnlockedMilestones = Array(newly).sorted()
+        for milestone in newlyUnlockedMilestones {
+            analytics.trackOnce(
+                name: "milestone_unlocked",
+                dedupeKey: "milestone_unlocked.\(userID.uuidString).\(milestone)",
+                properties: [
+                    "milestone_days": "\(milestone)",
+                    "current_streak_days": "\(currentStreakDays)"
+                ]
+            )
+        }
     }
 
     private static func nextMilestone(after days: Int) -> Int {

@@ -524,6 +524,7 @@ private struct HomeView: View {
     let aiService: (any AIService)?
     @Binding var notificationSyncTick: Int
     @EnvironmentObject private var sobrietyCloudSync: SobrietyCloudSync
+    private let analytics: AnalyticsTracker
 
     @State private var showSOS = false
     @State private var showRelapseConfirm = false
@@ -535,13 +536,15 @@ private struct HomeView: View {
         supportContactStore: SupportContactStore,
         state: HomeState,
         aiService: (any AIService)?,
-        notificationSyncTick: Binding<Int>
+        notificationSyncTick: Binding<Int>,
+        analytics: AnalyticsTracker = .shared
     ) {
         self.userID = userID
         self.onboardingStore = onboardingStore
         self.relapseStore = relapseStore
         self.supportContactStore = supportContactStore
         self.aiService = aiService
+        self.analytics = analytics
         _notificationSyncTick = notificationSyncTick
         _state = StateObject(wrappedValue: state)
     }
@@ -550,6 +553,7 @@ private struct HomeView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
                 Button {
+                    analytics.track(name: "sos_opened", properties: ["source": "home"])
                     showSOS = true
                 } label: {
                     Label {
@@ -642,6 +646,7 @@ private struct HomeView: View {
                     let calendar = Calendar.current
                     let now = Date()
                     let newStart = calendar.startOfDay(for: now)
+                    let previousStreak = state.soberDays
                     RelapseRecording.recordRelapse(
                         userID: userID,
                         newPeriodStart: now,
@@ -652,6 +657,13 @@ private struct HomeView: View {
                     )
                     state.load()
                     notificationSyncTick += 1
+                    analytics.track(
+                        name: "relapse_logged",
+                        properties: [
+                            "source": "home_truth_button",
+                            "previous_streak_days": "\(previousStreak)"
+                        ]
+                    )
                     Task {
                         await sobrietyCloudSync.syncAfterRelapse(
                             newPeriodStart: newStart,
