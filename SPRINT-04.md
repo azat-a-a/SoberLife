@@ -79,7 +79,7 @@
 - Tasks:
   - Track key events: onboarding_complete, sos_opened, relapse_logged, milestone_unlocked.
   - Add funnel views for auth -> onboarding -> active use.
-  - Add lightweight weekly dashboard notes template.
+  - Add lightweight weekly dashboard notes template (`ANALYTICS-WEEKLY-NOTES.md`).
 - DoD:
   - Events are emitted once per user action.
   - Event schema is documented and versioned.
@@ -103,6 +103,7 @@
   - Scenario test: streak -> relapse -> new streak -> milestone.
   - Verify notification behavior with real device time settings.
   - Validate stats continuity and historical views after relapse.
+  - Run `QA-SMOKE-S04.md` on simulator + real device.
 - DoD:
   - Smoke checklist passes on simulator and device.
   - No open P0/P1 bugs at sprint close.
