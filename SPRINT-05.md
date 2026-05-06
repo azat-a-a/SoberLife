@@ -19,7 +19,7 @@
 ### BETA-01 Closed Beta Readiness Gate
 - Outcome: product is safe and stable enough for invited beta users.
 - Tasks:
-  - Define beta entry criteria and acceptance checklist.
+  - Define beta entry criteria and acceptance checklist (`BETA-READINESS.md`).
   - Freeze MVP scope for beta window.
   - Prepare beta rollout notes and known limitations.
 - DoD:

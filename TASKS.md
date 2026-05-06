@@ -53,7 +53,7 @@
 - [ ] BETA-01 Closed beta readiness gate (Sprint 05)
   - Started: 2026-05-06
   - Plan:
-    - Freeze beta scope and document acceptance criteria.
+    - Freeze beta scope and document acceptance criteria (`BETA-READINESS.md`).
     - Prepare candidate build notes + known limitations.
     - Align launch checklist items required before inviting testers.
   - Exit criteria: readiness checklist approved and candidate build identified.
