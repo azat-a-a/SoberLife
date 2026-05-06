@@ -144,6 +144,7 @@ private struct MainTabView: View {
     let authWiring: AuthWiring?
     let cloudSync: SobrietyCloudSync
     let onSignOutTap: () -> Void
+    private let analytics: AnalyticsTracker = .shared
 
     @State private var notificationSyncTick: Int = 0
 
@@ -243,6 +244,14 @@ private struct MainTabView: View {
         .task {
             await syncUserProfileIfPossible()
         }
+        .task {
+            let dayKey = Self.dayKey(Date())
+            analytics.trackOnce(
+                name: "active_use_24h",
+                dedupeKey: "active_use_24h.\(userID.uuidString).\(dayKey)",
+                properties: ["surface": "main_tabs"]
+            )
+        }
     }
 
     private func syncUserProfileIfPossible() async {
@@ -288,6 +297,14 @@ private struct MainTabView: View {
     private static func nextMilestone(after days: Int) -> Int {
         let milestones = [7, 30, 90, 365]
         return milestones.first(where: { days < $0 }) ?? (days + 30)
+    }
+
+    private static func dayKey(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.calendar = .current
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd"
+        return f.string(from: date)
     }
 }
 
@@ -481,6 +498,10 @@ private struct SignedOutPlaceholderView: View {
                 }
 
                 Button {
+                    AnalyticsTracker.shared.track(
+                        name: "auth_started",
+                        properties: ["method": "email_password_signin"]
+                    )
                     Task {
                         isBusy = true
                         await onSignIn(
@@ -496,6 +517,10 @@ private struct SignedOutPlaceholderView: View {
                 .disabled(isBusy)
 
                 Button {
+                    AnalyticsTracker.shared.track(
+                        name: "auth_started",
+                        properties: ["method": "email_password_signup"]
+                    )
                     Task {
                         isBusy = true
                         await onSignUp(

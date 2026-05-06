@@ -16,13 +16,7 @@
 
 ## In Progress
 
-- [ ] DATA-01 Analytics baseline (core events)
-  - Started: 2026-05-06
-  - Plan:
-    - Define event schema v1 and payload fields for onboarding/SOS/relapse/milestones.
-    - Add one provider stub and central tracking API to avoid duplicate firing.
-    - Instrument key user actions and document event map.
-  - Exit criteria: events are emitted once per action and validated with a lightweight smoke checklist.
+- None
 
 ---
 
@@ -118,4 +112,8 @@
 - [x] I18N-01 Multilingual UI (system language)
   - Date: 2026-05-06
   - Notes: Added package localization resources (`en`, `ru`) with `defaultLocalization = "en"`; introduced `L10n` helper; localized AppShell/Auth/Home/Chat/Stats/Profile/SOS and notification/auth copy paths (`EmpathyCopy`, `SessionState`, `NotificationScheduleSync`); added localization workflow notes in `ios/README.md`.
+
+- [x] DATA-01 Analytics baseline (core events)
+  - Date: 2026-05-06
+  - Notes: Added centralized `AnalyticsTracker` with logging sink and `trackOnce` dedupe; instrumented `auth_started`, `auth_success`, `onboarding_complete`, `active_use_24h`, `sos_opened`, `relapse_logged`, `milestone_unlocked`; documented schema in `ANALYTICS.md` and weekly review template in `ANALYTICS-WEEKLY-NOTES.md`.
 

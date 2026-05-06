@@ -104,6 +104,7 @@
   - Verify notification behavior with real device time settings.
   - Validate stats continuity and historical views after relapse.
   - Run `QA-SMOKE-S04.md` on simulator + real device.
+  - Record run output in `QA-SMOKE-S04-RESULTS.md`.
 - DoD:
   - Smoke checklist passes on simulator and device.
   - No open P0/P1 bugs at sprint close.
