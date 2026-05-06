@@ -12,6 +12,7 @@
 2. Structured QA and bug burn-down
 3. Performance, observability, and reliability improvements
 4. App Store and TestFlight release preparation
+5. Language override in Profile (beyond system default)
 
 ## Committed Tasks
 
@@ -91,6 +92,19 @@
   - Metadata draft complete and reviewable.
   - Required legal text mapped to in-app screens.
   - No blocker gaps in store submission checklist.
+
+### I18N-02 In-App Language Switch (Profile)
+- Outcome: user can override system language directly in Profile settings.
+- Tasks:
+  - Add language selector in Profile (`System`, `English`, `Russian` for v1).
+  - Persist user language preference locally and apply it app-wide at runtime.
+  - Keep system-default behavior when no explicit override is selected.
+  - Validate key screens after live language switch (Auth/Home/Stats/Chat/SOS/Profile).
+- DoD:
+  - Profile contains working language control with immediate UI update.
+  - App restarts with previously selected language preference.
+  - `System` option restores device-language behavior.
+  - Smoke check passes on simulator and real device for `en`/`ru`.
 
 ## Stretch Goals (if all committed work is done)
 - A11Y-01 Accessibility sweep for VoiceOver and dynamic type.

@@ -10,13 +10,47 @@
 
 ## Todo
 
-- None
+- [ ] QA-02 Full regression on core flows (Sprint 05)
+  - Priority: P1
+  - Outcome: confidence across auth/onboarding/home/stats/chat/SOS/relapse/notifications before wider beta.
+  - DoD: 100% P0/P1 scenarios executed; no open P0; any P1 has owner + mitigation.
+  - Estimate: 2 days
+
+- [ ] BUG-01 Bug burn-down and stability fixes (Sprint 05)
+  - Priority: P1
+  - Outcome: reduced crash/error risk on beta candidate.
+  - DoD: crash-free sessions trend >= 99% on candidate; no critical data-loss paths.
+  - Estimate: 2 days
+
+- [ ] REL-01 TestFlight pipeline hardening (Sprint 05)
+  - Priority: P1
+  - Outcome: repeatable beta distribution workflow.
+  - DoD: build distributed to tester group; release notes template used; rollback steps validated once.
+  - Estimate: 1 day
+
+- [ ] STORE-01 App Store metadata prep (Sprint 05)
+  - Priority: P2
+  - Outcome: submission artifacts are review-ready ahead of release sprint.
+  - DoD: screenshots/description/privacy labels draft complete and mapped to checklist.
+  - Estimate: 1 day
+
+- [ ] I18N-02 In-app language switch in Profile (Sprint 05)
+  - Priority: P1
+  - Outcome: user can choose app language from Profile (`System`/`English`/`Russian`).
+  - DoD: runtime switch works across main screens; preference persists; `System` restores device language behavior.
+  - Estimate: 1 day
 
 ---
 
 ## In Progress
 
-- None
+- [ ] BETA-01 Closed beta readiness gate (Sprint 05)
+  - Started: 2026-05-06
+  - Plan:
+    - Freeze beta scope and document acceptance criteria.
+    - Prepare candidate build notes + known limitations.
+    - Align launch checklist items required before inviting testers.
+  - Exit criteria: readiness checklist approved and candidate build identified.
 
 ---
 
