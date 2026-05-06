@@ -20,7 +20,7 @@
   - DoD: notification prefs + SOS contact + relapse/stats parity + achievements sync available from Supabase with offline fallback.
   - Estimate: 3 days
   - Plan artifact: `MIGRATION-PLAN-S07.md`
-  - Progress (2026-05-06): Supabase tables `notification_preferences` + `support_contacts` (migration `20260506201000_...`); app bootstrap/pull-merge + dual-write via `UserSettingsSupabaseSync` / `UserSettingsCloudSync`. Remaining: stats/relapse cloud read, achievements sync.
+  - Progress (2026-05-06): Supabase tables `notification_preferences` + `support_contacts` (migration `20260506201000_...`); app bootstrap/pull-merge + dual-write via `UserSettingsSupabaseSync` / `UserSettingsCloudSync`. Stats/relapse: `SobrietySupabaseSync.fetchHistorySnapshot` + hydrate in `SobrietyCloudSync` before onboarding sync (`historyRevision` → Stats/notifications refresh). Remaining: achievements cloud sync.
 
 ---
 
