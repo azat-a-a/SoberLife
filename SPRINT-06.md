@@ -12,6 +12,7 @@
 2. Real-time monitoring and incident response readiness
 3. Hotfix process for critical issues
 4. Post-release learning and next-cycle planning
+5. Language expansion beyond EN/RU
 
 ## Committed Tasks
 
@@ -91,6 +92,19 @@
   - Feedback triage process is documented.
   - High-severity feedback has clear owner.
   - Weekly synthesis note produced.
+
+### I18N-03 Extended Language Pack (EU + CJK + Thai)
+- Outcome: app supports additional target locales for post-launch growth.
+- Tasks:
+  - Add localization resources for selected European languages and Asian locales: Chinese, Thai, Japanese.
+  - Define language list and fallback policy (e.g. region-specific Chinese variants and fallback to English when missing).
+  - Localize MVP surfaces consistently (Auth/Home/Stats/Chat/SOS/Profile/settings).
+  - Run linguistic QA pass for critical recovery/safety copy.
+- DoD:
+  - New locales are selectable and render without missing-key regressions on MVP screens.
+  - Safety-critical strings (SOS, relapse, disclaimers) reviewed in each added locale.
+  - Smoke checks pass for each newly added language on simulator/device.
+  - Localization coverage report updated in docs.
 
 ## Stretch Goals (if all committed work is done)
 - EXP-01 A/B test plan draft for onboarding improvements.

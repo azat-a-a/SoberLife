@@ -40,6 +40,12 @@
   - DoD: runtime switch works across main screens; preference persists; `System` restores device language behavior.
   - Estimate: 1 day
 
+- [ ] I18N-03 Add more languages (Sprint 06)
+  - Priority: P1
+  - Outcome: support additional locales: European languages + Chinese + Thai + Japanese.
+  - DoD: locales added and selectable; no missing-key regressions on MVP screens; safety-critical copy reviewed in each added locale.
+  - Estimate: 3 days
+
 ---
 
 ## In Progress
