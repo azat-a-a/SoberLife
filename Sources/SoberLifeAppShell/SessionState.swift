@@ -32,7 +32,7 @@ public final class SessionState: ObservableObject {
             authErrorMessage = nil
         } catch {
             authState = .signedOut
-            authErrorMessage = "Failed to restore session."
+            authErrorMessage = L10n.string("auth.error.restore_failed")
         }
     }
 
@@ -45,15 +45,15 @@ public final class SessionState: ObservableObject {
             authState = .signedOut
             switch error {
             case .invalidCredentials:
-                authErrorMessage = "Incorrect email or password."
+                authErrorMessage = L10n.string("auth.error.invalid_credentials")
             case .emailNotConfirmed:
                 authErrorMessage = EmpathyCopy.emailConfirmationRequired
             case .invalidResponse:
-                authErrorMessage = "Sign in failed. Please try again."
+                authErrorMessage = L10n.string("auth.error.signin_failed")
             }
         } catch {
             authState = .signedOut
-            authErrorMessage = "Sign in failed. Please try again."
+            authErrorMessage = L10n.string("auth.error.signin_failed")
         }
     }
 
@@ -68,13 +68,13 @@ public final class SessionState: ObservableObject {
             case .emailNotConfirmed:
                 authErrorMessage = EmpathyCopy.emailConfirmationRequired
             case .invalidCredentials:
-                authErrorMessage = "Check your email and password and try again."
+                authErrorMessage = L10n.string("auth.error.signup_check_email")
             case .invalidResponse:
-                authErrorMessage = "Could not create account. Please try again."
+                authErrorMessage = L10n.string("auth.error.signup_failed")
             }
         } catch {
             authState = .signedOut
-            authErrorMessage = "Could not create account. Please try again."
+            authErrorMessage = L10n.string("auth.error.signup_failed")
         }
     }
 
@@ -84,7 +84,7 @@ public final class SessionState: ObservableObject {
             authState = .signedOut
             authErrorMessage = nil
         } catch {
-            authErrorMessage = "Sign out failed. Please try again."
+            authErrorMessage = L10n.string("auth.error.signout_failed")
         }
     }
 

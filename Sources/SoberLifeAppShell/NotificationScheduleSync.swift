@@ -38,8 +38,8 @@ public enum NotificationScheduleSync {
             try await notificationService.schedule(
                 category: .daily,
                 payload: NotificationPayload(
-                    title: "One gentle check-in",
-                    body: "You are allowed to take today one moment at a time. Open SoberLife when you feel ready."
+                    title: L10n.string("notif.daily.title"),
+                    body: L10n.string("notif.daily.body")
                 ),
                 for: userID,
                 at: dailyAnchor
@@ -60,8 +60,8 @@ public enum NotificationScheduleSync {
                 try await notificationService.schedule(
                     category: .milestone(days: nextMilestoneTarget),
                     payload: NotificationPayload(
-                        title: "Milestone within reach",
-                        body: "You are close to \(nextMilestoneTarget) days. However today feels, your effort still matters."
+                        title: L10n.string("notif.milestone.title"),
+                        body: L10n.format("notif.milestone.body", "\(nextMilestoneTarget)")
                     ),
                     for: userID,
                     at: at
@@ -78,8 +78,8 @@ public enum NotificationScheduleSync {
                 try await notificationService.schedule(
                     category: .reengagement,
                     payload: NotificationPayload(
-                        title: "Still here with you",
-                        body: "No pressure — open the app whenever you want a small moment of support."
+                        title: L10n.string("notif.reengagement.title"),
+                        body: L10n.string("notif.reengagement.body")
                     ),
                     for: userID,
                     at: at

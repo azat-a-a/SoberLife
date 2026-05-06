@@ -23,6 +23,21 @@ xcodebuild -project SoberLife.xcodeproj -scheme SoberLife \
 
 Pick any installed simulator from **Xcode → Window → Devices and Simulators**.
 
+## Localization workflow (`en` + `ru`)
+`SoberLifeAppShell` now uses package resources:
+- `Sources/SoberLifeAppShell/Resources/en.lproj/Localizable.strings`
+- `Sources/SoberLifeAppShell/Resources/ru.lproj/Localizable.strings`
+
+Rules for adding/changing copy:
+1. Add a key in `en.lproj/Localizable.strings`.
+2. Add the same key in `ru.lproj/Localizable.strings`.
+3. Use `L10n.text("key")` in SwiftUI views or `L10n.string("key")` / `L10n.format("key", ...)` in non-view code.
+4. Avoid new hardcoded user-facing strings in views/services.
+
+Validation:
+- Run `swift test`.
+- In simulator, switch language to Russian and verify core screens (Auth, Home, Chat, Stats, Profile, SOS).
+
 ## TestFlight (outline)
 1. Create an App ID + App in App Store Connect matching **Bundle Identifier** (`com.soberlife.app` by default, change in target settings if needed).
 2. Archive: **Product → Archive** with a **Release** configuration and a real **Development Team**.

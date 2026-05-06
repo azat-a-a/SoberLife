@@ -2,8 +2,12 @@ import Foundation
 import SoberLifeCore
 
 public enum OnboardingGoal: String, CaseIterable, Codable, Sendable {
-    case reduce = "Reduce drinking"
-    case quit = "Quit completely"
+    case reduce = "onboarding.goal.reduce"
+    case quit = "onboarding.goal.quit"
+
+    public var localizedTitle: String {
+        L10n.string(rawValue)
+    }
 }
 
 public struct OnboardingProfile: Codable, Sendable, Equatable {
@@ -34,7 +38,7 @@ public struct OnboardingProfile: Codable, Sendable, Equatable {
         SobrietyProfileSnapshot(
             sobrietyStartDate: sobrietyStartDate,
             dailyAlcoholCost: dailyAlcoholCost,
-            displayName: goal?.rawValue
+            displayName: goal.map { L10n.string($0.rawValue) }
         )
     }
 }

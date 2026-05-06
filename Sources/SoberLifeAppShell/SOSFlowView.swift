@@ -40,16 +40,20 @@ struct SOSFlowView: View {
 
                 if contact.hasCallableNumber {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Someone you trust")
+                        L10n.text("sos.contact.title")
                             .font(.headline)
-                        Text(contact.trustedName.isEmpty ? "Your contact" : contact.trustedName)
+                        Text(contact.trustedName.isEmpty ? L10n.string("sos.contact.placeholder") : contact.trustedName)
                             .foregroundStyle(.secondary)
                         HStack {
                             if let url = Self.callURL(phone: contact.trustedPhone) {
                                 Button {
                                     openURL(url)
                                 } label: {
-                                    Label("Call", systemImage: "phone.fill")
+                                    Label {
+                                        L10n.text("sos.call")
+                                    } icon: {
+                                        Image(systemName: "phone.fill")
+                                    }
                                 }
                                 .buttonStyle(.borderedProminent)
                             }
@@ -57,7 +61,11 @@ struct SOSFlowView: View {
                                 Button {
                                     openURL(url)
                                 } label: {
-                                    Label("Message", systemImage: "message.fill")
+                                    Label {
+                                        L10n.text("sos.message")
+                                    } icon: {
+                                        Image(systemName: "message.fill")
+                                    }
                                 }
                                 .buttonStyle(.bordered)
                             }
@@ -107,7 +115,7 @@ struct SOSFlowView: View {
                     Text(EmpathyCopy.sosCrisisBody)
                         .foregroundStyle(.secondary)
                     if let url = URL(string: "https://findahelpline.com") {
-                        Link("Find a helpline (international)", destination: url)
+                        Link(L10n.string("sos.helpline"), destination: url)
                     }
                 }
                 .padding()
@@ -143,7 +151,7 @@ struct SOSFlowView: View {
         defer { isLoadingAI = false }
         let message = ChatMessage(
             role: "user",
-            content: "I am having a strong craving right now. Please respond with short, kind support.",
+            content: L10n.string("sos.ai.prompt"),
             timestamp: Date()
         )
         let context = AIContext(soberDays: soberDays, recentTriggers: [], recentJournalNotes: [])

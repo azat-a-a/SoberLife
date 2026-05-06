@@ -2,83 +2,61 @@ import Foundation
 
 /// Centralized supportive, non-shaming language (SAFE-01).
 public enum EmpathyCopy {
-    public static let sosTitle = "You are not alone"
-    public static let sosSubtitle =
-        "Cravings are hard, and reaching for help is brave. Nothing here erases your progress."
+    public static var sosTitle: String { L10n.string("empathy.sos.title") }
+    public static var sosSubtitle: String { L10n.string("empathy.sos.subtitle") }
 
-    public static let sosBreathingTitle = "Slow breathing"
-    public static let sosBreathingDetail = "Inhale 4 counts, hold 2, exhale 6. Repeat a few times. There is no rush."
+    public static var sosBreathingTitle: String { L10n.string("empathy.sos.breathing.title") }
+    public static var sosBreathingDetail: String { L10n.string("empathy.sos.breathing.detail") }
 
-    public static let sosWaterTitle = "Hydrate"
-    public static let sosWaterDetail = "A glass of water can be a small reset. You deserve care in small steps."
+    public static var sosWaterTitle: String { L10n.string("empathy.sos.water.title") }
+    public static var sosWaterDetail: String { L10n.string("empathy.sos.water.detail") }
 
-    public static let sosGroundingTitle = "Ground yourself"
-    public static let sosGroundingDetail = "Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste."
+    public static var sosGroundingTitle: String { L10n.string("empathy.sos.grounding.title") }
+    public static var sosGroundingDetail: String { L10n.string("empathy.sos.grounding.detail") }
 
-    public static let sosAiButton = "Get a supportive message"
-    public static let sosAiLoading = "Finding gentle words…"
-    public static let sosAiFallback =
-        "This moment is uncomfortable, not permanent. You have already practiced showing up for yourself. One next right step is enough."
+    public static var sosAiButton: String { L10n.string("empathy.sos.ai.button") }
+    public static var sosAiLoading: String { L10n.string("empathy.sos.ai.loading") }
+    public static var sosAiFallback: String { L10n.string("empathy.sos.ai.fallback") }
 
-    public static let sosCrisisSection = "If you might hurt yourself or someone else"
-    public static let sosCrisisBody =
-        "Please contact local emergency services or a crisis line right now. This app is not a substitute for professional or emergency care."
+    public static var sosCrisisSection: String { L10n.string("empathy.sos.crisis.section") }
+    public static var sosCrisisBody: String { L10n.string("empathy.sos.crisis.body") }
 
-    public static let relapseButton = "I had a drink (new period)"
-    public static let relapseTitle = "Thank you for telling the truth"
-    public static let relapseMessage =
-        "A slip does not delete who you are or the work you have already done. We will start a fresh sober period while keeping your milestones and history."
+    public static var relapseButton: String { L10n.string("empathy.relapse.button") }
+    public static var relapseTitle: String { L10n.string("empathy.relapse.title") }
+    public static var relapseMessage: String { L10n.string("empathy.relapse.message") }
 
-    public static let relapseConfirm = "Start fresh from today"
-    public static let relapseCancel = "Not now"
+    public static var relapseConfirm: String { L10n.string("empathy.relapse.confirm") }
+    public static var relapseCancel: String { L10n.string("empathy.relapse.cancel") }
 
-    public static let profileSupportHeading = "SOS contact (optional)"
-    public static let profileSupportHint =
-        "Someone you trust for a quick call when things feel intense. Stored only on this device."
+    public static var profileSupportHeading: String { L10n.string("empathy.profile.support.heading") }
+    public static var profileSupportHint: String { L10n.string("empathy.profile.support.hint") }
 
-    public static let chatNeedsBackend =
-        "To talk with the assistant, the app needs your Supabase project wired in (same setup as email sign-in)."
+    public static var chatNeedsBackend: String { L10n.string("empathy.chat.needs_backend") }
 
-    public static let emailConfirmationRequired =
-        "Check your email to confirm your account, then sign in here."
+    public static var emailConfirmationRequired: String { L10n.string("empathy.auth.email_confirmation") }
 
-    public static let chatCloudLoadFailed =
-        "We could not load your cloud history. Showing what is saved on this device."
+    public static var chatCloudLoadFailed: String { L10n.string("empathy.chat.cloud_load_failed") }
+    public static var chatCloudSyncFailed: String { L10n.string("empathy.chat.cloud_sync_failed") }
+    public static var chatSendFailed: String { L10n.string("empathy.chat.send_failed") }
+    public static var chatRetryAction: String { L10n.string("empathy.chat.retry") }
+    public static var chatEmptyHint: String { L10n.string("empathy.chat.empty_hint") }
 
-    public static let chatCloudSyncFailed =
-        "Your words are saved on this device; syncing to the cloud failed for a moment."
+    public static var dataSyncFailedShort: String { L10n.string("empathy.data.sync_failed_short") }
+    public static var sessionExpiredNeedsSignIn: String { L10n.string("empathy.session.expired") }
+    public static var networkOfflineShort: String { L10n.string("empathy.network.offline") }
 
-    public static let chatSendFailed =
-        "The assistant could not answer just now. Your message is still here — try again when you feel ready."
+    public static var statsPeriodsHeading: String { L10n.string("empathy.stats.periods.heading") }
+    public static var statsPeriodsFootnote: String { L10n.string("empathy.stats.periods.footnote") }
+    public static var statsPeriodCurrentBadge: String { L10n.string("empathy.stats.period.badge.current") }
+    public static var statsPeriodPastBadge: String { L10n.string("empathy.stats.period.badge.past") }
 
-    public static let chatRetryAction = "Try again"
-
-    public static let chatEmptyHint =
-        "This is a private space. There is no wrong thing to say. Short messages are fine."
-
-    public static let dataSyncFailedShort =
-        "Could not sync your progress to the cloud. It is still saved on this device — you can try again later."
-
-    public static let sessionExpiredNeedsSignIn =
-        "Your session expired. Please sign in again to continue syncing."
-
-    public static let networkOfflineShort =
-        "No internet connection right now. Your data stays on this device and will sync when you're back online."
-
-    public static let statsPeriodsHeading = "Your sober periods"
-    public static let statsPeriodsFootnote =
-        "Each row is a chapter, not a verdict. Milestones you already earned stay with you."
-    public static let statsPeriodCurrentBadge = "Current period"
-    public static let statsPeriodPastBadge = "Earlier period"
-
-    public static let profileNotificationsHeading = "Notifications"
-    public static let profileNotificationsHint =
-        "Saved on this device. We avoid pings during quiet hours when we can."
-    public static let profileNotificationsDaily = "Daily gentle reminder"
-    public static let profileNotificationsMilestone = "Milestone reminders"
-    public static let profileNotificationsReengagement = "Nudge after you have been away"
-    public static let profileNotificationsTime = "Reminder time"
-    public static let profileNotificationsQuiet = "Quiet hours"
-    public static let profileNotificationsQuietStart = "Quiet from (hour)"
-    public static let profileNotificationsQuietEnd = "Quiet until (hour)"
+    public static var profileNotificationsHeading: String { L10n.string("empathy.profile.notifications.heading") }
+    public static var profileNotificationsHint: String { L10n.string("empathy.profile.notifications.hint") }
+    public static var profileNotificationsDaily: String { L10n.string("empathy.profile.notifications.daily") }
+    public static var profileNotificationsMilestone: String { L10n.string("empathy.profile.notifications.milestone") }
+    public static var profileNotificationsReengagement: String { L10n.string("empathy.profile.notifications.reengagement") }
+    public static var profileNotificationsTime: String { L10n.string("empathy.profile.notifications.time") }
+    public static var profileNotificationsQuiet: String { L10n.string("empathy.profile.notifications.quiet") }
+    public static var profileNotificationsQuietStart: String { L10n.string("empathy.profile.notifications.quiet_start") }
+    public static var profileNotificationsQuietEnd: String { L10n.string("empathy.profile.notifications.quiet_end") }
 }

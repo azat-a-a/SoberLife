@@ -1,0 +1,148 @@
+"app.name" = "SoberLife";
+
+// Tabs
+"tab.home" = "Home";
+"tab.chat" = "AI Chat";
+"tab.stats" = "Stats";
+"tab.profile" = "Profile";
+
+// Common
+"common.close" = "Close";
+"common.dismiss" = "Dismiss";
+"common.back" = "Back";
+"common.skip" = "Skip";
+"common.continue" = "Continue";
+"common.finish" = "Finish";
+"common.save" = "Save";
+
+// Onboarding
+"onboarding.title" = "Welcome";
+"onboarding.progress" = "Onboarding %@/%@";
+"onboarding.goal.question" = "What feels right as a direction?";
+"onboarding.goal.helper" = "There is no wrong answer, and you can change your mind later.";
+"onboarding.goal.reduce" = "Reduce drinking";
+"onboarding.goal.quit" = "Quit completely";
+"onboarding.startdate.title" = "When does this sober period start?";
+"onboarding.startdate.field" = "Start date";
+"onboarding.cost.title" = "Average daily alcohol spend";
+"onboarding.cost.placeholder" = "Optional (e.g. 850)";
+"onboarding.cost.helper" = "Used to calculate your savings. You can skip this step.";
+"onboarding.notifications.title" = "Daily reminders";
+"onboarding.notifications.toggle" = "Gentle daily reminders";
+"onboarding.notifications.helper" = "You can change this anytime. We keep reminders short and skip shaming language.";
+
+// Auth
+"auth.welcome.body" = "Sign in with email to save your progress. If signing in feels like a lot right now, you can still come back when you are ready.";
+"auth.email" = "Email";
+"auth.password" = "Password";
+"auth.signin" = "Sign in";
+"auth.create_account" = "Create account";
+"auth.error.restore_failed" = "Failed to restore session.";
+"auth.error.invalid_credentials" = "Incorrect email or password.";
+"auth.error.signin_failed" = "Sign in failed. Please try again.";
+"auth.error.signup_check_email" = "Check your email and password and try again.";
+"auth.error.signup_failed" = "Could not create account. Please try again.";
+"auth.error.signout_failed" = "Sign out failed. Please try again.";
+
+// Home
+"home.title" = "Home";
+"home.sobriety.heading" = "Sobriety";
+"home.days" = "%@ days";
+"home.estimated_savings" = "Estimated savings: %@";
+"home.period_started" = "This period started: %@";
+"home.next_milestone" = "Next milestone: %@ days";
+"home.relapse_helper" = "Your milestones stay with you. Starting a new period does not erase what you have already learned.";
+"home.sos" = "SOS — quick help";
+
+// Stats
+"stats.title" = "Stats";
+"stats.current_period" = "Current period";
+"stats.best_streak" = "Best streak so far";
+"stats.honesty_times" = "Times you chose honesty";
+"stats.savings_period" = "Estimated savings (period)";
+"stats.next_milestone" = "Next milestone";
+"stats.progress" = "Progress";
+"stats.milestones_earned" = "Milestones you have earned";
+"stats.celebrating" = "Celebrating: %@";
+"stats.relapse_helper" = "Honesty check-ins start a new sober period without removing badges you already unlocked.";
+"stats.period_row.days" = "%@ days";
+"stats.period_row.since" = "Since %@";
+
+// Profile
+"profile.title" = "Profile";
+"profile.more_settings" = "More settings will arrive later. What you add here stays on this device unless you sign in and sync in a future release.";
+"profile.sos_contact.save" = "Save SOS contact";
+"profile.signout" = "Sign out";
+"profile.contact.name" = "Name or nickname";
+"profile.contact.phone" = "Phone number";
+
+// Chat
+"chat.nav_title" = "AI Chat";
+"chat.chats" = "Chats";
+"chat.new_chat" = "New chat";
+"chat.new_message" = "New message";
+"chat.recent" = "Recent";
+"chat.message.placeholder" = "Message";
+"chat.send" = "Send";
+
+// SOS
+"sos.title" = "SOS";
+"sos.contact.title" = "Someone you trust";
+"sos.contact.placeholder" = "Your contact";
+"sos.call" = "Call";
+"sos.message" = "Message";
+"sos.helpline" = "Find a helpline (international)";
+"sos.ai.prompt" = "I am having a strong craving right now. Please respond with short, kind support.";
+
+// Notifications
+"notif.daily.title" = "One gentle check-in";
+"notif.daily.body" = "You are allowed to take today one moment at a time. Open SoberLife when you feel ready.";
+"notif.milestone.title" = "Milestone within reach";
+"notif.milestone.body" = "You are close to %@ days. However today feels, your effort still matters.";
+"notif.reengagement.title" = "Still here with you";
+"notif.reengagement.body" = "No pressure — open the app whenever you want a small moment of support.";
+
+// EmpathyCopy
+"empathy.sos.title" = "You are not alone";
+"empathy.sos.subtitle" = "Cravings are hard, and reaching for help is brave. Nothing here erases your progress.";
+"empathy.sos.breathing.title" = "Slow breathing";
+"empathy.sos.breathing.detail" = "Inhale 4 counts, hold 2, exhale 6. Repeat a few times. There is no rush.";
+"empathy.sos.water.title" = "Hydrate";
+"empathy.sos.water.detail" = "A glass of water can be a small reset. You deserve care in small steps.";
+"empathy.sos.grounding.title" = "Ground yourself";
+"empathy.sos.grounding.detail" = "Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste.";
+"empathy.sos.ai.button" = "Get a supportive message";
+"empathy.sos.ai.loading" = "Finding gentle words…";
+"empathy.sos.ai.fallback" = "This moment is uncomfortable, not permanent. You have already practiced showing up for yourself. One next right step is enough.";
+"empathy.sos.crisis.section" = "If you might hurt yourself or someone else";
+"empathy.sos.crisis.body" = "Please contact local emergency services or a crisis line right now. This app is not a substitute for professional or emergency care.";
+"empathy.relapse.button" = "I had a drink (new period)";
+"empathy.relapse.title" = "Thank you for telling the truth";
+"empathy.relapse.message" = "A slip does not delete who you are or the work you have already done. We will start a fresh sober period while keeping your milestones and history.";
+"empathy.relapse.confirm" = "Start fresh from today";
+"empathy.relapse.cancel" = "Not now";
+"empathy.profile.support.heading" = "SOS contact (optional)";
+"empathy.profile.support.hint" = "Someone you trust for a quick call when things feel intense. Stored only on this device.";
+"empathy.chat.needs_backend" = "To talk with the assistant, the app needs your Supabase project wired in (same setup as email sign-in).";
+"empathy.auth.email_confirmation" = "Check your email to confirm your account, then sign in here.";
+"empathy.chat.cloud_load_failed" = "We could not load your cloud history. Showing what is saved on this device.";
+"empathy.chat.cloud_sync_failed" = "Your words are saved on this device; syncing to the cloud failed for a moment.";
+"empathy.chat.send_failed" = "The assistant could not answer just now. Your message is still here — try again when you feel ready.";
+"empathy.chat.retry" = "Try again";
+"empathy.chat.empty_hint" = "This is a private space. There is no wrong thing to say. Short messages are fine.";
+"empathy.data.sync_failed_short" = "Could not sync your progress to the cloud. It is still saved on this device — you can try again later.";
+"empathy.session.expired" = "Your session expired. Please sign in again to continue syncing.";
+"empathy.network.offline" = "No internet connection right now. Your data stays on this device and will sync when you're back online.";
+"empathy.stats.periods.heading" = "Your sober periods";
+"empathy.stats.periods.footnote" = "Each row is a chapter, not a verdict. Milestones you already earned stay with you.";
+"empathy.stats.period.badge.current" = "Current period";
+"empathy.stats.period.badge.past" = "Earlier period";
+"empathy.profile.notifications.heading" = "Notifications";
+"empathy.profile.notifications.hint" = "Saved on this device. We avoid pings during quiet hours when we can.";
+"empathy.profile.notifications.daily" = "Daily gentle reminder";
+"empathy.profile.notifications.milestone" = "Milestone reminders";
+"empathy.profile.notifications.reengagement" = "Nudge after you have been away";
+"empathy.profile.notifications.time" = "Reminder time";
+"empathy.profile.notifications.quiet" = "Quiet hours";
+"empathy.profile.notifications.quiet_start" = "Quiet from (hour)";
+"empathy.profile.notifications.quiet_end" = "Quiet until (hour)";

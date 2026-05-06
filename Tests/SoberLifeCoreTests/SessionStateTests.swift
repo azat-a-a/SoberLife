@@ -41,7 +41,7 @@ final class SessionStateTests: XCTestCase {
         await session.signIn(email: "a@b.co", password: "secret")
 
         XCTAssertEqual(session.authState, .signedOut)
-        XCTAssertEqual(session.authErrorMessage, "Incorrect email or password.")
+        XCTAssertEqual(session.authErrorMessage, L10n.string("auth.error.invalid_credentials"))
     }
 
     func testRestoreSessionUsesCurrentSession() async {
