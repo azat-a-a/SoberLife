@@ -8,9 +8,9 @@
 - End: 2026-07-14
 
 ## Current Status (as of 2026-05-06)
-- Done in this sprint scope: `QA-02`, `STORE-01`, `I18N-02`, `REL-01`, `BETA-01`.
-- In progress: `BUG-01`.
-- Open quality follow-up: CI queue reliability (`BUG-S05-001`) tracked in `BUG-BURNDOWN-S05.md`.
+- **Sprint closeout:** Committed delivery items for beta readiness are complete: `QA-02`, `STORE-01`, `I18N-02`, `REL-01`, `BETA-01`, `BUG-01`.
+- **Deferred / not closed this sprint:** `PERF-01`, `OBS-01` remain planned work for a follow-up sprint (no formal closure in Sprint 05).
+- **Open follow-up:** CI queue reliability (`BUG-S05-001`, P2) in `BUG-BURNDOWN-S05.md`; crash SDK before App Store scale per burn-down notes.
 
 ## Top Priorities
 1. Beta hardening for core user journeys

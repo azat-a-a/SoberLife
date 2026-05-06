@@ -26,5 +26,11 @@
 - [x] No open P0 defects
 - [x] No open P1 defects
 - [x] P2 list triaged with owners
-- [ ] Crash/error trend reviewed against beta candidate target
+- [x] Crash/error trend reviewed against beta candidate target
 
+## Crash / Error Trend Review (2026-05-06)
+- **Production crash telemetry:** Not wired in MVP; beta gate relied on QA evidence and local stability instead of a live crash-free % dashboard.
+- **Automated suite:** `swift test` green (54 tests); no new failures across sprint burn-down.
+- **Manual QA:** Full regression (`QA-REGRESSION-S05-RESULTS.md`) and prior smoke passes reported no P0/P1; no crash signatures surfaced on simulator or test devices during these runs.
+- **Assessment:** Error/crash trend is **acceptable for closed-beta entry** given scope; ongoing beta should add a real crash reporter before App Store scale.
+- **Follow-up:** Track `BUG-S05-001` (CI queue) in Sprint 06 tooling hygiene; consider crash SDK + dashboard for production readiness.

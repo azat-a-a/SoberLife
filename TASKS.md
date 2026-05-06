@@ -20,16 +20,6 @@
 
 ## In Progress
 
-- [ ] BUG-01 Bug burn-down and stability fixes (Sprint 05)
-  - Started: 2026-05-06
-  - Plan:
-    - Maintain live defect queue in `BUG-BURNDOWN-S05.md` with severity/owner/status.
-    - Prioritize P0/P1 fixes first; verify with focused reruns.
-    - Track crash/error trend against beta target and update mitigation notes.
-  - Progress:
-    - 2026-05-06: fixed `BUG-S05-002` (archive orientation warning), validated with successful re-archive.
-  - Exit criteria: no open P0/P1; triaged P2 list with owners; stability trend acceptable for beta candidate.
-
 ---
 
 ## Done
@@ -128,6 +118,10 @@
 - [x] BETA-01 Closed beta readiness gate (Sprint 05)
   - Date: 2026-05-06
   - Notes: Gate criteria completed and decision set to GO in `BETA-READINESS.md`; precheck evidence consolidated in `BETA-GO-NOGO-PRECHECK-S05.md`.
+
+- [x] BUG-01 Bug burn-down and stability fixes (Sprint 05)
+  - Date: 2026-05-06
+  - Notes: Defect queue closed out in `BUG-BURNDOWN-S05.md`; `BUG-S05-002` fixed; crash/error trend review recorded; single open P2 (`BUG-S05-001`, CI queue) deferred with owner/mitigation.
 
 - [x] SAFE-01 Safety and empathy copy pass
   - Date: 2026-05-05
