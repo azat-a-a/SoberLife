@@ -1,0 +1,138 @@
+SoberLife
+Accueil
+Chat IA
+Statistiques
+Profil
+Fermer
+Ignorer
+Retour
+Passer
+Continuer
+Terminer
+Enregistrer
+Bienvenue
+Intégration %@/%@
+Quelle direction te semble juste pour l’instant ?
+Il n’y a pas de mauvaise réponse — et tu pourras changer d’avis plus tard.
+Réduire la consommation
+Arrêter complètement
+Quand commence cette période d’abstinence ?
+Date de début
+Dépenses alcool moyennes par jour
+Facultatif (ex. 850)
+Sert à estimer tes économies. Tu peux sauter cette étape.
+Rappels quotidiens
+Rappels quotidiens doux
+Tu peux modifier cela à tout moment. Les rappels restent courts, sans langage culpabilisant.
+Connecte-toi par e-mail pour sauvegarder ta progression. Si c’est trop lourd maintenant, reviens quand tu seras prêt.
+E-mail
+Mot de passe
+Se connecter
+Créer un compte
+Impossible de restaurer la session.
+E-mail ou mot de passe incorrect.
+Échec de la connexion. Réessaie.
+Vérifie l’e-mail et le mot de passe, puis réessaie.
+Impossible de créer le compte. Réessaie.
+Échec de la déconnexion. Réessaie.
+Accueil
+Abstinence
+%@ jours
+Économies estimées : %@
+Cette période a commencé : %@
+Prochain jalon : %@ jours
+Tes jalons restent avec toi. Une nouvelle période n’efface pas ce que tu as déjà appris.
+SOS — aide rapide
+Statistiques
+Période actuelle
+Meilleure série jusqu’ici
+Fois où tu as choisi l’honnêteté
+Économies estimées (période)
+Prochain jalon
+Progression
+Jalons obtenus
+On célèbre : %@
+Les check-ins honnêtes démarrent une nouvelle période sans retirer les badges déjà débloqués.
+%@ jours
+Depuis %@
+Profil
+D’autres réglages arrivent plus tard. Ce que tu ajoutes ici reste sur cet appareil tant que tu ne te connectes pas pour synchroniser.
+Enregistrer le contact SOS
+Se déconnecter
+Nom ou surnom
+Numéro de téléphone
+Langue de l’app
+Système
+English
+Русский
+Deutsch
+Français
+Español
+Italiano
+Polski
+简体中文
+ไทย
+日本語
+Chat IA
+Discussions
+Nouvelle discussion
+Nouveau message
+Récent
+Message
+Envoyer
+SOS
+Quelqu’un en qui tu as confiance
+Ton contact
+Appeler
+Message
+Trouver une ligne d’écoute (international)
+J’ai une envie très forte en ce moment. Réponds brièvement et avec bienveillance pour me soutenir.
+Un rappel doux
+Tu peux vivre aujourd’hui moment par moment. Ouvre SoberLife quand tu te sentiras prêt.
+Jalon à portée de main
+Tu es proche de %@ jours. Quelle que soit la journée, ton effort compte.
+Toujours là
+Sans pression — ouvre l’app quand tu veux un peu de soutien.
+Tu n’es pas seul·e
+Les envies sont dures, et demander de l’aide est courageux. Rien de tout cela n’efface ta progression.
+Respiration lente
+Inspire 4, bloque 2, expire 6. Répète quelques fois. Pas besoin de te presser.
+S’hydrater
+Un verre d’eau peut être un petit reset. Tu mérites des soins, même en petits pas.
+S’ancrer
+Nomme 5 choses que tu vois, 4 que tu peux toucher, 3 que tu entends, 2 que tu sens, 1 que tu goûtes.
+Recevoir un message de soutien
+Je cherche des mots bienveillants…
+Ce moment est inconfortable, pas permanent. Tu as déjà appris à être là pour toi. Un prochain petit pas suffit.
+Si tu risques de te faire du mal ou de faire du mal à autrui
+Contacte immédiatement les secours locaux ou une ligne d’urgence. Cette appli ne remplace pas des soins professionnels ou d’urgence.
+J’ai bu (nouvelle période)
+Merci pour ton honnêteté
+Un écart ne t’efface ni ton travail déjà accompli. Nous commençons une nouvelle période tout en gardant tes jalons et ton historique.
+Repartir à zéro aujourd’hui
+Pas maintenant
+Contact SOS (facultatif)
+Quelqu’un à appeler vite quand c’est intense. Stocké uniquement sur cet appareil.
+Pour parler à l’assistant, le projet Supabase doit être connecté (comme pour la connexion e-mail).
+Confirme ton e-mail pour activer le compte, puis connecte-toi ici.
+Impossible de charger l’historique cloud. Affichage de ce qui est sur cet appareil.
+Tes messages sont sur cet appareil ; la synchro cloud a échoué un instant.
+L’assistant n’a pas pu répondre maintenant. Ton message est toujours là — réessaie quand tu veux.
+Réessayer
+C’est un espace privé. Il n’y a pas de « mauvaise » chose à dire. Les messages courts vont très bien.
+Impossible de synchroniser ta progression avec le cloud. Elle reste sur cet appareil — réessaie plus tard.
+Ta session a expiré. Reconnecte-toi pour continuer la synchronisation.
+Pas d’internet pour l’instant. Tes données restent sur cet appareil et se synchroniseront quand tu seras en ligne.
+Tes périodes d’abstinence
+Chaque ligne est un chapitre, pas un jugement. Les jalons déjà gagnés restent avec toi.
+Période actuelle
+Période précédente
+Notifications
+Enregistrées sur cet appareil. Si possible, on évite les notifications pendant les heures calmes.
+Rappel quotidien doux
+Rappels de jalons
+Petit rappel après une absence
+Heure du rappel
+Heures calmes
+Calme à partir de (heure)
+Calme jusqu’à (heure)

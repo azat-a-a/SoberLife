@@ -1,0 +1,160 @@
+"app.name" = "SoberLife";
+
+// Tabs
+"tab.home" = "ホーム";
+"tab.chat" = "AIチャット";
+"tab.stats" = "統計";
+"tab.profile" = "プロフィール";
+
+// Common
+"common.close" = "閉じる";
+"common.dismiss" = "閉じる";
+"common.back" = "戻る";
+"common.skip" = "スキップ";
+"common.continue" = "続ける";
+"common.finish" = "完了";
+"common.save" = "保存";
+
+// Onboarding
+"onboarding.title" = "ようこそ";
+"onboarding.progress" = "オンボーディング %@/%@";
+"onboarding.goal.question" = "今、どの方向がしっくりきますか？";
+"onboarding.goal.helper" = "正解はありません。あとから気持ちが変わっても大丈夫です。";
+"onboarding.goal.reduce" = "飲酒量を減らす";
+"onboarding.goal.quit" = "完全にやめる";
+"onboarding.startdate.title" = "この禁酒期間はいつから始まりますか？";
+"onboarding.startdate.field" = "開始日";
+"onboarding.cost.title" = "1日あたりの平均アルコール支出";
+"onboarding.cost.placeholder" = "任意（例：850）";
+"onboarding.cost.helper" = "節約額の目安に使います。この手順はスキップできます。";
+"onboarding.notifications.title" = "毎日のリマインダー";
+"onboarding.notifications.toggle" = "やさしい毎日のリマインダー";
+"onboarding.notifications.helper" = "いつでも変更できます。短く、恥ずかしめる言葉は使いません。";
+
+// Auth
+"auth.welcome.body" = "メールでサインインして進捗を保存してください。今は難しければ、準備ができてから戻ってきてください。";
+"auth.email" = "メール";
+"auth.password" = "パスワード";
+"auth.signin" = "サインイン";
+"auth.create_account" = "アカウント作成";
+"auth.error.restore_failed" = "セッションを復元できませんでした。";
+"auth.error.invalid_credentials" = "メールまたはパスワードが正しくありません。";
+"auth.error.signin_failed" = "サインインに失敗しました。もう一度お試しください。";
+"auth.error.signup_check_email" = "メールとパスワードを確認して、もう一度お試しください。";
+"auth.error.signup_failed" = "アカウントを作成できませんでした。もう一度お試しください。";
+"auth.error.signout_failed" = "サインアウトに失敗しました。もう一度お試しください。";
+
+// Home
+"home.title" = "ホーム";
+"home.sobriety.heading" = "禁酒";
+"home.days" = "%@ 日";
+"home.estimated_savings" = "推定節約額：%@";
+"home.period_started" = "この期間の開始：%@";
+"home.next_milestone" = "次のマイルストーン：%@ 日";
+"home.relapse_helper" = "マイルストーンはあなたと一緒です。新しい期間が、これまでの学びを消すことはありません。";
+"home.sos" = "SOS — すぐの助け";
+
+// Stats
+"stats.title" = "統計";
+"stats.current_period" = "現在の期間";
+"stats.best_streak" = "これまでの最長記録";
+"stats.honesty_times" = "正直さを選んだ回数";
+"stats.savings_period" = "この期間の推定節約額";
+"stats.next_milestone" = "次のマイルストーン";
+"stats.progress" = "進捗";
+"stats.milestones_earned" = "獲得したマイルストーン";
+"stats.celebrating" = "お祝い：%@";
+"stats.relapse_helper" = "正直なチェックインは新しい禁酒期間を始めますが、すでに解除したバッジは残ります。";
+"stats.period_row.days" = "%@ 日";
+"stats.period_row.since" = "%@ から";
+
+// Profile
+"profile.title" = "プロフィール";
+"profile.more_settings" = "その他の設定は後日追加されます。ここに入力した内容は、将来サインインして同期するまでこの端末に保存されます。";
+"profile.sos_contact.save" = "SOS連絡先を保存";
+"profile.signout" = "サインアウト";
+"profile.contact.name" = "名前またはニックネーム";
+"profile.contact.phone" = "電話番号";
+"profile.language" = "アプリの言語";
+"profile.language.system" = "システムに合わせる";
+"profile.language.english" = "English";
+"profile.language.russian" = "Русский";
+"profile.language.german" = "Deutsch";
+"profile.language.french" = "Français";
+"profile.language.spanish" = "Español";
+"profile.language.italian" = "Italiano";
+"profile.language.polish" = "Polski";
+"profile.language.chinese_simplified" = "简体中文";
+"profile.language.thai" = "ไทย";
+"profile.language.japanese" = "日本語";
+
+// Chat
+"chat.nav_title" = "AIチャット";
+"chat.chats" = "チャット";
+"chat.new_chat" = "新しいチャット";
+"chat.new_message" = "新しいメッセージ";
+"chat.recent" = "最近";
+"chat.message.placeholder" = "メッセージ";
+"chat.send" = "送信";
+
+// SOS
+"sos.title" = "SOS";
+"sos.contact.title" = "信頼できる人";
+"sos.contact.placeholder" = "連絡先";
+"sos.call" = "電話";
+"sos.message" = "メッセージ";
+"sos.helpline" = "ヘルプラインを探す（国際）";
+"sos.ai.prompt" = "今、強い渇望があります。短く、やさしく支える返事をください。";
+
+// Notifications
+"notif.daily.title" = "やさしいひとこと";
+"notif.daily.body" = "今日は一瞬ずつで大丈夫。準備ができたら SoberLife を開いてください。";
+"notif.milestone.title" = "マイルストーンが近い";
+"notif.milestone.body" = "あと %@ 日に近づいています。今日がどんな日でも、あなたの努力は大切です。";
+"notif.reengagement.title" = "ここにいます";
+"notif.reengagement.body" = "プレッシャーはありません。少し支えが欲しいときにアプリを開いてください。";
+
+// EmpathyCopy
+"empathy.sos.title" = "ひとりじゃない";
+"empathy.sos.subtitle" = "渇望はつらく、助けを求めるのは勇気です。それらが進捗を消すことはありません。";
+"empathy.sos.breathing.title" = "ゆっくり呼吸";
+"empathy.sos.breathing.detail" = "吸って4、止めて2、吐いて6。何回か繰り返しましょう。急がなくて大丈夫。";
+"empathy.sos.water.title" = "水分補給";
+"empathy.sos.water.detail" = "水一杯も小さなリセットになります。小さな一歩でも自分をいたわっていいです。";
+"empathy.sos.grounding.title" = "グラウンディング";
+"empathy.sos.grounding.detail" = "見えるもの5つ、触れられるもの4つ、聞こえるもの3つ、匂いがするもの2つ、味わうもの1つを言ってみましょう。";
+"empathy.sos.ai.button" = "支えのメッセージを受け取る";
+"empathy.sos.ai.loading" = "やさしい言葉を探しています…";
+"empathy.sos.ai.fallback" = "この瞬間は不快でも、永遠ではありません。あなたはすでに自分に寄り添う練習をしてきました。次の小さな一歩で十分です。";
+"empathy.sos.crisis.section" = "自分や他者を傷つける可能性がある場合";
+"empathy.sos.crisis.body" = "今すぐ地域の緊急通報や危機ダイヤルに連絡してください。このアプリは専門的・緊急のケアに代わるものではありません。";
+"empathy.relapse.button" = "飲酒しました（新しい期間）";
+"empathy.relapse.title" = "正直に伝えてくれてありがとう";
+"empathy.relapse.message" = "つまずきがあなたやこれまでの努力を消すことはありません。マイルストーンと履歴を残したまま、新しい禁酒期間を始めます。";
+"empathy.relapse.confirm" = "今日から新しく始める";
+"empathy.relapse.cancel" = "今はしない";
+"empathy.profile.support.heading" = "SOS連絡先（任意）";
+"empathy.profile.support.hint" = "つらいときにすぐ電話できる人。この端末にだけ保存されます。";
+"empathy.chat.needs_backend" = "アシスタントとチャットするには Supabase プロジェクトを接続してください（メールログインと同じ）。";
+"empathy.auth.email_confirmation" = "メールでアカウントを有効化してから、ここでサインインしてください。";
+"empathy.chat.cloud_load_failed" = "クラウド履歴を読み込めませんでした。この端末に保存されている内容を表示します。";
+"empathy.chat.cloud_sync_failed" = "言葉はこの端末に保存されています。クラウド同期が一時的に失敗しました。";
+"empathy.chat.send_failed" = "アシスタントが今応答できませんでした。メッセージは残っています。準備ができたら再試行してください。";
+"empathy.chat.retry" = "再試行";
+"empathy.chat.empty_hint" = "ここはプライベートな場所。「間違った」ことはありません。短いメッセージで大丈夫です。";
+"empathy.data.sync_failed_short" = "進捗をクラウドに同期できませんでした。この端末に残っています。あとでもう一度お試しください。";
+"empathy.session.expired" = "セッションの有効期限が切れました。同期を続けるには再度サインインしてください。";
+"empathy.network.offline" = "いまはオフラインです。データはこの端末に残り、オンラインに戻ると同期されます。";
+"empathy.stats.periods.heading" = "禁酒の期間";
+"empathy.stats.periods.footnote" = "各行は章であり、判決ではありません。すでに得たマイルストーンはあなたのもののままです。";
+"empathy.stats.period.badge.current" = "現在の期間";
+"empathy.stats.period.badge.past" = "以前の期間";
+"empathy.profile.notifications.heading" = "通知";
+"empathy.profile.notifications.hint" = "この端末に保存されます。可能なときは静かな時間帯の通知を避けます。";
+"empathy.profile.notifications.daily" = "毎日のやさしいリマインダー";
+"empathy.profile.notifications.milestone" = "マイルストーンのリマインダー";
+"empathy.profile.notifications.reengagement" = "しばらく離れていたあとのそっとしたリマインダー";
+"empathy.profile.notifications.time" = "リマインダー時間";
+"empathy.profile.notifications.quiet" = "静音時間";
+"empathy.profile.notifications.quiet_start" = "静音開始（時）";
+"empathy.profile.notifications.quiet_end" = "静音終了（時）";

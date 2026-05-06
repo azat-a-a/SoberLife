@@ -5,6 +5,14 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Codable {
     case system
     case english
     case russian
+    case german
+    case french
+    case spanish
+    case italian
+    case polish
+    case chineseSimplified
+    case thai
+    case japanese
 
     public var id: String { rawValue }
 
@@ -16,6 +24,22 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Codable {
             return "en"
         case .russian:
             return "ru"
+        case .german:
+            return "de"
+        case .french:
+            return "fr"
+        case .spanish:
+            return "es"
+        case .italian:
+            return "it"
+        case .polish:
+            return "pl"
+        case .chineseSimplified:
+            return "zh-Hans"
+        case .thai:
+            return "th"
+        case .japanese:
+            return "ja"
         }
     }
 
@@ -27,6 +51,22 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Codable {
             return Locale(identifier: "en")
         case .russian:
             return Locale(identifier: "ru")
+        case .german:
+            return Locale(identifier: "de")
+        case .french:
+            return Locale(identifier: "fr")
+        case .spanish:
+            return Locale(identifier: "es")
+        case .italian:
+            return Locale(identifier: "it")
+        case .polish:
+            return Locale(identifier: "pl")
+        case .chineseSimplified:
+            return Locale(identifier: "zh-Hans")
+        case .thai:
+            return Locale(identifier: "th")
+        case .japanese:
+            return Locale(identifier: "ja")
         }
     }
 
@@ -38,6 +78,22 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Codable {
             return "profile.language.english"
         case .russian:
             return "profile.language.russian"
+        case .german:
+            return "profile.language.german"
+        case .french:
+            return "profile.language.french"
+        case .spanish:
+            return "profile.language.spanish"
+        case .italian:
+            return "profile.language.italian"
+        case .polish:
+            return "profile.language.polish"
+        case .chineseSimplified:
+            return "profile.language.chinese_simplified"
+        case .thai:
+            return "profile.language.thai"
+        case .japanese:
+            return "profile.language.japanese"
         }
     }
 }

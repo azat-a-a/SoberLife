@@ -1,0 +1,138 @@
+SoberLife
+Home
+Chat IA
+Statistiche
+Profilo
+Chiudi
+Ignora
+Indietro
+Salta
+Continua
+Fine
+Salva
+Benvenuto
+Onboarding %@/%@
+Che direzione ti sembra giusta adesso?
+Non esiste una risposta sbagliata — e puoi cambiare idea in seguito.
+Ridurre il consumo
+Smettere del tutto
+Quando inizia questo periodo di sobrietà?
+Data di inizio
+Spesa media giornaliera per alcol
+Facoltativo (es. 850)
+Serve a stimare i risparmi. Puoi saltare questo passaggio.
+Promemoria giornalieri
+Promemoria giornalieri gentili
+Puoi modificarlo in qualsiasi momento. I promemoria restano brevi, senza linguaggio che fa sentire in colpa.
+Accedi con email per salvare i progressi. Se ora è troppo, torna quando sei pronto.
+Email
+Password
+Accedi
+Crea account
+Impossibile ripristinare la sessione.
+Email o password non corretti.
+Accesso non riuscito. Riprova.
+Controlla email e password e riprova.
+Impossibile creare l’account. Riprova.
+Disconnessione non riuscita. Riprova.
+Home
+Sobrietà
+%@ giorni
+Risparmio stimato: %@
+Questo periodo è iniziato: %@
+Prossimo traguardo: %@ giorni
+I tuoi traguardi restano con te. Un nuovo periodo non cancella ciò che hai già imparato.
+SOS — aiuto rapido
+Statistiche
+Periodo attuale
+Miglior serie finora
+Volte in cui hai scelto onestà
+Risparmio stimato (periodo)
+Prossimo traguardo
+Progresso
+Traguardi ottenuti
+Celebriamo: %@
+I check-in onesti avviano un nuovo periodo senza togliere i badge già sbloccati.
+%@ giorni
+Dal %@
+Profilo
+Altre impostazioni arriveranno più avanti. Ciò che aggiungi qui resta su questo dispositivo finché non accedi e sincronizzi in futuro.
+Salva contatto SOS
+Esci
+Nome o soprannome
+Numero di telefono
+Lingua dell’app
+Sistema
+English
+Русский
+Deutsch
+Français
+Español
+Italiano
+Polski
+简体中文
+ไทย
+日本語
+Chat IA
+Chat
+Nuova chat
+Nuovo messaggio
+Recenti
+Messaggio
+Invia
+SOS
+Qualcuno di cui ti fidi
+Il tuo contatto
+Chiama
+Messaggio
+Trova una linea di ascolto (internazionale)
+Ho una forte voglia in questo momento. Rispondi in breve e con gentilezza per sostenermi.
+Un promemoria gentile
+Puoi vivere oggi un momento alla volta. Apri SoberLife quando ti senti pronto.
+Traguardo a portata di mano
+Sei vicino a %@ giorni. Comunque vada la giornata, il tuo impegno conta.
+Siamo ancora qui
+Senza pressione — apri l’app quando vuoi un po’ di supporto.
+Non sei solo
+Le voglie sono difficili e chiedere aiuto è coraggioso. Nulla di tutto questo cancella i tuoi progressi.
+Respirazione lenta
+Inspira 4, trattieni 2, espira 6. Ripeti qualche volta. Non c’è fretta.
+Idratarsi
+Un bicchiere d’acqua può essere un piccolo reset. Meriti cura anche con piccoli passi.
+Ancorati al presente
+Nomina 5 cose che vedi, 4 che puoi toccare, 3 che senti, 2 che annusi, 1 che assaggi.
+Ricevi un messaggio di supporto
+Cerco parole gentili…
+Questo momento è scomodo, non permanente. Hai già praticato esserci per te. Basta un prossimo piccolo passo.
+Se potresti farti del male o fare del male a qualcuno
+Contatta subito i servizi di emergenza locali o una linea di crisi. Questa app non sostituisce cure professionali o di emergenza.
+Ho bevuto (nuovo periodo)
+Grazie per la tua onestà
+Un passo falso non cancella te né il lavoro che hai già fatto. Iniziamo un nuovo periodo mantenendo traguardi e cronologia.
+Ricomincia da oggi
+Non ora
+Contatto SOS (facoltativo)
+Qualcuno da chiamare in fretta quando è intenso. Salvato solo su questo dispositivo.
+Per chattare con l’assistente, collega il progetto Supabase (come per l’accesso email).
+Conferma l’email per attivare l’account, poi accedi qui.
+Impossibile caricare la cronologia cloud. Mostro ciò che è salvato su questo dispositivo.
+Le tue parole sono su questo dispositivo; la sincronizzazione cloud è fallita per un attimo.
+L’assistente non ha potuto rispondere ora. Il tuo messaggio è ancora qui — riprova quando vuoi.
+Riprova
+Questo è uno spazio privato. Non c’è nulla di “sbagliato” da dire. I messaggi brevi vanno benissimo.
+Impossibile sincronizzare i progressi con il cloud. Restano su questo dispositivo — riprova più tardi.
+La sessione è scaduta. Accedi di nuovo per continuare a sincronizzare.
+Nessuna connessione ora. I tuoi dati restano su questo dispositivo e verranno sincronizzati quando torni online.
+I tuoi periodi di sobrietà
+Ogni riga è un capitolo, non un giudizio. I traguardi già raggiunti restano con te.
+Periodo attuale
+Periodo precedente
+Notifiche
+Salvate su questo dispositivo. Quando possiamo, evitiamo notifiche nelle ore di quiete.
+Promemoria giornaliero gentile
+Promemoria traguardi
+Piccolo promemoria dopo una pausa
+Ora del promemoria
+Ore di quiete
+Quiete da (ora)
+Quiete fino a (ora)

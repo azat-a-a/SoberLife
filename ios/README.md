@@ -23,20 +23,23 @@ xcodebuild -project SoberLife.xcodeproj -scheme SoberLife \
 
 Pick any installed simulator from **Xcode → Window → Devices and Simulators**.
 
-## Localization workflow (`en` + `ru`)
-`SoberLifeAppShell` now uses package resources:
-- `Sources/SoberLifeAppShell/Resources/en.lproj/Localizable.strings`
-- `Sources/SoberLifeAppShell/Resources/ru.lproj/Localizable.strings`
+## Localization workflow
+`SoberLifeAppShell` uses package resources under `Sources/SoberLifeAppShell/Resources/*.lproj/Localizable.strings`.
+
+Shipped locales: `en`, `ru`, `de`, `fr`, `es`, `it`, `pl`, `zh-Hans`, `th`, `ja` (see `I18N-COVERAGE-S06.md`).
 
 Rules for adding/changing copy:
-1. Add a key in `en.lproj/Localizable.strings`.
-2. Add the same key in `ru.lproj/Localizable.strings`.
-3. Use `L10n.text("key")` in SwiftUI views or `L10n.string("key")` / `L10n.format("key", ...)` in non-view code.
-4. Avoid new hardcoded user-facing strings in views/services.
+1. Add or update the key in `en.lproj/Localizable.strings` (source of truth for key order).
+2. Update `ru.lproj` and each `scripts/i18n/<locale>.txt` line (same order as English — one translation per line).
+3. Regenerate merged bundles from repo root:
+   - `python3 scripts/i18n/make_bundle.py`
+   - `python3 scripts/i18n/merge_lproj.py`
+4. Use `L10n.text("key")` in SwiftUI views or `L10n.string("key")` / `L10n.format("key", ...)` in non-view code.
+5. Avoid new hardcoded user-facing strings in views/services.
 
 Validation:
 - Run `swift test`.
-- In simulator, switch language to Russian and verify core screens (Auth, Home, Chat, Stats, Profile, SOS).
+- In simulator, use Profile → App language and verify core screens (Auth, Home, Chat, Stats, Profile, SOS) for any locale you changed.
 
 ## TestFlight pipeline (REL-01)
 1. Create an App ID + App in App Store Connect matching **Bundle Identifier** (`com.soberlife.app` by default, change in target settings if needed).

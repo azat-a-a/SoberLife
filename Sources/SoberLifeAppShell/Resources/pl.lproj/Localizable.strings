@@ -1,0 +1,160 @@
+"app.name" = "SoberLife";
+
+// Tabs
+"tab.home" = "Strona główna";
+"tab.chat" = "Czat AI";
+"tab.stats" = "Statystyki";
+"tab.profile" = "Profil";
+
+// Common
+"common.close" = "Zamknij";
+"common.dismiss" = "Odrzuć";
+"common.back" = "Wstecz";
+"common.skip" = "Pomiń";
+"common.continue" = "Dalej";
+"common.finish" = "Zakończ";
+"common.save" = "Zapisz";
+
+// Onboarding
+"onboarding.title" = "Witamy";
+"onboarding.progress" = "Wprowadzenie %@/%@";
+"onboarding.goal.question" = "Co teraz wydaje Ci się właściwym kierunkiem?";
+"onboarding.goal.helper" = "Nie ma złej odpowiedzi — i później możesz zmienić zdanie.";
+"onboarding.goal.reduce" = "Ograniczyć picie";
+"onboarding.goal.quit" = "Zrezygnować całkowicie";
+"onboarding.startdate.title" = "Kiedy zaczyna się ten okres trzeźwości?";
+"onboarding.startdate.field" = "Data rozpoczęcia";
+"onboarding.cost.title" = "Średnie dzienne wydatki na alkohol";
+"onboarding.cost.placeholder" = "Opcjonalnie (np. 850)";
+"onboarding.cost.helper" = "Służy do szacowania oszczędności. Możesz pominąć ten krok.";
+"onboarding.notifications.title" = "Codzienne przypomnienia";
+"onboarding.notifications.toggle" = "Łagodne codzienne przypomnienia";
+"onboarding.notifications.helper" = "Możesz to zmienić w każdej chwili. Przypomnienia są krótkie i bez wstydu.";
+
+// Auth
+"auth.welcome.body" = "Zaloguj się e-mailem, aby zapisać postęp. Jeśli to teraz za dużo, wróć, gdy będziesz gotów.";
+"auth.email" = "E-mail";
+"auth.password" = "Hasło";
+"auth.signin" = "Zaloguj się";
+"auth.create_account" = "Utwórz konto";
+"auth.error.restore_failed" = "Nie udało się przywrócić sesji.";
+"auth.error.invalid_credentials" = "Nieprawidłowy e-mail lub hasło.";
+"auth.error.signin_failed" = "Logowanie nie powiodło się. Spróbuj ponownie.";
+"auth.error.signup_check_email" = "Sprawdź e-mail i hasło i spróbuj ponownie.";
+"auth.error.signup_failed" = "Nie można utworzyć konta. Spróbuj ponownie.";
+"auth.error.signout_failed" = "Wylogowanie nie powiodło się. Spróbuj ponownie.";
+
+// Home
+"home.title" = "Strona główna";
+"home.sobriety.heading" = "Trzeźwość";
+"home.days" = "%@ dni";
+"home.estimated_savings" = "Szacowane oszczędności: %@";
+"home.period_started" = "Ten okres rozpoczął się: %@";
+"home.next_milestone" = "Następny kamień milowy: %@ dni";
+"home.relapse_helper" = "Twoje kamienie milowe zostają z Tobą. Nowy okres nie usuwa tego, czego się już nauczyłeś.";
+"home.sos" = "SOS — szybka pomoc";
+
+// Stats
+"stats.title" = "Statystyki";
+"stats.current_period" = "Bieżący okres";
+"stats.best_streak" = "Najlepsza seria dotychczas";
+"stats.honesty_times" = "Razy, gdy wybrałeś szczerość";
+"stats.savings_period" = "Szacowane oszczędności (okres)";
+"stats.next_milestone" = "Następny kamień milowy";
+"stats.progress" = "Postęp";
+"stats.milestones_earned" = "Zdobyte kamienie milowe";
+"stats.celebrating" = "Świętujemy: %@";
+"stats.relapse_helper" = "Szczerze zaznaczone check-iny rozpoczynają nowy okres bez zabierania już odblokowanych odznak.";
+"stats.period_row.days" = "%@ dni";
+"stats.period_row.since" = "Od %@";
+
+// Profile
+"profile.title" = "Profil";
+"profile.more_settings" = "Więcej ustawień pojawi się później. To, co tu dodasz, zostaje na tym urządzeniu, dopóki nie zalogujesz się i nie zsynchronizujesz w przyszłości.";
+"profile.sos_contact.save" = "Zapisz kontakt SOS";
+"profile.signout" = "Wyloguj";
+"profile.contact.name" = "Imię lub pseudonim";
+"profile.contact.phone" = "Numer telefonu";
+"profile.language" = "Język aplikacji";
+"profile.language.system" = "System";
+"profile.language.english" = "English";
+"profile.language.russian" = "Русский";
+"profile.language.german" = "Deutsch";
+"profile.language.french" = "Français";
+"profile.language.spanish" = "Español";
+"profile.language.italian" = "Italiano";
+"profile.language.polish" = "Polski";
+"profile.language.chinese_simplified" = "简体中文";
+"profile.language.thai" = "ไทย";
+"profile.language.japanese" = "日本語";
+
+// Chat
+"chat.nav_title" = "Czat AI";
+"chat.chats" = "Czaty";
+"chat.new_chat" = "Nowy czat";
+"chat.new_message" = "Nowa wiadomość";
+"chat.recent" = "Ostatnie";
+"chat.message.placeholder" = "Wiadomość";
+"chat.send" = "Wyślij";
+
+// SOS
+"sos.title" = "SOS";
+"sos.contact.title" = "Osoba, której ufasz";
+"sos.contact.placeholder" = "Twój kontakt";
+"sos.call" = "Zadzwoń";
+"sos.message" = "Wiadomość";
+"sos.helpline" = "Znajdź infolinię (międzynarodowa)";
+"sos.ai.prompt" = "Mam teraz bardzo silną zachciankę. Odpowiedz krótko i życzliwie, żeby mnie wesprzeć.";
+
+// Notifications
+"notif.daily.title" = "Łagodne przypomnienie";
+"notif.daily.body" = "Możesz przeżyć dziś chwilę po chwili. Otwórz SoberLife, gdy będziesz gotów.";
+"notif.milestone.title" = "Kamień milowy na wyciągnięcie ręki";
+"notif.milestone.body" = "Jesteś blisko %@ dni. Jakkolwiek wygląda dzień, Twój wysiłek ma znaczenie.";
+"notif.reengagement.title" = "Nadal jesteśmy";
+"notif.reengagement.body" = "Bez presji — otwórz aplikację, gdy chcesz odrobiny wsparcia.";
+
+// EmpathyCopy
+"empathy.sos.title" = "Nie jesteś sam";
+"empathy.sos.subtitle" = "Zachcianki są ciężkie, a prośba o pomoc to odwaga. Nic z tego nie kasuje Twojego postępu.";
+"empathy.sos.breathing.title" = "Wolny oddech";
+"empathy.sos.breathing.detail" = "Wdech na 4, pauza 2, wydech na 6. Powtórz kilka razy. Nie ma pośpiechu.";
+"empathy.sos.water.title" = "Nawodnienie";
+"empathy.sos.water.detail" = "Szklanka wody może być małym resetem. Zasługujesz na troskę w małych krokach.";
+"empathy.sos.grounding.title" = "Ugruntowanie";
+"empathy.sos.grounding.detail" = "Wymień 5 rzeczy, które widzisz, 4, które możesz dotknąć, 3, które słyszysz, 2, które wyczuwasz zapachem, 1 smak.";
+"empathy.sos.ai.button" = "Otrzymaj wspierającą wiadomość";
+"empathy.sos.ai.loading" = "Szukam ciepłych słów…";
+"empathy.sos.ai.fallback" = "Ten moment jest niewygodny, nie trwa wiecznie. Już ćwiczyłeś bycie dla siebie. Wystarczy jeden kolejny mały krok.";
+"empathy.sos.crisis.section" = "Jeśli możesz sobie lub komuś zrobić krzywdę";
+"empathy.sos.crisis.body" = "Natychmiast zadzwoń na lokalne służby ratunkowe lub infolinię kryzysową. Ta aplikacja nie zastępuje profesjonalnej ani nagłej pomocy.";
+"empathy.relapse.button" = "Piłem(-am) — nowy okres";
+"empathy.relapse.title" = "Dziękujemy za szczerość";
+"empathy.relapse.message" = "Potknięcie nie usuwa Ciebie ani pracy, którą już wykonałeś. Zaczynamy świeży okres trzeźwości, zachowując kamienie milowe i historię.";
+"empathy.relapse.confirm" = "Zacznij od nowa od dziś";
+"empathy.relapse.cancel" = "Nie teraz";
+"empathy.profile.support.heading" = "Kontakt SOS (opcjonalnie)";
+"empathy.profile.support.hint" = "Ktoś, do kogo możesz szybko zadzwonić, gdy jest ciężko. Tylko na tym urządzeniu.";
+"empathy.chat.needs_backend" = "Aby rozmawiać z asystentem, podłącz projekt Supabase (jak przy logowaniu e-mailem).";
+"empathy.auth.email_confirmation" = "Potwierdź e-mail, aby aktywować konto, potem zaloguj się tutaj.";
+"empathy.chat.cloud_load_failed" = "Nie udało się wczytać historii z chmury. Pokazuję to, co jest na tym urządzeniu.";
+"empathy.chat.cloud_sync_failed" = "Twoje słowa są na tym urządzeniu; synchronizacja z chmurą chwilowo nie powiodła się.";
+"empathy.chat.send_failed" = "Asystent teraz nie mógł odpowiedzieć. Twoja wiadomość nadal tu jest — spróbuj, gdy będziesz gotów.";
+"empathy.chat.retry" = "Spróbuj ponownie";
+"empathy.chat.empty_hint" = "To prywatna przestrzeń. Nie ma „źle” powiedzianych rzeczy. Krótkie wiadomości są w porządku.";
+"empathy.data.sync_failed_short" = "Nie udało się zsynchronizować postępu z chmurą. Nadal jest na tym urządzeniu — spróbuj później.";
+"empathy.session.expired" = "Sesja wygasła. Zaloguj się ponownie, aby kontynuować synchronizację.";
+"empathy.network.offline" = "Brak internetu. Dane zostają na tym urządzeniu i zsynchronizują się, gdy wrócisz online.";
+"empathy.stats.periods.heading" = "Twoje okresy trzeźwości";
+"empathy.stats.periods.footnote" = "Każdy wiersz to rozdział, nie wyrok. Kamienie milowe, które już zdobyłeś, zostają z Tobą.";
+"empathy.stats.period.badge.current" = "Bieżący okres";
+"empathy.stats.period.badge.past" = "Wcześniejszy okres";
+"empathy.profile.notifications.heading" = "Powiadomienia";
+"empathy.profile.notifications.hint" = "Zapisane na tym urządzeniu. Gdy się da, unikamy powiadomień w godzinach ciszy.";
+"empathy.profile.notifications.daily" = "Łagodne codzienne przypomnienie";
+"empathy.profile.notifications.milestone" = "Przypomnienia o kamieniach milowych";
+"empathy.profile.notifications.reengagement" = "Delikatne przypomnienie po przerwie";
+"empathy.profile.notifications.time" = "Czas przypomnienia";
+"empathy.profile.notifications.quiet" = "Godziny ciszy";
+"empathy.profile.notifications.quiet_start" = "Cisza od (godzina)";
+"empathy.profile.notifications.quiet_end" = "Cisza do (godzina)";

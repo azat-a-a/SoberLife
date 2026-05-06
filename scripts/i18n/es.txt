@@ -1,0 +1,138 @@
+SoberLife
+Inicio
+Chat IA
+Estadísticas
+Perfil
+Cerrar
+Descartar
+Atrás
+Omitir
+Continuar
+Finalizar
+Guardar
+Te damos la bienvenida
+Incorporación %@/%@
+¿Qué dirección se siente adecuada ahora?
+No hay una respuesta incorrecta — y puedes cambiar de opinión más adelante.
+Reducir el consumo
+Dejar por completo
+¿Cuándo empieza este periodo sin alcohol?
+Fecha de inicio
+Gasto diario medio en alcohol
+Opcional (p. ej., 850)
+Sirve para calcular tus ahorros. Puedes omitir este paso.
+Recordatorios diarios
+Recordatorios diarios suaves
+Puedes cambiarlo en cualquier momento. Los recordatorios son breves y sin lenguaje que avergüence.
+Inicia sesión con correo para guardar tu progreso. Si ahora es demasiado, vuelve cuando estés listo.
+Correo
+Contraseña
+Iniciar sesión
+Crear cuenta
+No se pudo restaurar la sesión.
+Correo o contraseña incorrectos.
+Error al iniciar sesión. Inténtalo de nuevo.
+Revisa el correo y la contraseña e inténtalo de nuevo.
+No se pudo crear la cuenta. Inténtalo de nuevo.
+Error al cerrar sesión. Inténtalo de nuevo.
+Inicio
+Sobriedad
+%@ días
+Ahorro estimado: %@
+Este periodo comenzó: %@
+Próximo hito: %@ días
+Tus hitos se quedan contigo. Un periodo nuevo no borra lo que ya aprendiste.
+SOS — ayuda rápida
+Estadísticas
+Periodo actual
+Mejor racha hasta ahora
+Veces que elegiste la honestidad
+Ahorro estimado (periodo)
+Próximo hito
+Progreso
+Hitos conseguidos
+Celebrando: %@
+Los registros honestos inician un periodo nuevo sin quitar las insignias ya desbloqueadas.
+%@ días
+Desde %@
+Perfil
+Habrá más ajustes más adelante. Lo que añadas aquí se queda en este dispositivo hasta que inicies sesión y sincronices en el futuro.
+Guardar contacto SOS
+Cerrar sesión
+Nombre o apodo
+Número de teléfono
+Idioma de la app
+Sistema
+English
+Русский
+Deutsch
+Français
+Español
+Italiano
+Polski
+简体中文
+ไทย
+日本語
+Chat IA
+Chats
+Chat nuevo
+Mensaje nuevo
+Reciente
+Mensaje
+Enviar
+SOS
+Alguien de confianza
+Tu contacto
+Llamar
+Mensaje
+Buscar una línea de ayuda (internacional)
+Tengo un antojo muy fuerte ahora. Por favor responde breve y con amabilidad para apoyarme.
+Un recordatorio suave
+Puedes tomar hoy un momento tras otro. Abre SoberLife cuando te sientas listo.
+Hito al alcance
+Estás cerca de %@ días. Como sea el día, tu esfuerzo importa.
+Seguimos aquí
+Sin presión — abre la app cuando quieras un poco de apoyo.
+No estás solo
+Los antojos son duros, y pedir ayuda es valiente. Nada de esto borra tu progreso.
+Respiración lenta
+Inspira 4, mantén 2, expira 6. Repite unas veces. No hay prisa.
+Hidrátate
+Un vaso de agua puede ser un pequeño reinicio. Mereces cuidado en pasos pequeños.
+Conéctate al presente
+Nombra 5 cosas que ves, 4 que puedes tocar, 3 que oyes, 2 que hueles, 1 que saboreas.
+Recibir un mensaje de apoyo
+Buscando palabras amables…
+Este momento es incómodo, no permanente. Ya has practicado estar ahí para ti. Un siguiente paso pequeño basta.
+Si podrías hacerte daño o hacer daño a otra persona
+Contacta ahora a emergencias locales o una línea de crisis. Esta app no sustituye atención profesional o de emergencia.
+Bebí (periodo nuevo)
+Gracias por decir la verdad
+Un tropiezo no te borra ni el trabajo que ya hiciste. Empezamos un periodo nuevo manteniendo hitos e historial.
+Empezar de nuevo hoy
+Ahora no
+Contacto SOS (opcional)
+Alguien a quien llamar rápido cuando se pone intenso. Solo en este dispositivo.
+Para chatear con el asistente, conecta tu proyecto Supabase (igual que el inicio con correo).
+Confirma tu correo para activar la cuenta y luego inicia sesión aquí.
+No se pudo cargar el historial en la nube. Mostrando lo guardado en este dispositivo.
+Tus palabras están en este dispositivo; la sincronización falló un momento.
+El asistente no pudo responder ahora. Tu mensaje sigue aquí — inténtalo cuando quieras.
+Intentar de nuevo
+Este es un espacio privado. No hay nada “mal” que decir. Los mensajes cortos están bien.
+No se pudo sincronizar tu progreso con la nube. Sigue en este dispositivo — inténtalo más tarde.
+Tu sesión expiró. Vuelve a iniciar sesión para seguir sincronizando.
+Sin internet ahora. Tus datos se quedan en este dispositivo y se sincronizarán cuando vuelvas a estar en línea.
+Tus periodos sin alcohol
+Cada fila es un capítulo, no un veredicto. Los hitos ya logrados se quedan contigo.
+Periodo actual
+Periodo anterior
+Notificaciones
+Guardadas en este dispositivo. Cuando podemos, evitamos avisos en horas de silencio.
+Recordatorio diario suave
+Recordatorios de hitos
+Pequeño recordatorio tras ausencia
+Hora del recordatorio
+Horas de silencio
+Silencio desde (hora)
+Silencio hasta (hora)

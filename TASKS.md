@@ -10,12 +10,6 @@
 
 ## Todo
 
-- [ ] I18N-03 Add more languages (Sprint 06)
-  - Priority: P1
-  - Outcome: support additional locales: European languages + Chinese + Thai + Japanese.
-  - DoD: locales added and selectable; no missing-key regressions on MVP screens; safety-critical copy reviewed in each added locale.
-  - Estimate: 3 days
-
 ---
 
 ## In Progress
@@ -122,6 +116,10 @@
 - [x] BUG-01 Bug burn-down and stability fixes (Sprint 05)
   - Date: 2026-05-06
   - Notes: Defect queue closed out in `BUG-BURNDOWN-S05.md`; `BUG-S05-002` fixed; crash/error trend review recorded; single open P2 (`BUG-S05-001`, CI queue) deferred with owner/mitigation.
+
+- [x] I18N-03 Extended language pack (Sprint 06)
+  - Date: 2026-05-06
+  - Notes: Added `de`, `fr`, `es`, `it`, `pl`, `zh-Hans`, `th`, `ja` bundles and `AppLanguage` cases; source translations in `scripts/i18n/*.txt` with `make_bundle.py` + `merge_lproj.py`; coverage in `I18N-COVERAGE-S06.md`. Recommend native-speaker review for safety strings before wide release.
 
 - [x] SAFE-01 Safety and empathy copy pass
   - Date: 2026-05-05

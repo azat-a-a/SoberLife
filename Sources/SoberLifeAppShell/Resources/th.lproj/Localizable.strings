@@ -1,0 +1,160 @@
+"app.name" = "SoberLife";
+
+// Tabs
+"tab.home" = "หน้าแรก";
+"tab.chat" = "แชท AI";
+"tab.stats" = "สถิติ";
+"tab.profile" = "โปรไฟล์";
+
+// Common
+"common.close" = "ปิด";
+"common.dismiss" = "ปิด";
+"common.back" = "กลับ";
+"common.skip" = "ข้าม";
+"common.continue" = "ดำเนินการต่อ";
+"common.finish" = "เสร็จสิ้น";
+"common.save" = "บันทึก";
+
+// Onboarding
+"onboarding.title" = "ยินดีต้อนรับ";
+"onboarding.progress" = "เริ่มต้นใช้งาน %@/%@";
+"onboarding.goal.question" = "ตอนนี้ทิศทางแบบไหนรู้สึกใช่สำหรับคุณ?";
+"onboarding.goal.helper" = "ไม่มีคำตอบที่ผิด — และคุณเปลี่ยนใจภายหลังได้";
+"onboarding.goal.reduce" = "ลดการดื่ม";
+"onboarding.goal.quit" = "เลิกทั้งหมด";
+"onboarding.startdate.title" = "ช่วงงดเหล้านี้เริ่มเมื่อไร?";
+"onboarding.startdate.field" = "วันที่เริ่ม";
+"onboarding.cost.title" = "ค่าใช้จ่ายเฉลี่ยต่อวันสำหรับแอลกอฮอล์";
+"onboarding.cost.placeholder" = "ไม่บังคับ (เช่น 850)";
+"onboarding.cost.helper" = "ใช้คำนวณเงินที่ประหยัดได้ คุณข้ามขั้นตอนนี้ได้";
+"onboarding.notifications.title" = "การแจ้งเตือนรายวัน";
+"onboarding.notifications.toggle" = "การแจ้งเตือนอ่อนโยนรายวัน";
+"onboarding.notifications.helper" = "เปลี่ยนได้ทุกเมื่อ เราสั้นและไม่ใช้ภาษาที่ทำให้อาย";
+
+// Auth
+"auth.welcome.body" = "ลงชื่อเข้าด้วยอีเมลเพื่อบันทึกความคืบหน้า หากตอนนี้หนักเกินไป กลับมาเมื่อพร้อม";
+"auth.email" = "อีเมล";
+"auth.password" = "รหัสผ่าน";
+"auth.signin" = "ลงชื่อเข้า";
+"auth.create_account" = "สร้างบัญชี";
+"auth.error.restore_failed" = "กู้คืนเซสชันไม่สำเร็จ";
+"auth.error.invalid_credentials" = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+"auth.error.signin_failed" = "ลงชื่อเข้าไม่สำเร็จ ลองอีกครั้ง";
+"auth.error.signup_check_email" = "ตรวจอีเมลและรหัสผ่านแล้วลองอีกครั้ง";
+"auth.error.signup_failed" = "สร้างบัญชีไม่ได้ ลองอีกครั้ง";
+"auth.error.signout_failed" = "ออกจากระบบไม่สำเร็จ ลองอีกครั้ง";
+
+// Home
+"home.title" = "หน้าแรก";
+"home.sobriety.heading" = "การงดเหล้า";
+"home.days" = "%@ วัน";
+"home.estimated_savings" = "ประมาณการเงินที่ประหยัด: %@";
+"home.period_started" = "ช่วงนี้เริ่มเมื่อ: %@";
+"home.next_milestone" = "เป้าหมายถัดไป: %@ วัน";
+"home.relapse_helper" = "เหรียญตราของคุณยังอยู่กับคุณ เริ่มช่วงใหม่ไม่ลบสิ่งที่คุณเรียนรู้แล้ว";
+"home.sos" = "SOS — ความช่วยเหลือด่วน";
+
+// Stats
+"stats.title" = "สถิติ";
+"stats.current_period" = "ช่วงปัจจุบัน";
+"stats.best_streak" = "สตรีคที่ดีที่สุดจนถึงตอนนี้";
+"stats.honesty_times" = "จำนวนครั้งที่คุณเลือกความจริงใจ";
+"stats.savings_period" = "ประมาณการเงินที่ประหยัด (ช่วงนี้)";
+"stats.next_milestone" = "เป้าหมายถัดไป";
+"stats.progress" = "ความคืบหน้า";
+"stats.milestones_earned" = "เหรียญตราที่ได้รับ";
+"stats.celebrating" = "ฉลอง: %@";
+"stats.relapse_helper" = "การบันทึกอย่างจริงใจเริ่มช่วงงดเหล้าใหม่โดยไม่ลบเหรียญที่ปลดล็อกแล้ว";
+"stats.period_row.days" = "%@ วัน";
+"stats.period_row.since" = "ตั้งแต่ %@";
+
+// Profile
+"profile.title" = "โปรไฟล์";
+"profile.more_settings" = "การตั้งค่าเพิ่มเติมจะมาภายหลัง สิ่งที่คุณเพิ่มที่นี่อยู่บนอุปกรณ์นี้จนกว่าคุณจะลงชื่อเข้าและซิงค์ในอนาคต";
+"profile.sos_contact.save" = "บันทึกผู้ติดต่อ SOS";
+"profile.signout" = "ออกจากระบบ";
+"profile.contact.name" = "ชื่อหรือชื่อเล่น";
+"profile.contact.phone" = "หมายเลขโทรศัพท์";
+"profile.language" = "ภาษาของแอป";
+"profile.language.system" = "ตามระบบ";
+"profile.language.english" = "English";
+"profile.language.russian" = "Русский";
+"profile.language.german" = "Deutsch";
+"profile.language.french" = "Français";
+"profile.language.spanish" = "Español";
+"profile.language.italian" = "Italiano";
+"profile.language.polish" = "Polski";
+"profile.language.chinese_simplified" = "简体中文";
+"profile.language.thai" = "ไทย";
+"profile.language.japanese" = "日本語";
+
+// Chat
+"chat.nav_title" = "แชท AI";
+"chat.chats" = "แชท";
+"chat.new_chat" = "แชทใหม่";
+"chat.new_message" = "ข้อความใหม่";
+"chat.recent" = "ล่าสุด";
+"chat.message.placeholder" = "ข้อความ";
+"chat.send" = "ส่ง";
+
+// SOS
+"sos.title" = "SOS";
+"sos.contact.title" = "คนที่คุณไว้วางใจ";
+"sos.contact.placeholder" = "ผู้ติดต่อของคุณ";
+"sos.call" = "โทร";
+"sos.message" = "ข้อความ";
+"sos.helpline" = "ค้นหาสายด่วน (นานาชาติ)";
+"sos.ai.prompt" = "ตอนนี้อยากดื่มมาก ช่วยตอบสั้นๆ ด้วยความอ่อนโยนเพื่อสนับสนุนฉัน";
+
+// Notifications
+"notif.daily.title" = "การเตือนอย่างอ่อนโยน";
+"notif.daily.body" = "คุณใช้วันนี้ทีละช่วงได้ เปิด SoberLife เมื่อพร้อม";
+"notif.milestone.title" = "เป้าหมายใกล้พอคว้า";
+"notif.milestone.body" = "คุณใกล้ %@ วันแล้ว ไม่ว่าวันนี้จะรู้สึกอย่างไร ความพยายามของคุณมีความหมาย";
+"notif.reengagement.title" = "เรายังอยู่ที่นี่";
+"notif.reengagement.body" = "ไม่กดดัน — เปิดแอปเมื่อต้องการความช่วยเหลือเล็กน้อย";
+
+// EmpathyCopy
+"empathy.sos.title" = "คุณไม่ได้อยู่คนเดียว";
+"empathy.sos.subtitle" = "การอยากดื่มเป็นเรื่องยาก และการขอความช่วยเหลือต้องใช้ความกล้า ไม่มีสิ่งใดลบความคืบหน้าของคุณ";
+"empathy.sos.breathing.title" = "หายใจช้าๆ";
+"empathy.sos.breathing.detail" = "หายใจเข้า 4 ค้าง 2 หายใจออก 6 ทำซ้ำสักครั้ง ไม่ต้องรีบ";
+"empathy.sos.water.title" = "ดื่มน้ำ";
+"empathy.sos.water.detail" = "แก้วน้ำอาจเป็นการรีเซ็ตเล็กน้อย คุณสมควรได้รับการดูแลทีละน้อย";
+"empathy.sos.grounding.title" = "ยึดเหย้าหลัก";
+"empathy.sos.grounding.detail" = "บอก 5 สิ่งที่เห็น 4 ที่สัมผัสได้ 3 ที่ได้ยิน 2 ที่ได้กลิ่น 1 ที่ได้รส";
+"empathy.sos.ai.button" = "รับข้อความให้กำลังใจ";
+"empathy.sos.ai.loading" = "กำลังหาคำพูดอ่อนโยน…";
+"empathy.sos.ai.fallback" = "ช่วงเวลานี้อึดอัด ไม่ใช่ถาวร คุณเคยฝึกอยู่กับตัวเองแล้ว ก้าวเล็กถัดไปก็พอ";
+"empathy.sos.crisis.section" = "หากคุณอาจทำร้ายตัวเองหรือผู้อื่น";
+"empathy.sos.crisis.body" = "โปรดติดต่อหน่วยฉุกเฉินท้องถิ่นหรือสายด่วนวิกฤตทันที แอปนี้ไม่ใช่ทางแทนการดูแลวิชาชีพหรือฉุกเฉิน";
+"empathy.relapse.button" = "ฉันดื่มแล้ว (ช่วงใหม่)";
+"empathy.relapse.title" = "ขอบคุณที่พูดความจริง";
+"empathy.relapse.message" = "การพลาดไม่ลบตัวคุณหรืองานที่ทำไปแล้ว เราเริ่มช่วงงดเหล้าใหม่พร้อมเก็บเหรียญตราและประวัติ";
+"empathy.relapse.confirm" = "เริ่มใหม่จากวันนี้";
+"empathy.relapse.cancel" = "ยังไม่ใช่ตอนนี้";
+"empathy.profile.support.heading" = "ผู้ติดต่อ SOS (ไม่บังคับ)";
+"empathy.profile.support.hint" = "คนที่โทรหาได้เร็วเมื่อหนักใจ เก็บเฉพาะบนอุปกรณ์นี้";
+"empathy.chat.needs_backend" = "จะคุยกับผู้ช่วยต้องเชื่อมโปรเจ็กต์ Supabase (เหมือนลงชื่อด้วยอีเมล)";
+"empathy.auth.email_confirmation" = "ยืนยันอีเมลเพื่อเปิดใช้บัญชี แล้วลงชื่อเข้าที่นี่";
+"empathy.chat.cloud_load_failed" = "โหลดประวัติคลาวด์ไม่ได้ แสดงสิ่งที่บันทึกบนอุปกรณ์นี้";
+"empathy.chat.cloud_sync_failed" = "คำพูดของคุณอยู่บนอุปกรณ์นี้ การซิงค์คลาวด์ล้มเหลวชั่วครู่";
+"empathy.chat.send_failed" = "ผู้ช่วยตอบไม่ได้ตอนนี้ ข้อความยังอยู่ — ลองใหม่เมื่อพร้อม";
+"empathy.chat.retry" = "ลองอีกครั้ง";
+"empathy.chat.empty_hint" = "นี่คือพื้นที่ส่วนตัว ไม่มีอะไร “ผิด” ที่จะพูด ข้อความสั้นก็ได้";
+"empathy.data.sync_failed_short" = "ซิงค์ความคืบหน้ากับคลาวด์ไม่ได้ ยังอยู่บนอุปกรณ์นี้ — ลองใหม่ภายหลัง";
+"empathy.session.expired" = "เซสชันหมดอายุ ลงชื่อเข้าอีกครั้งเพื่อซิงค์ต่อ";
+"empathy.network.offline" = "ไม่มีอินเทอร์เน็ตตอนนี้ ข้อมูลอยู่บนอุปกรณ์นี้และจะซิงค์เมื่อกลับออนไลน์";
+"empathy.stats.periods.heading" = "ช่วงงดเหล้าของคุณ";
+"empathy.stats.periods.footnote" = "แต่ละแถวคือบท ไม่ใช่คำตัดสิน เหรียญตราที่ได้แล้วยังอยู่กับคุณ";
+"empathy.stats.period.badge.current" = "ช่วงปัจจุบัน";
+"empathy.stats.period.badge.past" = "ช่วงก่อนหน้า";
+"empathy.profile.notifications.heading" = "การแจ้งเตือน";
+"empathy.profile.notifications.hint" = "บันทึกบนอุปกรณ์นี้ ถ้าเป็นไปได้ เราหลีกเลี่ยงการรบกวนช่วงเวลาเงียบ";
+"empathy.profile.notifications.daily" = "การเตือนอ่อนโยนรายวัน";
+"empathy.profile.notifications.milestone" = "การเตือนเป้าหมาย";
+"empathy.profile.notifications.reengagement" = "เตือนอ่อนๆ หลังหายไปนาน";
+"empathy.profile.notifications.time" = "เวลาแจ้งเตือน";
+"empathy.profile.notifications.quiet" = "ช่วงเวลาเงียบ";
+"empathy.profile.notifications.quiet_start" = "เงียบตั้งแต่ (ชั่วโมง)";
+"empathy.profile.notifications.quiet_end" = "เงียบจนถึง (ชั่วโมง)";

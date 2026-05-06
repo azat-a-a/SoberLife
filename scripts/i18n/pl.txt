@@ -1,0 +1,138 @@
+SoberLife
+Strona główna
+Czat AI
+Statystyki
+Profil
+Zamknij
+Odrzuć
+Wstecz
+Pomiń
+Dalej
+Zakończ
+Zapisz
+Witamy
+Wprowadzenie %@/%@
+Co teraz wydaje Ci się właściwym kierunkiem?
+Nie ma złej odpowiedzi — i później możesz zmienić zdanie.
+Ograniczyć picie
+Zrezygnować całkowicie
+Kiedy zaczyna się ten okres trzeźwości?
+Data rozpoczęcia
+Średnie dzienne wydatki na alkohol
+Opcjonalnie (np. 850)
+Służy do szacowania oszczędności. Możesz pominąć ten krok.
+Codzienne przypomnienia
+Łagodne codzienne przypomnienia
+Możesz to zmienić w każdej chwili. Przypomnienia są krótkie i bez wstydu.
+Zaloguj się e-mailem, aby zapisać postęp. Jeśli to teraz za dużo, wróć, gdy będziesz gotów.
+E-mail
+Hasło
+Zaloguj się
+Utwórz konto
+Nie udało się przywrócić sesji.
+Nieprawidłowy e-mail lub hasło.
+Logowanie nie powiodło się. Spróbuj ponownie.
+Sprawdź e-mail i hasło i spróbuj ponownie.
+Nie można utworzyć konta. Spróbuj ponownie.
+Wylogowanie nie powiodło się. Spróbuj ponownie.
+Strona główna
+Trzeźwość
+%@ dni
+Szacowane oszczędności: %@
+Ten okres rozpoczął się: %@
+Następny kamień milowy: %@ dni
+Twoje kamienie milowe zostają z Tobą. Nowy okres nie usuwa tego, czego się już nauczyłeś.
+SOS — szybka pomoc
+Statystyki
+Bieżący okres
+Najlepsza seria dotychczas
+Razy, gdy wybrałeś szczerość
+Szacowane oszczędności (okres)
+Następny kamień milowy
+Postęp
+Zdobyte kamienie milowe
+Świętujemy: %@
+Szczerze zaznaczone check-iny rozpoczynają nowy okres bez zabierania już odblokowanych odznak.
+%@ dni
+Od %@
+Profil
+Więcej ustawień pojawi się później. To, co tu dodasz, zostaje na tym urządzeniu, dopóki nie zalogujesz się i nie zsynchronizujesz w przyszłości.
+Zapisz kontakt SOS
+Wyloguj
+Imię lub pseudonim
+Numer telefonu
+Język aplikacji
+System
+English
+Русский
+Deutsch
+Français
+Español
+Italiano
+Polski
+简体中文
+ไทย
+日本語
+Czat AI
+Czaty
+Nowy czat
+Nowa wiadomość
+Ostatnie
+Wiadomość
+Wyślij
+SOS
+Osoba, której ufasz
+Twój kontakt
+Zadzwoń
+Wiadomość
+Znajdź infolinię (międzynarodowa)
+Mam teraz bardzo silną zachciankę. Odpowiedz krótko i życzliwie, żeby mnie wesprzeć.
+Łagodne przypomnienie
+Możesz przeżyć dziś chwilę po chwili. Otwórz SoberLife, gdy będziesz gotów.
+Kamień milowy na wyciągnięcie ręki
+Jesteś blisko %@ dni. Jakkolwiek wygląda dzień, Twój wysiłek ma znaczenie.
+Nadal jesteśmy
+Bez presji — otwórz aplikację, gdy chcesz odrobiny wsparcia.
+Nie jesteś sam
+Zachcianki są ciężkie, a prośba o pomoc to odwaga. Nic z tego nie kasuje Twojego postępu.
+Wolny oddech
+Wdech na 4, pauza 2, wydech na 6. Powtórz kilka razy. Nie ma pośpiechu.
+Nawodnienie
+Szklanka wody może być małym resetem. Zasługujesz na troskę w małych krokach.
+Ugruntowanie
+Wymień 5 rzeczy, które widzisz, 4, które możesz dotknąć, 3, które słyszysz, 2, które wyczuwasz zapachem, 1 smak.
+Otrzymaj wspierającą wiadomość
+Szukam ciepłych słów…
+Ten moment jest niewygodny, nie trwa wiecznie. Już ćwiczyłeś bycie dla siebie. Wystarczy jeden kolejny mały krok.
+Jeśli możesz sobie lub komuś zrobić krzywdę
+Natychmiast zadzwoń na lokalne służby ratunkowe lub infolinię kryzysową. Ta aplikacja nie zastępuje profesjonalnej ani nagłej pomocy.
+Piłem(-am) — nowy okres
+Dziękujemy za szczerość
+Potknięcie nie usuwa Ciebie ani pracy, którą już wykonałeś. Zaczynamy świeży okres trzeźwości, zachowując kamienie milowe i historię.
+Zacznij od nowa od dziś
+Nie teraz
+Kontakt SOS (opcjonalnie)
+Ktoś, do kogo możesz szybko zadzwonić, gdy jest ciężko. Tylko na tym urządzeniu.
+Aby rozmawiać z asystentem, podłącz projekt Supabase (jak przy logowaniu e-mailem).
+Potwierdź e-mail, aby aktywować konto, potem zaloguj się tutaj.
+Nie udało się wczytać historii z chmury. Pokazuję to, co jest na tym urządzeniu.
+Twoje słowa są na tym urządzeniu; synchronizacja z chmurą chwilowo nie powiodła się.
+Asystent teraz nie mógł odpowiedzieć. Twoja wiadomość nadal tu jest — spróbuj, gdy będziesz gotów.
+Spróbuj ponownie
+To prywatna przestrzeń. Nie ma „źle” powiedzianych rzeczy. Krótkie wiadomości są w porządku.
+Nie udało się zsynchronizować postępu z chmurą. Nadal jest na tym urządzeniu — spróbuj później.
+Sesja wygasła. Zaloguj się ponownie, aby kontynuować synchronizację.
+Brak internetu. Dane zostają na tym urządzeniu i zsynchronizują się, gdy wrócisz online.
+Twoje okresy trzeźwości
+Każdy wiersz to rozdział, nie wyrok. Kamienie milowe, które już zdobyłeś, zostają z Tobą.
+Bieżący okres
+Wcześniejszy okres
+Powiadomienia
+Zapisane na tym urządzeniu. Gdy się da, unikamy powiadomień w godzinach ciszy.
+Łagodne codzienne przypomnienie
+Przypomnienia o kamieniach milowych
+Delikatne przypomnienie po przerwie
+Czas przypomnienia
+Godziny ciszy
+Cisza od (godzina)
+Cisza do (godzina)

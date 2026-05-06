@@ -104,7 +104,7 @@
   - New locales are selectable and render without missing-key regressions on MVP screens.
   - Safety-critical strings (SOS, relapse, disclaimers) reviewed in each added locale.
   - Smoke checks pass for each newly added language on simulator/device.
-  - Localization coverage report updated in docs.
+  - Localization coverage report updated in docs (`I18N-COVERAGE-S06.md`, `scripts/i18n/` pipeline).
 
 ## Stretch Goals (if all committed work is done)
 - EXP-01 A/B test plan draft for onboarding improvements.
