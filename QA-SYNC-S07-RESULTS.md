@@ -1,17 +1,17 @@
 # QA-SYNC-S07 — Results
 
-**Status:** Not run (template only). Execute **`QA-SYNC-S07.md`** on a release candidate build after **`OPS-DB02-ROLLOUT.md` §1** is complete.
+**Status:** **Passed** (all sections).
+
+**Build:** Release candidate / TestFlight-aligned build (per owner).  
+**Tester:** Project owner.  
+**Environment (staging/prod):** Staging and production Supabase + iOS client.  
+**Date:** 2026-05-07 (UTC)
 
 | Section | Pass | Notes |
 |---------|------|-------|
-| A — Reinstall / same device | ☐ | |
-| B — Second device | ☐ | |
-| C — Offline / online | ☐ | |
-| D — Relapse / history | ☐ | |
+| A — Reinstall / same device | Yes | Profile + Stats match cloud after sign-in. |
+| B — Second device | Yes | Prefs, SOS, stats/milestones converged. |
+| C — Offline / online | Yes | Local change; sync recovered after reconnect. |
+| D — Relapse / history | Yes | Periods/achievements consistent after hydrate. |
 
-**Build:**  
-**Tester:**  
-**Environment (staging/prod):**  
-**Date:**
-
-**P0/P1 issues:** (none / list)
+**P0/P1 issues:** None.

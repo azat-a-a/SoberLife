@@ -11,11 +11,11 @@
 - Start: **2026-05-07**
 - End: **2026-05-20**
 
-## Progress (engineering repo, 2026-05-07)
+## Progress
 
-- [x] **Gate 0 (partial):** `OPS-DB02-ROLLOUT.md` §0 completed in repo; §1–§5 remain **owner** (Supabase + devices).
-- [x] **QA-03 (template):** `QA-SYNC-S07-RESULTS.md` created — fill after manual run.
-- [x] **I18N-04 (template):** `I18N-REVIEW-S07.md` created — assign reviewers.
+- [x] **Gate 0 (OPS):** `OPS-DB02-ROLLOUT.md` fully completed (2026-05-07); staging + prod verified; completion record filled.
+- [x] **QA-03:** `QA-SYNC-S07.md` + `QA-SYNC-S07-RESULTS.md` — all sections passed (2026-05-07).
+- [x] **I18N-04:** `I18N-REVIEW-S07.md` signed off; no blockers (optional native pass before wide locale rollout per `I18N-COVERAGE-S06.md`).
 - [x] **TECH-01 (one item):** Main tab cloud bootstrap calls `ensure_user_profile` once per successful wake, then settings + achievements bootstraps skip duplicate ensure (`skipEnsureProfile`).
 - [x] **DATA-02:** **D-015** in `DECISIONS.md`; `ANALYTICS.md` updated.
 
@@ -31,8 +31,7 @@
 
 **Artifact:** `OPS-DB02-ROLLOUT.md`
 
-- Apply and verify Supabase migrations; run the manual matrix; assign sync triage owner.
-- **DoD:** checklist completion record filled; no open P0 on sync/data loss.
+- **Status (2026-05-07):** Complete — migrations, RLS smoke, app matrix, monitoring/rollback posture, completion record filled; no P0/P1 sync issues.
 
 ---
 

@@ -10,20 +10,6 @@
 
 ## Todo
 
-- [ ] OPS-01 DB-02 rollout verification (owner: staging/prod + devices)
-  - Priority: P1
-  - Outcome: migrations and client sync verified in staging/prod; manual matrix done.
-  - DoD: `OPS-DB02-ROLLOUT.md` §1–§5 + completion record; issues triaged.
-  - Estimate: 0.5 day
-  - Notes: §0 repo/CI done in `OPS-DB02-ROLLOUT.md`. Supabase CLI optional for `db push`.
-
-- [ ] S07-01 Execute Sprint 07 — remaining manual work
-  - Priority: P1
-  - Outcome: QA sync results filed; i18n review sheet progressed; observability item from Sprint 05 picked up if time.
-  - DoD: `QA-SYNC-S07-RESULTS.md` filled; `I18N-REVIEW-S07.md` signed or blockers in `TASKS.md`.
-  - Estimate: through 2026-05-20
-  - Notes: see `SPRINT-07.md` Progress block for what is already done in-repo.
-
 ---
 
 ## In Progress
@@ -31,6 +17,14 @@
 ---
 
 ## Done
+
+- [x] OPS-01 DB-02 rollout verification (field)
+  - Date: 2026-05-07
+  - Notes: `OPS-DB02-ROLLOUT.md` fully checked; staging + production; matrix passed; completion record filled. `LAUNCH-CHECKLIST.md` DB-02 line closed.
+
+- [x] S07-01 Sprint 07 — QA sync + I18N sign-off
+  - Date: 2026-05-07
+  - Notes: `QA-SYNC-S07.md` / `QA-SYNC-S07-RESULTS.md` all pass; `I18N-REVIEW-S07.md` signed off, no blockers. Optional native-speaker pass before wide non–EN/RU rollout per `I18N-COVERAGE-S06.md`.
 
 - [x] PLAN-01 Product concept consolidation
   - Notes: consolidated from "Концепция приложения SoberLife".
