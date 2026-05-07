@@ -20,7 +20,7 @@
 - Decision: Use Supabase for Auth, Postgres, Edge Functions, and Storage.
 - Why: Single backend platform reduces integration overhead and speeds MVP.
 - Impact: Core data model and auth tied to Supabase architecture.
-- Status: Accepted
+- Status: Deprecated (replaced by D-017)
 
 ## 2026-05-05 - D-003
 - Decision: AI integration through backend proxy (`deepseek-chat` edge function), never direct from client.
@@ -86,6 +86,12 @@
 - Decision: Accept **Sprint 07** closure for **Gate 0 (OPS)**, **QA-03 (cross-device / sync regression)**, and **I18N-04 (safety-critical copy review for extended locales)** as documented: `OPS-DB02-ROLLOUT.md` completed for staging and production; `QA-SYNC-S07.md` / `QA-SYNC-S07-RESULTS.md` passed with no P0/P1; `I18N-REVIEW-S07.md` signed off with no blockers.
 - Why: Field verification and repeatable QA artifacts remove launch risk on cloud parity and sync; i18n review is complete for the current bar, with optional native-speaker pass before wide non–EN/RU rollout (`I18N-COVERAGE-S06.md`).
 - Impact: Engineering priority shifts to **Pre-Beta** items in `LAUNCH-CHECKLIST.md` and Sprint 08 planning; analytics destination remains **D-015** / **D-008** until Sprint 08.
+- Status: Accepted
+
+## 2026-05-07 - D-017
+- Decision: Migrate backend from Supabase to Yandex Cloud stack: Auth via dedicated backend (JWT + refresh), managed PostgreSQL in Yandex Cloud, API layer in Yandex Serverless Containers / Functions, object storage in Yandex Object Storage.
+- Why: Align infrastructure with Yandex Cloud operations, residency/compliance goals, and unified platform ownership.
+- Impact: Existing Supabase-bound services become adapter-based; cloud sync/auth endpoints change; DB migrations must be replayed on Yandex PostgreSQL; rollout uses dual-run + cutover plan documented in `YANDEX-CLOUD-MIGRATION.md`.
 - Status: Accepted
 
 ## Open Decisions
