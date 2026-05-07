@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg-a: #c9e6ea;
   --bg-b: #93c7cf;
   --bg-c: #6ca8b2;
@@ -8,6 +8,18 @@
   --text: #11343a;
   --accent: #2f6f78;
   --sos: #d26c6c;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-a: #1f3640;
+  --bg-b: #254750;
+  --bg-c: #1a2f35;
+  --surface: rgba(20, 32, 36, 0.78);
+  --surface-strong: rgba(27, 42, 47, 0.9);
+  --text: #e5f3f5;
+  --accent: #4c9da9;
+  --sos: #d97a7a;
 }
 
 * {
@@ -63,6 +75,16 @@ input {
   background: var(--surface-strong);
 }
 
+select {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
 button {
   background: var(--accent);
   color: #fff;
@@ -87,6 +109,76 @@ button.sos {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.controls-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bottom-tabs {
+  position: sticky;
+  bottom: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px !important;
+  margin-top: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.bottom-tabs button.tab-icon {
+  margin-bottom: 0;
+  min-height: 52px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.bottom-tabs button.tab-icon:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.bottom-tabs button.tab-icon:active {
+  transform: scale(0.98);
+}
+
+.tab-icon .tab-icon-svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.bottom-tabs button.tab-icon.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.bottom-tabs button.tab-icon.active .tab-icon-svg {
+  opacity: 1;
+}
+
+.bottom-tabs button.tab-icon:not(.active) .tab-icon-svg {
+  opacity: 0.88;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-tabs button.tab-icon:active {
+    transform: none;
+  }
 }
 
 .muted {
