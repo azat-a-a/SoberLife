@@ -176,6 +176,22 @@ public final class HTTPSupabaseService: SupabaseService, @unchecked Sendable {
         try validate(response: response)
     }
 
+    public func restRPC(
+        function: String,
+        jsonBody: Data,
+        bearerToken: String
+    ) async throws -> Data {
+        let url = baseURL.appendingPathComponent("rest/v1/rpc/\(function)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        addUserRestHeaders(to: &request, bearerToken: bearerToken)
+        request.httpBody = jsonBody
+
+        let (data, response) = try await session.data(for: request)
+        try validate(response: response)
+        return data
+    }
+
     public func restPatch(
         table: String,
         filter: [String: String],

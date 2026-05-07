@@ -93,6 +93,12 @@
 "profile.theme.light" = "Светлая";
 "profile.theme.night" = "Ночная";
 
+// Community (anonymous)
+"community.title" = "Сообщество";
+"community.subtitle" = "Только анонимные отметки. Без профилей, постов и личных сообщений — просто мягкое напоминание, что вы не одни.";
+"community.checkin" = "Отметиться анонимно";
+"community.today_checkins" = "Сегодня отметились: %@";
+
 // Chat
 "chat.nav_title" = "AI-чат";
 "chat.chats" = "Чаты";

@@ -295,6 +295,8 @@ private struct MainTabView: View {
                     store: onboardingStore
                 ),
                 aiService: aiService,
+                sessionState: sessionState,
+                authWiring: authWiring,
                 notificationSyncTick: $notificationSyncTick
             )
             .tabItem {
@@ -695,9 +697,12 @@ private struct HomeView: View {
     let supportContactStore: SupportContactStore
     @StateObject private var state: HomeState
     let aiService: (any AIService)?
+    let sessionState: SessionState
+    let authWiring: AuthWiring?
     @Binding var notificationSyncTick: Int
     @EnvironmentObject private var sobrietyCloudSync: SobrietyCloudSync
     private let analytics: AnalyticsTracker
+    @StateObject private var community: CommunityPulseState
 
     @State private var showSOS = false
     @State private var showRelapseConfirm = false
@@ -710,6 +715,8 @@ private struct HomeView: View {
         supportContactStore: SupportContactStore,
         state: HomeState,
         aiService: (any AIService)?,
+        sessionState: SessionState,
+        authWiring: AuthWiring?,
         notificationSyncTick: Binding<Int>,
         analytics: AnalyticsTracker = .shared
     ) {
@@ -718,9 +725,12 @@ private struct HomeView: View {
         self.relapseStore = relapseStore
         self.supportContactStore = supportContactStore
         self.aiService = aiService
+        self.sessionState = sessionState
+        self.authWiring = authWiring
         self.analytics = analytics
         _notificationSyncTick = notificationSyncTick
         _state = StateObject(wrappedValue: state)
+        _community = StateObject(wrappedValue: CommunityPulseState(sessionState: sessionState, authWiring: authWiring))
     }
 
     var body: some View {
@@ -777,6 +787,10 @@ private struct HomeView: View {
                     }
                 }
                 .calmCard()
+
+                if community.isAvailable {
+                    CommunityPulseCard(state: community)
+                }
 
                 Divider()
 

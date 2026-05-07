@@ -93,6 +93,12 @@
 "profile.theme.light" = "Light";
 "profile.theme.night" = "Night";
 
+// Community (anonymous)
+"community.title" = "Community";
+"community.subtitle" = "Anonymous check-ins only. No profiles, no posts, no DMs — just a gentle reminder you are not doing this alone.";
+"community.checkin" = "Anonymous check-in";
+"community.today_checkins" = "Today: %@ people checked in";
+
 // Chat
 "chat.nav_title" = "AI Chat";
 "chat.chats" = "Chats";
