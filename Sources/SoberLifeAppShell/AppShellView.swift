@@ -5,6 +5,7 @@ import SoberLifeCore
 public struct AppShellView: View {
     @ObservedObject private var sessionState: SessionState
     @StateObject private var localizationSettings = LocalizationSettings()
+    @StateObject private var appearanceSettings = AppearanceSettings()
     private let aiService: (any AIService)?
     private let authWiring: AuthWiring?
 
@@ -43,9 +44,51 @@ public struct AppShellView: View {
         }
         .environmentObject(localizationSettings)
         .environment(\.locale, localizationSettings.locale)
+        .environmentObject(appearanceSettings)
+        .preferredColorScheme(appearanceSettings.preferredColorScheme)
         .task {
             await sessionState.restoreSession()
         }
+    }
+}
+
+private enum AppAppearance: String, CaseIterable, Identifiable {
+    case system
+    case light
+    case night
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .system: "System"
+        case .light: "Light"
+        case .night: "Night"
+        }
+    }
+
+    var preferredColorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .night: .dark
+        }
+    }
+}
+
+@MainActor
+private final class AppearanceSettings: ObservableObject {
+    @Published var selectedAppearance: AppAppearance {
+        didSet { UserDefaults.standard.set(selectedAppearance.rawValue, forKey: Self.key) }
+    }
+
+    var preferredColorScheme: ColorScheme? { selectedAppearance.preferredColorScheme }
+
+    private static let key = "soberlife.appearance"
+
+    init() {
+        let raw = UserDefaults.standard.string(forKey: Self.key)
+        self.selectedAppearance = raw.flatMap(AppAppearance.init(rawValue:)) ?? .system
     }
 }
 
@@ -960,6 +1003,7 @@ private struct ProfileView: View {
     let onNotificationPreferencesChanged: () -> Void
     let onSignOutTap: () -> Void
     @EnvironmentObject private var localizationSettings: LocalizationSettings
+    @EnvironmentObject private var appearanceSettings: AppearanceSettings
 
     @State private var trustedName: String = ""
     @State private var trustedPhone: String = ""
@@ -985,6 +1029,14 @@ private struct ProfileView: View {
                         }
                     } label: {
                         L10n.text("profile.language")
+                    }
+                }
+
+                Section {
+                    Picker("Theme", selection: $appearanceSettings.selectedAppearance) {
+                        ForEach(AppAppearance.allCases) { opt in
+                            Text(opt.label).tag(opt)
+                        }
                     }
                 }
 
