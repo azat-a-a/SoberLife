@@ -88,6 +88,16 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+
+"profile.theme" = "Tema";
+"profile.theme.system" = "Sistema";
+"profile.theme.light" = "Claro";
+"profile.theme.night" = "Noche";
+"community.title" = "Comunidad";
+"community.subtitle" = "Solo registros anónimos. Sin perfiles, publicaciones ni mensajes directos: solo un recordatorio suave de que no estás solo.";
+"community.checkin" = "Registro anónimo";
+"community.today_checkins" = "Hoy se registraron: %@ personas";
+
 // Chat
 "chat.nav_title" = "Chat IA";
 "chat.chats" = "Chats";

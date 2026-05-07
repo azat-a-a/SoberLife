@@ -88,6 +88,16 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+
+"profile.theme" = "Design";
+"profile.theme.system" = "System";
+"profile.theme.light" = "Hell";
+"profile.theme.night" = "Nacht";
+"community.title" = "Community";
+"community.subtitle" = "Nur anonyme Check-ins. Keine Profile, keine Posts, keine DMs — nur eine sanfte Erinnerung, dass du nicht allein bist.";
+"community.checkin" = "Anonym einchecken";
+"community.today_checkins" = "Heute eingecheckt: %@ Personen";
+
 // Chat
 "chat.nav_title" = "KI-Chat";
 "chat.chats" = "Chats";

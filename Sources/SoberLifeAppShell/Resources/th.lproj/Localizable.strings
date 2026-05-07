@@ -88,6 +88,16 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+
+"profile.theme" = "ธีม";
+"profile.theme.system" = "ตามระบบ";
+"profile.theme.light" = "สว่าง";
+"profile.theme.night" = "กลางคืน";
+"community.title" = "ชุมชน";
+"community.subtitle" = "มีเฉพาะการเช็กอินแบบไม่ระบุตัวตน ไม่มีโปรไฟล์ โพสต์ หรือข้อความส่วนตัว — แค่การเตือนอย่างอ่อนโยนว่าคุณไม่ได้อยู่คนเดียว";
+"community.checkin" = "เช็กอินแบบไม่ระบุตัวตน";
+"community.today_checkins" = "วันนี้มีคนเช็กอิน: %@ คน";
+
 // Chat
 "chat.nav_title" = "แชท AI";
 "chat.chats" = "แชท";

@@ -88,6 +88,16 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+
+"profile.theme" = "テーマ";
+"profile.theme.system" = "システム";
+"profile.theme.light" = "ライト";
+"profile.theme.night" = "ナイト";
+"community.title" = "コミュニティ";
+"community.subtitle" = "匿名チェックインのみ。プロフィール、投稿、DM はありません。あなたは一人ではないという、やさしいリマインダーです。";
+"community.checkin" = "匿名でチェックイン";
+"community.today_checkins" = "今日チェックインした人: %@人";
+
 // Chat
 "chat.nav_title" = "AIチャット";
 "chat.chats" = "チャット";

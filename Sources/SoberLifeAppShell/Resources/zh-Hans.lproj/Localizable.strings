@@ -88,6 +88,16 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+
+"profile.theme" = "主题";
+"profile.theme.system" = "跟随系统";
+"profile.theme.light" = "浅色";
+"profile.theme.night" = "夜间";
+"community.title" = "社区";
+"community.subtitle" = "仅提供匿名打卡。没有个人主页、动态或私信——只是温和地提醒你：你并不孤单。";
+"community.checkin" = "匿名打卡";
+"community.today_checkins" = "今天打卡人数：%@";
+
 // Chat
 "chat.nav_title" = "AI 聊天";
 "chat.chats" = "聊天";

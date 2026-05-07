@@ -88,6 +88,16 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+
+"profile.theme" = "Thème";
+"profile.theme.system" = "Système";
+"profile.theme.light" = "Clair";
+"profile.theme.night" = "Nuit";
+"community.title" = "Communauté";
+"community.subtitle" = "Uniquement des check-ins anonymes. Pas de profils, pas de publications, pas de messages privés — juste un rappel bienveillant que vous n’êtes pas seul.";
+"community.checkin" = "Check-in anonyme";
+"community.today_checkins" = "Aujourd’hui : %@ personnes ont fait un check-in";
+
 // Chat
 "chat.nav_title" = "Chat IA";
 "chat.chats" = "Discussions";
