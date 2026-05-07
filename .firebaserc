@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "replace-with-your-firebase-project-id"
-  }
+    "default": "soberlife-a7a22",
+    "soberlife": "soberlife-a7a22"
+  },
+  "targets": {},
+  "etags": {}
 }

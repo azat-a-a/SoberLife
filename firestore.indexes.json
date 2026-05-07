@@ -1,16 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "communityCheckins",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "day",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "relapseEvents",
       "queryScope": "COLLECTION",
       "fields": [

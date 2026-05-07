@@ -114,12 +114,29 @@ async function getTodayCheckins() {
   return snap.size;
 }
 
+function checkinDocId(uid, day) {
+  return `${uid}_${day}`;
+}
+
+async function hasCheckedInToday(uid) {
+  const day = utcDay();
+  const ref = doc(db, "communityCheckins", checkinDocId(uid, day));
+  const snap = await getDoc(ref);
+  return snap.exists();
+}
+
 async function checkIn(uid) {
-  await addDoc(collection(db, "communityCheckins"), {
+  const day = utcDay();
+  const ref = doc(db, "communityCheckins", checkinDocId(uid, day));
+  const existing = await getDoc(ref);
+  if (existing.exists()) return false;
+
+  await setDoc(ref, {
     userId: uid,
-    day: utcDay(),
+    day,
     createdAt: new Date().toISOString()
   });
+  return true;
 }
 
 async function addRelapse(uid) {
@@ -133,6 +150,7 @@ async function renderHome(uid, profile) {
   const sourceMode = navigator.onLine ? "cloud" : "fallback";
   const dotClass = sourceMode === "cloud" ? "dot cloud" : "dot local";
   const todayCheckins = await getTodayCheckins();
+  const checkedInToday = await hasCheckedInToday(uid);
   const streak = daysSince(profile.soberSince);
 
   appRoot.innerHTML = `
@@ -145,7 +163,9 @@ async function renderHome(uid, profile) {
     <section class="card">
       <h3>Community</h3>
       <p class="muted">Stay anonymous, feel together.</p>
-      <button id="checkinBtn">Anonymous check-in</button>
+      <button id="checkinBtn" ${checkedInToday ? "disabled" : ""}>
+        ${checkedInToday ? "Checked in today" : "Anonymous check-in"}
+      </button>
       <p>Today: ${todayCheckins} people checked in</p>
     </section>
     <section class="card">
@@ -157,10 +177,13 @@ async function renderHome(uid, profile) {
     </section>
   `;
 
-  document.getElementById("checkinBtn").onclick = async () => {
-    await checkIn(uid);
-    await renderHome(uid, profile);
-  };
+  if (!checkedInToday) {
+    document.getElementById("checkinBtn").onclick = async () => {
+      await checkIn(uid);
+      const updatedProfile = await loadProfile(uid);
+      await renderHome(uid, updatedProfile);
+    };
+  }
 
   document.getElementById("relapseBtn").onclick = async () => {
     await addRelapse(uid);

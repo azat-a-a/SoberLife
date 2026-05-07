@@ -69,6 +69,11 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 button.secondary {
   background: rgba(47, 111, 120, 0.2);
   color: var(--text);

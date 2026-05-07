@@ -7,5 +7,8 @@
     "start": "python3 -m http.server 5173",
     "firebase:serve": "firebase emulators:start --only hosting",
     "firebase:deploy": "firebase deploy --only hosting,firestore,storage"
+  },
+  "dependencies": {
+    "firebase": "^12.13.0"
   }
 }
