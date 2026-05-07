@@ -12,15 +12,17 @@ struct SOSFlowView: View {
     @State private var aiReply: String?
     @State private var aiErrorMessage: String?
     @State private var isLoadingAI = false
+    @State private var aiFeedbackTick = 0
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text(EmpathyCopy.sosTitle)
                     .font(.title2)
                     .bold()
+                    .fontDesign(.rounded)
                 Text(EmpathyCopy.sosSubtitle)
-                    .foregroundStyle(.secondary)
+                    .calmSecondaryText()
 
                 quickAction(
                     title: EmpathyCopy.sosBreathingTitle,
@@ -43,7 +45,7 @@ struct SOSFlowView: View {
                         L10n.text("sos.contact.title")
                             .font(.headline)
                         Text(contact.trustedName.isEmpty ? L10n.string("sos.contact.placeholder") : contact.trustedName)
-                            .foregroundStyle(.secondary)
+                            .calmSecondaryText()
                         HStack {
                             if let url = Self.callURL(phone: contact.trustedPhone) {
                                 Button {
@@ -55,7 +57,8 @@ struct SOSFlowView: View {
                                         Image(systemName: "phone.fill")
                                     }
                                 }
-                                .buttonStyle(.borderedProminent)
+                                .buttonStyle(CalmPrimaryButtonStyle())
+                                .tint(CalmTheme.sos)
                             }
                             if let url = Self.smsURL(phone: contact.trustedPhone) {
                                 Button {
@@ -68,11 +71,11 @@ struct SOSFlowView: View {
                                     }
                                 }
                                 .buttonStyle(.bordered)
+                                .tint(CalmTheme.accent)
                             }
                         }
                     }
-                    .padding()
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .calmCard()
                 }
 
                 if aiService != nil {
@@ -80,7 +83,7 @@ struct SOSFlowView: View {
                         if let aiErrorMessage {
                             Text(aiErrorMessage)
                                 .font(.footnote)
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(CalmTheme.sos)
                         }
                         if let aiReply {
                             Text(aiReply)
@@ -99,30 +102,35 @@ struct SOSFlowView: View {
                                     .frame(maxWidth: .infinity)
                             }
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(CalmPrimaryButtonStyle())
                         .disabled(isLoadingAI)
                     }
                 } else {
                     Text(EmpathyCopy.sosAiFallback)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                        .calmCard()
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(EmpathyCopy.sosCrisisSection)
-                        .font(.headline)
+                        .calmSectionTitle()
                     Text(EmpathyCopy.sosCrisisBody)
-                        .foregroundStyle(.secondary)
+                        .calmSecondaryText()
                     if let url = URL(string: "https://findahelpline.com") {
                         Link(L10n.string("sos.helpline"), destination: url)
                     }
                 }
                 .padding()
-                .background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+                .background(CalmTheme.sos.opacity(0.14), in: RoundedRectangle(cornerRadius: 12))
             }
             .padding()
         }
+        .calmPageBackground()
+        .tint(CalmTheme.accent)
+        .animation(CalmTheme.breatheAnimation, value: isLoadingAI)
+        .sensoryFeedback(.selection, trigger: isLoadingAI)
+        .sensoryFeedback(.success, trigger: aiFeedbackTick)
     }
 
     private func quickAction(title: String, detail: String, systemImage: String) -> some View {
@@ -141,7 +149,7 @@ struct SOSFlowView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .calmCard()
     }
 
     private func loadAI() async {
@@ -163,6 +171,7 @@ struct SOSFlowView: View {
                 context: context
             )
             aiReply = reply.reply
+            aiFeedbackTick += 1
         } catch {
             if let urlError = error as? URLError,
                Self.isOfflineError(urlError)
@@ -170,6 +179,7 @@ struct SOSFlowView: View {
                 aiErrorMessage = EmpathyCopy.networkOfflineShort
             }
             aiReply = EmpathyCopy.sosAiFallback
+            aiFeedbackTick += 1
         }
     }
 

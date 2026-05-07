@@ -185,7 +185,7 @@ private struct MainTabView: View {
                 HStack(alignment: .top, spacing: 8) {
                     Text(message)
                         .font(.footnote)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.primary.opacity(0.88))
                     Spacer(minLength: 8)
                     Button {
                         cloudSync.clearError()
@@ -196,14 +196,16 @@ private struct MainTabView: View {
                 }
                 .padding(10)
                 .frame(maxWidth: .infinity)
-                .background(Color.orange.opacity(0.18))
+                .background(CalmTheme.sos.opacity(0.12), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
             }
 
             if let message = userSettingsCloudSync.lastError {
                 HStack(alignment: .top, spacing: 8) {
                     Text(message)
                         .font(.footnote)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.primary.opacity(0.88))
                     Spacer(minLength: 8)
                     Button {
                         userSettingsCloudSync.clearError()
@@ -214,14 +216,16 @@ private struct MainTabView: View {
                 }
                 .padding(10)
                 .frame(maxWidth: .infinity)
-                .background(Color.orange.opacity(0.15))
+                .background(CalmTheme.sos.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
             }
 
             if let message = achievementsCloudSync.lastError {
                 HStack(alignment: .top, spacing: 8) {
                     Text(message)
                         .font(.footnote)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.primary.opacity(0.88))
                     Spacer(minLength: 8)
                     Button {
                         achievementsCloudSync.clearError()
@@ -232,7 +236,9 @@ private struct MainTabView: View {
                 }
                 .padding(10)
                 .frame(maxWidth: .infinity)
-                .background(Color.orange.opacity(0.12))
+                .background(CalmTheme.sos.opacity(0.09), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
             }
 
             TabView {
@@ -306,6 +312,8 @@ private struct MainTabView: View {
             }
             }
         }
+        .background(CalmTheme.pageGradient.ignoresSafeArea())
+        .tint(CalmTheme.accent)
         .environmentObject(cloudSync)
         .environmentObject(userSettingsCloudSync)
         .environmentObject(achievementsCloudSync)
@@ -409,6 +417,7 @@ private struct OnboardingFlowView: View {
                 )
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                    .padding(.top, 8)
 
                 Group {
                     switch state.currentStep {
@@ -419,6 +428,7 @@ private struct OnboardingFlowView: View {
                     }
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
+                .animation(CalmTheme.breatheAnimation, value: state.currentStep)
 
                 HStack {
                     if state.currentStep > 0 {
@@ -427,7 +437,8 @@ private struct OnboardingFlowView: View {
                         } label: {
                             L10n.text("common.back")
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(CalmSecondaryButtonStyle())
+                        .tint(CalmTheme.accent)
                     }
 
                     Spacer()
@@ -438,7 +449,8 @@ private struct OnboardingFlowView: View {
                         } label: {
                             L10n.text("common.skip")
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(CalmSecondaryButtonStyle())
+                        .tint(CalmTheme.accent)
                     }
 
                     Button {
@@ -454,12 +466,13 @@ private struct OnboardingFlowView: View {
                             L10n.text("common.continue")
                         }
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(CalmPrimaryButtonStyle())
                     .disabled(!state.canContinue)
                 }
             }
             .padding()
             .navigationTitle(L10n.text("onboarding.title"))
+            .calmPageBackground()
         }
     }
 
@@ -468,6 +481,7 @@ private struct OnboardingFlowView: View {
             L10n.text("onboarding.goal.question")
                 .font(.title2)
                 .bold()
+                    .fontDesign(.rounded)
 
             ForEach(OnboardingGoal.allCases, id: \.self) { goal in
                 Button {
@@ -480,15 +494,14 @@ private struct OnboardingFlowView: View {
                             Image(systemName: "checkmark.circle.fill")
                         }
                     }
-                    .padding()
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .calmCard()
                 }
                 .buttonStyle(.plain)
             }
 
             L10n.text("onboarding.goal.helper")
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .calmSecondaryText()
         }
     }
 
@@ -497,6 +510,7 @@ private struct OnboardingFlowView: View {
             L10n.text("onboarding.startdate.title")
                 .font(.title2)
                 .bold()
+                .fontDesign(.rounded)
             DatePicker(selection: $state.sobrietyStartDate, in: ...Date(), displayedComponents: .date) {
                 L10n.text("onboarding.startdate.field")
             }
@@ -509,14 +523,15 @@ private struct OnboardingFlowView: View {
             L10n.text("onboarding.cost.title")
                 .font(.title2)
                 .bold()
+                .fontDesign(.rounded)
 
             TextField(L10n.string("onboarding.cost.placeholder"), text: $state.dailyAlcoholCostText)
                 .padding(12)
-                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                .background(CalmTheme.surfaceStrong, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
 
             L10n.text("onboarding.cost.helper")
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .calmSecondaryText()
         }
     }
 
@@ -525,10 +540,11 @@ private struct OnboardingFlowView: View {
             L10n.text("onboarding.notifications.title")
                 .font(.title2)
                 .bold()
+                .fontDesign(.rounded)
             Toggle(L10n.string("onboarding.notifications.toggle"), isOn: $state.notificationsEnabled)
             L10n.text("onboarding.notifications.helper")
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .calmSecondaryText()
         }
     }
 }
@@ -552,6 +568,7 @@ private struct SignedOutPlaceholderView: View {
                 L10n.text("auth.welcome.body")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
+                    .padding(.bottom, 4)
 
                 Group {
                     #if os(iOS)
@@ -599,7 +616,7 @@ private struct SignedOutPlaceholderView: View {
                 } label: {
                     L10n.text("auth.signin")
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(CalmPrimaryButtonStyle())
                 .disabled(isBusy)
 
                 Button {
@@ -618,10 +635,12 @@ private struct SignedOutPlaceholderView: View {
                 } label: {
                     L10n.text("auth.create_account")
                 }
+                .buttonStyle(CalmSecondaryButtonStyle())
                 .disabled(isBusy)
             }
             .padding(24)
             .navigationTitle(L10n.text("onboarding.title"))
+            .calmPageBackground()
         }
     }
 }
@@ -639,6 +658,7 @@ private struct HomeView: View {
 
     @State private var showSOS = false
     @State private var showRelapseConfirm = false
+    @State private var relapseConfirmedTick = 0
 
     init(
         userID: UUID,
@@ -674,60 +694,69 @@ private struct HomeView: View {
                     }
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.orange)
+                .buttonStyle(CalmPrimaryButtonStyle())
+                .tint(CalmTheme.sos)
+                .sensoryFeedback(.impact, trigger: showSOS)
 
+                VStack(alignment: .leading, spacing: 8) {
                 L10n.text("home.sobriety.heading")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
+                    .calmSectionTitle()
 
-                Text(L10n.format("home.days", "\(state.soberDays)"))
-                    .font(.system(size: 42, weight: .bold))
+                    Text(L10n.format("home.days", "\(state.soberDays)"))
+                        .font(.system(size: 42, weight: .bold))
+                        .contentTransition(.numericText())
 
-                if let dailyAlcoholCost = state.dailyAlcoholCost {
-                    Text(
-                        L10n.format(
-                            "home.estimated_savings",
-                            "\(Int(Double(state.soberDays) * dailyAlcoholCost))"
+                    if let dailyAlcoholCost = state.dailyAlcoholCost {
+                        Text(
+                            L10n.format(
+                                "home.estimated_savings",
+                                "\(Int(Double(state.soberDays) * dailyAlcoholCost))"
+                            )
                         )
-                    )
                         .font(.subheadline)
-                }
+                    }
 
-                if let startDate = state.sobrietyStartDate {
-                    Text(
-                        L10n.format(
-                            "home.period_started",
-                            startDate.formatted(date: .abbreviated, time: .omitted)
+                    if let startDate = state.sobrietyStartDate {
+                        Text(
+                            L10n.format(
+                                "home.period_started",
+                                startDate.formatted(date: .abbreviated, time: .omitted)
+                            )
                         )
-                    )
-                        .foregroundStyle(.secondary)
-                }
+                        .calmSecondaryText()
+                    }
 
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(L10n.format("home.next_milestone", "\(state.nextMilestoneDays)"))
-                        .font(.subheadline)
-                    ProgressView(value: state.milestoneProgress)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(L10n.format("home.next_milestone", "\(state.nextMilestoneDays)"))
+                            .font(.subheadline)
+                        ProgressView(value: state.milestoneProgress)
+                            .tint(CalmTheme.accent)
+                    }
                 }
+                .calmCard()
 
                 Divider()
 
                 Button(EmpathyCopy.relapseButton) {
                     showRelapseConfirm = true
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(CalmSecondaryButtonStyle())
+                .tint(CalmTheme.accent)
 
                 L10n.text("home.relapse_helper")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .calmSecondaryText()
 
                 Spacer()
             }
             .padding()
             .navigationTitle(L10n.text("home.title"))
+            .calmPageBackground()
             .task {
                 state.load()
             }
+            .animation(CalmTheme.breatheAnimation, value: state.soberDays)
+            .sensoryFeedback(.warning, trigger: relapseConfirmedTick)
             .sheet(isPresented: $showSOS) {
                 NavigationStack {
                     SOSFlowView(
@@ -781,6 +810,7 @@ private struct HomeView: View {
                             occurredAt: now
                         )
                     }
+                    relapseConfirmedTick += 1
                 }
                 Button(EmpathyCopy.relapseCancel, role: .cancel) {}
             } message: {
@@ -808,6 +838,7 @@ private struct StatsView: View {
                     L10n.text("stats.title")
                         .font(.title2)
                         .bold()
+                        .fontDesign(.rounded)
 
                     statRow(labelKey: "stats.current_period", value: L10n.format("stats.period_row.days", "\(state.currentStreakDays)"))
                     statRow(labelKey: "stats.best_streak", value: L10n.format("stats.period_row.days", "\(state.longestStreakDays)"))
@@ -817,6 +848,7 @@ private struct StatsView: View {
                     statRow(labelKey: "stats.progress", value: "\(state.progressPercent)%")
 
                     ProgressView(value: Double(state.progressPercent), total: 100)
+                        .tint(CalmTheme.accent)
 
                     if !state.unlockedMilestones.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
@@ -866,6 +898,7 @@ private struct StatsView: View {
                 .padding()
             }
             .navigationTitle(L10n.text("stats.title"))
+            .calmPageBackground()
             .task(id: syncTick) {
                 state.load()
                 await achievementsCloudSync.pushMilestones(days: Set(state.newlyUnlockedMilestones))
@@ -904,7 +937,7 @@ private struct StatsView: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .calmCard()
     }
 
     @ViewBuilder

@@ -40,6 +40,7 @@ struct AIChatTabView: View {
                         Image(systemName: "square.and.pencil")
                     }
                 }
+                .buttonStyle(CalmSecondaryButtonStyle())
 
                 Section {
                     ForEach(state.threads) { thread in
@@ -68,9 +69,12 @@ struct AIChatTabView: View {
                 }
             }
             .navigationTitle(L10n.text("chat.chats"))
+            .scrollContentBackground(.hidden)
+            .background(CalmTheme.pageGradient)
         } detail: {
             chatDetail
         }
+        .tint(CalmTheme.accent)
         .task {
             await state.load()
         }
@@ -82,12 +86,12 @@ struct AIChatTabView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(err)
                         .font(.footnote)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(CalmTheme.sos)
                     if state.canRetryAssistant {
                         Button(EmpathyCopy.chatRetryAction) {
                             Task { await state.retryAssistantReply() }
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(CalmPrimaryButtonStyle())
                         .disabled(state.isSending)
                     }
                 }
@@ -101,7 +105,7 @@ struct AIChatTabView: View {
                     LazyVStack(alignment: .leading, spacing: 12) {
                         if state.messages.isEmpty && !state.isLoading {
                             Text(EmpathyCopy.chatEmptyHint)
-                                .foregroundStyle(.secondary)
+                                .calmSecondaryText()
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.vertical, 8)
                         }
@@ -115,7 +119,7 @@ struct AIChatTabView: View {
                     .padding()
                 }
                 .onChange(of: state.messages.count) { _, _ in
-                    withAnimation {
+                    withAnimation(.easeOut(duration: 0.24)) {
                         proxy.scrollTo("chatBottom", anchor: .bottom)
                     }
                 }
@@ -125,7 +129,7 @@ struct AIChatTabView: View {
                 TextField(L10n.string("chat.message.placeholder"), text: $state.draft, axis: .vertical)
                     .lineLimit(1...6)
                     .padding(10)
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    .background(CalmTheme.surfaceStrong, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
 
                 Button {
                     Task { await state.sendDraft() }
@@ -141,9 +145,10 @@ struct AIChatTabView: View {
                 .accessibilityLabel(L10n.string("chat.send"))
             }
             .padding()
-            .background(.background)
+            .background(CalmTheme.surface.opacity(0.8))
         }
         .navigationTitle(L10n.text("chat.nav_title"))
+        .calmPageBackground()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -160,6 +165,8 @@ struct AIChatTabView: View {
                     .background(.thinMaterial.opacity(0.5))
             }
         }
+        .animation(CalmTheme.breatheAnimation, value: state.messages.count)
+        .sensoryFeedback(.selection, trigger: state.messages.count)
     }
 
     @ViewBuilder
@@ -171,7 +178,7 @@ struct AIChatTabView: View {
                 .font(.body)
                 .padding(12)
                 .background(
-                    isUser ? Color.blue.opacity(0.18) : Color.secondary.opacity(0.14),
+                    isUser ? CalmTheme.accent.opacity(0.22) : CalmTheme.accentSoft.opacity(0.35),
                     in: RoundedRectangle(cornerRadius: 14)
                 )
             if !isUser { Spacer(minLength: 48) }
