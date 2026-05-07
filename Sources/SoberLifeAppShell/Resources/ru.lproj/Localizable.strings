@@ -92,6 +92,9 @@
 "profile.theme.system" = "Как в системе";
 "profile.theme.light" = "Светлая";
 "profile.theme.night" = "Ночная";
+"profile.source.checking" = "Проверка";
+"profile.source.cloud" = "Облако";
+"profile.source.fallback" = "Локально";
 
 // Community (anonymous)
 "community.title" = "Сообщество";

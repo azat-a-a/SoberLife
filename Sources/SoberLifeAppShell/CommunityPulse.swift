@@ -16,15 +16,27 @@ final class CommunityPulseState: ObservableObject {
 
     private let sessionState: SessionState
     private let authWiring: AuthWiring?
+    private let userDefaults: UserDefaults
+    private let localPrefix = "soberlife.community.local."
 
-    var isAvailable: Bool { authWiring != nil }
+    var isAvailable: Bool { true }
 
-    init(sessionState: SessionState, authWiring: AuthWiring?) {
+    init(
+        sessionState: SessionState,
+        authWiring: AuthWiring?,
+        userDefaults: UserDefaults = .standard
+    ) {
         self.sessionState = sessionState
         self.authWiring = authWiring
+        self.userDefaults = userDefaults
     }
 
     func checkInAnonymously() async {
+        guard authWiring != nil else {
+            checkInLocallyOncePerDay()
+            await refresh()
+            return
+        }
         await perform {
             guard let authWiring else { return }
             let token = try await requireToken()
@@ -35,6 +47,10 @@ final class CommunityPulseState: ObservableObject {
     }
 
     func refresh() async {
+        guard authWiring != nil else {
+            refreshLocal()
+            return
+        }
         await perform {
             guard let authWiring else { return }
             let token = try await requireToken()
@@ -69,6 +85,38 @@ final class CommunityPulseState: ObservableObject {
         } catch {
             errorMessage = String(describing: error)
         }
+    }
+
+    private func checkInLocallyOncePerDay() {
+        let day = Self.utcDayKey(Date())
+        let onceKey = localPrefix + "checked.\(day)"
+        guard userDefaults.bool(forKey: onceKey) == false else { return }
+        let countKey = localPrefix + "count.\(day)"
+        let next = userDefaults.integer(forKey: countKey) + 1
+        userDefaults.set(next, forKey: countKey)
+        userDefaults.set(true, forKey: onceKey)
+    }
+
+    private func refreshLocal() {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = Date()
+        var rows: [DayCount] = []
+        for i in stride(from: 6, through: 0, by: -1) {
+            guard let d = calendar.date(byAdding: .day, value: -i, to: now) else { continue }
+            let day = Self.utcDayKey(d)
+            let count = userDefaults.integer(forKey: localPrefix + "count.\(day)")
+            rows.append(DayCount(day: day, checkins: count))
+        }
+        last7 = rows
+    }
+
+    private static func utcDayKey(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.calendar = Calendar(identifier: .gregorian)
+        f.timeZone = TimeZone(secondsFromGMT: 0)
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd"
+        return f.string(from: date)
     }
 }
 

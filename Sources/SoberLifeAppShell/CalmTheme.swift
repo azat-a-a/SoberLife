@@ -2,6 +2,9 @@ import SwiftUI
 #if canImport(UIKit)
 import UIKit
 #endif
+#if canImport(AppKit)
+import AppKit
+#endif
 
 enum CalmTheme {
     #if canImport(UIKit)
@@ -178,10 +181,7 @@ extension View {
     func calmPageBackground() -> some View {
         background(
             ZStack {
-                Image("meditative-background", bundle: .module)
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
+                CalmBackgroundImageView()
                 CalmTheme.pageGradient.opacity(0.42)
                     .ignoresSafeArea()
                 CalmTheme.backdropVeil
@@ -197,5 +197,41 @@ extension View {
 
     func calmSecondaryText() -> some View {
         foregroundStyle(.secondary.opacity(0.82))
+    }
+}
+
+private struct CalmBackgroundImageView: View {
+    var body: some View {
+        Group {
+            if let image = Self.loadImageFromBundle() {
+                image
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                // Fallback keeps UI usable even if resource packaging fails.
+                CalmTheme.pageGradient
+            }
+        }
+        .ignoresSafeArea()
+    }
+
+    private static func loadImageFromBundle() -> Image? {
+        #if canImport(UIKit)
+        if let uiImage = UIImage(named: "meditative-background", in: .module, compatibleWith: nil) {
+            return Image(uiImage: uiImage)
+        }
+        if let path = Bundle.module.path(forResource: "meditative-background", ofType: "png"),
+           let uiImage = UIImage(contentsOfFile: path)
+        {
+            return Image(uiImage: uiImage)
+        }
+        #elseif canImport(AppKit)
+        if let path = Bundle.module.path(forResource: "meditative-background", ofType: "png"),
+           let nsImage = NSImage(contentsOfFile: path)
+        {
+            return Image(nsImage: nsImage)
+        }
+        #endif
+        return nil
     }
 }

@@ -204,6 +204,12 @@ private struct SignedInRootView: View {
 }
 
 private struct MainTabView: View {
+    private enum ProfileSourceMode {
+        case checking
+        case cloud
+        case fallback
+    }
+
     @ObservedObject var sessionState: SessionState
     let userID: UUID
     let onboardingStore: OnboardingStore
@@ -221,6 +227,7 @@ private struct MainTabView: View {
     private let analytics: AnalyticsTracker = .shared
 
     @State private var notificationSyncTick: Int = 0
+    @State private var profileSourceMode: ProfileSourceMode = .checking
 
     var body: some View {
         VStack(spacing: 0) {
@@ -385,6 +392,17 @@ private struct MainTabView: View {
                 properties: ["surface": "main_tabs"]
             )
         }
+        .task {
+            await refreshProfileSourceMode()
+        }
+        .onChange(of: sessionState.authState) { _, _ in
+            Task { await refreshProfileSourceMode() }
+        }
+        .overlay(alignment: .topTrailing) {
+            profileSourceBadge
+                .padding(.top, 6)
+                .padding(.trailing, 10)
+        }
     }
 
     /// Single `ensure_user_profile` before settings + achievements bootstrap when JWT is valid; bootstraps retry ensure if this fails transiently.
@@ -444,6 +462,42 @@ private struct MainTabView: View {
         f.locale = Locale(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy-MM-dd"
         return f.string(from: date)
+    }
+
+    private var profileSourceBadge: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(profileSourceMode == .cloud ? Color.green : (profileSourceMode == .fallback ? CalmTheme.sos : .secondary))
+                .frame(width: 6, height: 6)
+            Text(LocalizedStringKey(profileSourceLabelKey), bundle: .module)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(.ultraThinMaterial, in: Capsule())
+        .accessibilityElement(children: .combine)
+    }
+
+    private var profileSourceLabelKey: String {
+        switch profileSourceMode {
+        case .checking: "profile.source.checking"
+        case .cloud: "profile.source.cloud"
+        case .fallback: "profile.source.fallback"
+        }
+    }
+
+    private func refreshProfileSourceMode() async {
+        guard authWiring != nil else {
+            profileSourceMode = .fallback
+            return
+        }
+        if let token = await sessionState.accessTokenIfAvailable(),
+           SupabaseJWT.isLikelyUserAccessToken(token) {
+            profileSourceMode = .cloud
+        } else {
+            profileSourceMode = .fallback
+        }
     }
 }
 
@@ -788,9 +842,7 @@ private struct HomeView: View {
                 }
                 .calmCard()
 
-                if community.isAvailable {
-                    CommunityPulseCard(state: community)
-                }
+                CommunityPulseCard(state: community)
 
                 Divider()
 

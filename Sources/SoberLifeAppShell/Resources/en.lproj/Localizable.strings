@@ -92,6 +92,9 @@
 "profile.theme.system" = "System";
 "profile.theme.light" = "Light";
 "profile.theme.night" = "Night";
+"profile.source.checking" = "Checking";
+"profile.source.cloud" = "Cloud";
+"profile.source.fallback" = "Fallback";
 
 // Community (anonymous)
 "community.title" = "Community";
