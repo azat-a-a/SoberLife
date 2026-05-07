@@ -1,4 +1,4 @@
-const CACHE = "soberlife-cache-v4";
+const CACHE = "soberlife-cache-v6";
 const ASSETS = ["/", "/index.html", "/styles.css", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

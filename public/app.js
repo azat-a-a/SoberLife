@@ -18,15 +18,20 @@ import {
   query,
   where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { firebaseWebConfig } from "/firebase-config.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+import { firebaseWebConfig, firebaseFunctionsRegion } from "/firebase-config.js";
 
 const appRoot = document.getElementById("app");
 const firebaseApp = initializeApp(firebaseWebConfig);
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
+const functionsClient = getFunctions(firebaseApp, firebaseFunctionsRegion || "europe-west1");
 let checkinInFlight = false;
 let activeTab = "home";
 let currentTheme = detectInitialTheme();
+let sosScreenOpen = false;
+let sosMessages = [];
+let sosSending = false;
 
 const I18N = {
   en: {
@@ -64,7 +69,24 @@ const I18N = {
     statsCheckins7d: "Check-ins (7 days)",
     theme: "Theme",
     themeLight: "Light",
-    themeDark: "Dark"
+    themeDark: "Dark",
+    sosButton: "SOS — I might relapse",
+    sosTitle: "SOS support",
+    sosBack: "Back",
+    sosDisclaimer:
+      "This chat is not emergency care. If you may harm yourself or someone else, contact local emergency services or a crisis hotline right away.",
+    sosPlaceholder: "What is happening right now? A few words are enough.",
+    sosSend: "Send",
+    sosThinking: "Thinking…",
+    sosIntro:
+      "I am here with you — opening this screen took courage. Before we talk, take one slow exhale, longer than your inhale. When you are ready, tell me what you notice: the urge, thoughts, tension, or situation. I will stay with you.",
+    sosErrorGeneric: "The assistant is temporarily unavailable. Wait a moment and try again.",
+    sosErrorOffline: "You appear to be offline. Connect to the internet to use the assistant.",
+    sosAriaThread: "Chat messages",
+    sosErrorRegionHint:
+      "SOS cloud function was not found. Check that firebaseFunctionsRegion in firebase-config.js matches \"region\" in functions/index.js, then run: firebase deploy --only functions && firebase deploy --only hosting.",
+    sosErrorSecretHint:
+      "Server is missing the DeepSeek key. Run: firebase functions:secrets:set DEEPSEEK_API_KEY then firebase deploy --only functions."
   },
   ru: {
     appTitle: "SoberLife",
@@ -101,7 +123,24 @@ const I18N = {
     statsCheckins7d: "Чекины (7 дней)",
     theme: "Тема",
     themeLight: "Светлая",
-    themeDark: "Тёмная"
+    themeDark: "Тёмная",
+    sosButton: "SOS — могу сорваться",
+    sosTitle: "Поддержка SOS",
+    sosBack: "Назад",
+    sosDisclaimer:
+      "Это не скорая помощь. Если есть риск для жизни или здоровья — срочно звоните в экстренные службы или на линию кризисной помощи.",
+    sosPlaceholder: "Что происходит прямо сейчас? Достаточно пары слов.",
+    sosSend: "Отправить",
+    sosThinking: "Думаю…",
+    sosIntro:
+      "Я рядом — то, что вы открыли этот экран, уже шаг заботы о себе. Сначала сделайте одно медленное выдыхание, чуть длиннее вдоха. Когда будете готовы, напишите, что замечаете: тягу, мысли, напряжение или ситуацию.",
+    sosErrorGeneric: "Помощник сейчас недоступен. Попробуйте ещё раз через минуту.",
+    sosErrorOffline: "Нет подключения к интернету — нужна сеть, чтобы связаться с ассистентом.",
+    sosAriaThread: "Сообщения чата",
+    sosErrorRegionHint:
+      "Не найдена облачная функция SOS. Проверьте: firebaseFunctionsRegion в firebase-config.js должен совпадать с region в functions/index.js, затем: firebase deploy --only functions и firebase deploy --only hosting.",
+    sosErrorSecretHint:
+      "На сервере нет ключа DeepSeek: firebase functions:secrets:set DEEPSEEK_API_KEY и снова firebase deploy --only functions."
   },
   de: {
     appTitle: "SoberLife",
@@ -138,7 +177,20 @@ const I18N = {
     statsCheckins7d: "Check-ins (7 Tage)",
     theme: "Design",
     themeLight: "Hell",
-    themeDark: "Dunkel"
+    themeDark: "Dunkel",
+    sosButton: "SOS — drohender Rückfall",
+    sosTitle: "SOS-Unterstützung",
+    sosBack: "Zurück",
+    sosDisclaimer:
+      "Dieser Chat ersetzt keine Notfallversorgung. Bei akuter Gefahr wählen Sie bitte einen Notruf oder eine Krisenhotline.",
+    sosPlaceholder: "Was passiert gerade? Ein paar Worte genügen.",
+    sosSend: "Senden",
+    sosThinking: "Denke nach …",
+    sosIntro:
+      "Ich bin bei dir — diesen Bildschirm zu öffnen, war bereits ein Schritt der Selbstfürsorge. Mach zuerst ein langsames Ausatmen, etwas länger als das Einatmen. Wenn du soweit bist: Was bemerkst du zuerst—Drang, Gedanken, Anspannung oder die Situation?",
+    sosErrorGeneric: "Assistent vorübergehend nicht erreichbar. Bitte kurz warten und erneut versuchen.",
+    sosErrorOffline: "Du scheinst offline zu sein. Für den Assistenten ist Internetverbindung nötig.",
+    sosAriaThread: "Chatnachrichten"
   },
   es: {
     appTitle: "SoberLife",
@@ -175,7 +227,20 @@ const I18N = {
     statsCheckins7d: "Check-ins (7 días)",
     theme: "Tema",
     themeLight: "Claro",
-    themeDark: "Oscuro"
+    themeDark: "Oscuro",
+    sosButton: "SOS — puedo recaer",
+    sosTitle: "Apoyo SOS",
+    sosBack: "Volver",
+    sosDisclaimer:
+      "Este chat no es emergencia. Si hay peligro inmediato, llama a servicios de urgencia o una línea de crisis.",
+    sosPlaceholder: "¿Qué está pasando ahora? Con unas palabras basta.",
+    sosSend: "Enviar",
+    sosThinking: "Pensando…",
+    sosIntro:
+      "Estoy contigo — abrir esta pantalla ya es un gesto de cuidado. Primero exhala más lento y un poco más largo que al inhalar. Cuando puedas, escribe qué notas primero: el antojo, pensamientos, tensión o la situación.",
+    sosErrorGeneric: "El asistente no está disponible por ahora. Espera un momento e inténtalo otra vez.",
+    sosErrorOffline: "Parece que estás sin conexión. Hace falta internet para usar el asistente.",
+    sosAriaThread: "Mensajes del chat"
   },
   fr: {
     appTitle: "SoberLife",
@@ -212,7 +277,20 @@ const I18N = {
     statsCheckins7d: "Check-ins (7 jours)",
     theme: "Thème",
     themeLight: "Clair",
-    themeDark: "Sombre"
+    themeDark: "Sombre",
+    sosButton: "SOS — risque de rechute",
+    sosTitle: "Soutien SOS",
+    sosBack: "Retour",
+    sosDisclaimer:
+      "Ce chat n’est pas un service d’urgence. En danger immédiat, contactez les secours ou une ligne de crise.",
+    sosPlaceholder: "Qu’est-ce qui se passe maintenant ? Quelques mots suffisent.",
+    sosSend: "Envoyer",
+    sosThinking: "Réflexion…",
+    sosIntro:
+      "Je suis là avec vous — ouvrir cet écran est déjà un acte de soin. Respirez lentement : l’expiration un peu plus longue que l’inspiration. Quand vous êtes prêt·e : qu’est-ce que vous remarquez en premier — l’envie, les pensées, la tension ou la situation ?",
+    sosErrorGeneric: "L’assistant est momentanément indisponible. Réessayez dans un instant.",
+    sosErrorOffline: "Vous semblez hors ligne ; Internet est nécessaire pour joindre l’assistant.",
+    sosAriaThread: "Messages du chat"
   },
   it: {
     appTitle: "SoberLife",
@@ -249,7 +327,20 @@ const I18N = {
     statsCheckins7d: "Check-in (7 giorni)",
     theme: "Tema",
     themeLight: "Chiaro",
-    themeDark: "Scuro"
+    themeDark: "Scuro",
+    sosButton: "SOS — rischio di ricaduta",
+    sosTitle: "Supporto SOS",
+    sosBack: "Indietro",
+    sosDisclaimer:
+      "Questa chat non è emergenza. Se c’è pericolo immediato, contatta i servizi di emergenza o una linea di crisi.",
+    sosPlaceholder: "Cosa sta succedendo ora? Bastano poche parole.",
+    sosSend: "Invia",
+    sosThinking: "Sto pensando…",
+    sosIntro:
+      "Sono qui con te — aprire questa schermata è già cura di te. Fai prima un lungo espira, più lungo dell’inspira. Quando sei pronto: cosa noti per prima cosa — voglia, pensieri, tensione o la situazione?",
+    sosErrorGeneric: "L’assistente non è disponibile al momento. Riprova tra poco.",
+    sosErrorOffline: "Sembri offline: serve internet per usare l’assistente.",
+    sosAriaThread: "Messaggi della chat"
   },
   ja: {
     appTitle: "SoberLife",
@@ -286,7 +377,20 @@ const I18N = {
     statsCheckins7d: "チェックイン（7日）",
     theme: "テーマ",
     themeLight: "ライト",
-    themeDark: "ダーク"
+    themeDark: "ダーク",
+    sosButton: "SOS — 再飲酒しそう",
+    sosTitle: "SOSサポート",
+    sosBack: "戻る",
+    sosDisclaimer:
+      "このチャットは緊急対応ではありません。生命や安全の危険がある場合は、すぐに救急・警察・いのちの電話などに連絡してください。",
+    sosPlaceholder: "今、何が起きていますか？短くて大丈夫です。",
+    sosSend: "送信",
+    sosThinking: "考えています…",
+    sosIntro:
+      "ここにいます。この画面を開けただけでも、自分を守ろうとする力です。まずは、吸う息より長く、ゆっくり吐き出しましょう。よくなったら、いま強いものは何ですか――衝動、考え、体の張り、状況、どれでしょう。",
+    sosErrorGeneric: "アシスタントに接続できませんでした。少ししてから再度お試しください。",
+    sosErrorOffline: "オフラインのようです。アシスタントにはインターネットが必要です。",
+    sosAriaThread: "チャット"
   },
   pl: {
     appTitle: "SoberLife",
@@ -323,7 +427,20 @@ const I18N = {
     statsCheckins7d: "Check-iny (7 dni)",
     theme: "Motyw",
     themeLight: "Jasny",
-    themeDark: "Ciemny"
+    themeDark: "Ciemny",
+    sosButton: "SOS — zbliżam się do nawrotu",
+    sosTitle: "Wsparcie SOS",
+    sosBack: "Wstecz",
+    sosDisclaimer:
+      "To nie jest pogotowie. Jeśli jest realne ryzyko dla życia lub zdrowia — zadzwoń na numer alarmowy lub linię wsparcia.",
+    sosPlaceholder: "Co dzieje się teraz? Wystarczą kilka słów.",
+    sosSend: "Wyślij",
+    sosThinking: "Myślę…",
+    sosIntro:
+      "Jestem przy Tobie — sam fakt otwarcia tego ekranu to już dbanie o siebie. Najpierw zrób wolny wydech trochę dłuższy niż wdech. Jak będziesz gotowa/gotowy: co najpierw zauważasz — pokusę, myśli, napięcie czy sytuację?",
+    sosErrorGeneric: "Asystent jest chwilowo niedostępny. Spróbuj ponownie za chwilę.",
+    sosErrorOffline: "Wygląda na to, że jesteś offline — potrzebny jest internet.",
+    sosAriaThread: "Wiadomości czatu"
   },
   th: {
     appTitle: "SoberLife",
@@ -360,7 +477,20 @@ const I18N = {
     statsCheckins7d: "เช็กอิน (7 วัน)",
     theme: "ธีม",
     themeLight: "สว่าง",
-    themeDark: "มืด"
+    themeDark: "มืด",
+    sosButton: "SOS — ใกล้จะถอยหลัง",
+    sosTitle: "ช่วยเหลือฉุกเฉิน",
+    sosBack: "กลับ",
+    sosDisclaimer:
+      "แชทนี้ไม่ใช่บริการฉุกเฉิน หากอยู่ในภาวะไม่ปลอดภัย โปรดติดต่อหน่วยกู้ภัยหรือสายด่วนวิกฤต",
+    sosPlaceholder: "ตอนนี้เกิดอะไรขึ้น? พิมพ์สั้นๆ ได้",
+    sosSend: "ส่ง",
+    sosThinking: "กำลังคิด…",
+    sosIntro:
+      "เราอยู่ตรงนี้ — การเปิดหน้าจอนี้เป็นการดูแลตัวเองแล้ว หายใจออกช้าๆ ให้ยาวกว่าการหายใจเข้า เมื่อพร้อม บอกสิ่งที่สังเกตก่อนคิดถึง — ความอยาก ความคิด ความตึง หรือสถานการณ์",
+    sosErrorGeneric: "ผู้ช่วยใช้งานไม่ได้ชั่วคราว โปรดลองอีกครั้งในเมื่อครู่",
+    sosErrorOffline: "ขณะนี้ออฟไลน์ ต้องใช้อินเทอร์เน็ตเพื่อพูดกับผู้ช่วย",
+    sosAriaThread: "ข้อความการสนทนา"
   },
   "zh-Hans": {
     appTitle: "SoberLife",
@@ -397,7 +527,20 @@ const I18N = {
     statsCheckins7d: "打卡（7天）",
     theme: "主题",
     themeLight: "浅色",
-    themeDark: "深色"
+    themeDark: "深色",
+    sosButton: "SOS — 我可能坚持不住",
+    sosTitle: "紧急支持",
+    sosBack: "返回",
+    sosDisclaimer:
+      "此对话不能替代急救。如有立即危险，请拨打当地急救或心理危机热线。",
+    sosPlaceholder: "此刻发生了什么？简短描述即可。",
+    sosSend: "发送",
+    sosThinking: "思考中…",
+    sosIntro:
+      "我在这里。你能打开这个页面，已经是自我照顾的一步。先慢慢呼气，让呼气比吸气更长一些。准备好后，请告诉我你最先注意到的是：冲动、想法、身体紧张，还是情境？",
+    sosErrorGeneric: "助手暂时不可用，请稍后再试。",
+    sosErrorOffline: "当前似乎离线，使用助手需要网络连接。",
+    sosAriaThread: "聊天消息"
   }
 };
 
@@ -696,6 +839,139 @@ async function getStats(uid, profile) {
   };
 }
 
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function sosThreadMarkup() {
+  return sosMessages
+    .map(
+      (m) =>
+        `<div class="msg msg--${m.role === "user" ? "user" : "assistant"}" aria-live="polite">${escapeHtml(
+          m.content
+        )}</div>`
+    )
+    .join("");
+}
+
+function scrollSosThreadBottom() {
+  const el = document.getElementById("sosThread");
+  if (el) requestAnimationFrame(() => (el.scrollTop = el.scrollHeight));
+}
+
+async function openSOSAssistant(uid, profile) {
+  sosScreenOpen = true;
+  sosMessages = [{ role: "assistant", content: t("sosIntro") }];
+  const fresh = await loadProfile(uid);
+  await renderHome(uid, fresh || profile);
+}
+
+function formatSOSCallableError(err) {
+  const code = err?.code || "";
+  const msg = String(err?.message || "").trim();
+
+  console.error("[SOS sosDeepseekChat]", code, msg, err);
+
+  if (code === "functions/not-found" || code === "not-found" || /NOT_FOUND/i.test(msg)) {
+    return `${t("sosErrorRegionHint")}`;
+  }
+
+  if (code === "failed-precondition") {
+    if (/missing api key/i.test(msg) || /not configured/i.test(msg)) {
+      return t("sosErrorSecretHint");
+    }
+    return msg || t("sosErrorGeneric");
+  }
+
+  if (code === "unauthenticated") {
+    return msg || t("sosErrorGeneric");
+  }
+
+  if (msg.length > 15 && msg.length < 720 && code !== "functions/internal") {
+    return msg;
+  }
+
+  return t("sosErrorGeneric");
+}
+
+function renderSOSScreen(uid, profile) {
+  appRoot.innerHTML = `
+    ${renderTopControls()}
+    <section class="card sos-hero">
+      <button type="button" id="sosBack" class="secondary sos-back">${t("sosBack")}</button>
+      <h2>${t("sosTitle")}</h2>
+      <p class="muted sos-disclaimer">${t("sosDisclaimer")}</p>
+    </section>
+    <div id="sosThread" class="sos-thread card" tabindex="0" role="log" aria-label="${escapeHtml(t("sosAriaThread"))}">
+      ${sosThreadMarkup()}
+      ${
+        sosSending
+          ? `<div class="msg msg--assistant sos-typing"><span>${escapeHtml(t("sosThinking"))}</span></div>`
+          : ""
+      }
+    </div>
+    <section class="card sos-composer">
+      <textarea id="sosInput" rows="3" ${sosSending ? "disabled" : ""}></textarea>
+      <button type="button" id="sosSendBtn" class="${sosSending ? "secondary" : ""}" ${sosSending ? "disabled" : ""}>
+        ${t("sosSend")}
+      </button>
+    </section>
+  `;
+
+  const input = document.getElementById("sosInput");
+  if (input) input.placeholder = t("sosPlaceholder");
+
+  document.getElementById("sosBack").onclick = async () => {
+    sosSending = false;
+    sosScreenOpen = false;
+    const fresh = await loadProfile(uid);
+    await renderHome(uid, fresh || profile);
+  };
+
+  bindTopControls(() => renderSOSScreen(uid, profile));
+
+  const sendChat = async () => {
+    if (sosSending) return;
+    const text = document.getElementById("sosInput")?.value?.trim().slice(0, 4000);
+    if (!text) return;
+    if (!navigator.onLine) {
+      sosMessages.push({ role: "assistant", content: t("sosErrorOffline") });
+      renderSOSScreen(uid, profile);
+      return;
+    }
+    sosMessages.push({ role: "user", content: text });
+    sosSending = true;
+    renderSOSScreen(uid, profile);
+
+    try {
+      const sosFn = httpsCallable(functionsClient, "sosDeepseekChat", { timeout: 150000 });
+      const result = await sosFn({ messages: sosMessages, locale: currentLanguage });
+      const reply = result.data?.reply;
+      if (reply) sosMessages.push({ role: "assistant", content: reply });
+      else sosMessages.push({ role: "assistant", content: t("sosErrorGeneric") });
+    } catch (err) {
+      sosMessages.push({ role: "assistant", content: formatSOSCallableError(err) });
+    } finally {
+      sosSending = false;
+      renderSOSScreen(uid, profile);
+      scrollSosThreadBottom();
+    }
+  };
+
+  document.getElementById("sosSendBtn").onclick = () => sendChat();
+  const ta = document.getElementById("sosInput");
+  if (ta) {
+    ta.onkeydown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") sendChat();
+    };
+    if (!sosSending) ta.focus();
+  }
+
+  scrollSosThreadBottom();
+}
+
 async function renderHome(uid, profile) {
   const isCloudSource = navigator.onLine;
   const sourceMode = isCloudSource ? t("sourceCloud") : t("sourceFallback");
@@ -704,6 +980,11 @@ async function renderHome(uid, profile) {
   const checkedInToday = await hasCheckedInToday(uid, profile);
   const streak = daysSince(profile.soberSince);
 
+  if (sosScreenOpen) {
+    renderSOSScreen(uid, profile);
+    return;
+  }
+
   appRoot.innerHTML = `
     ${renderTopControls()}
     <section class="card">
@@ -711,6 +992,9 @@ async function renderHome(uid, profile) {
       <h2>${t("hello")}, ${profile.name}</h2>
       <p>${t("currentStreak")}: <strong>${streak} ${t("days")}</strong></p>
       <p class="muted">${t("soberSince")} ${profile.soberSince}</p>
+    </section>
+    <section class="card sos-gate-card">
+      <button type="button" id="openSOSBtn" class="sos sos-open">${t("sosButton")}</button>
     </section>
     <section class="card">
       <h3>${t("communityTitle")}</h3>
@@ -755,6 +1039,9 @@ async function renderHome(uid, profile) {
         <p>${t("statsRelapses")}: <strong>${stats.relapses}</strong></p>
         <p>${t("statsCheckins7d")}: <strong>${stats.checkins7d}</strong></p>
       </section>
+      <section class="card">
+        <button type="button" id="openSOSFromStatsBtn" class="sos sos-open">${t("sosButton")}</button>
+      </section>
       ${renderBottomTabs()}
     `;
     document.getElementById("tabHomeBtn").onclick = async () => {
@@ -771,6 +1058,7 @@ async function renderHome(uid, profile) {
       const refreshed = await loadProfile(uid);
       await renderHome(uid, refreshed);
     });
+    document.getElementById("openSOSFromStatsBtn").onclick = async () => openSOSAssistant(uid, profile);
     return;
   }
 
@@ -803,6 +1091,8 @@ async function renderHome(uid, profile) {
   document.getElementById("logoutBtn").onclick = async () => {
     await signOut(auth);
   };
+
+  document.getElementById("openSOSBtn").onclick = async () => openSOSAssistant(uid, profile);
 }
 
 onAuthStateChanged(auth, async (user) => {

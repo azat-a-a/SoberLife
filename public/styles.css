@@ -210,3 +210,90 @@ button.sos {
 .dot.local {
   background: #d29c4f;
 }
+
+/* SOS / AI chat */
+.sos-gate-card .sos-open {
+  margin-bottom: 0;
+}
+
+.sos-hero h2 {
+  margin-top: 6px;
+}
+
+.sos-back {
+  width: auto;
+  align-self: flex-start;
+  margin-bottom: 4px;
+}
+
+.sos-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: min(58vh, 520px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sos-thread .msg {
+  max-width: 92%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.sos-thread .msg--user {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+  color: var(--text);
+  border-bottom-right-radius: 6px;
+}
+
+.sos-thread .msg--assistant {
+  align-self: flex-start;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  border-bottom-left-radius: 6px;
+}
+
+:root[data-theme="dark"] .sos-thread .msg--assistant {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.sos-typing span {
+  display: inline-block;
+  opacity: 0.75;
+  animation: sos-pulse 1.25s ease-in-out infinite alternate;
+}
+
+@keyframes sos-pulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sos-composer textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  border: none;
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sos-typing span {
+    animation: none;
+    opacity: 0.85;
+  }
+}

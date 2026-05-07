@@ -13,7 +13,7 @@ SoberLife is now a web-first Progressive Web App with Firebase as the only backe
 - `public/manifest.webmanifest` - PWA manifest.
 - `public/sw.js` - service worker for basic offline caching.
 - `firestore.rules` - access control rules.
-- `firestore.indexes.json` - required Firestore indexes.
+- `functions/` — Cloud Functions (**`sosDeepseekChat`** → DeepSeek proxy, secret `DEEPSEEK_API_KEY`).
 - `firebase.json` - Hosting/Firestore/Storage config.
 
 ## Setup
@@ -34,4 +34,5 @@ SoberLife is now a web-first Progressive Web App with Firebase as the only backe
 ## Deploy
 
 - `firebase deploy --only hosting,firestore,storage`
+- SOS AI (DeepSeek): see `SOS-DEEPSEEK-DEPLOY.md` and `functions/` (callable `sosDeepseekChat`, secret `DEEPSEEK_API_KEY`).
 

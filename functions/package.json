@@ -1,0 +1,13 @@
+{
+  "name": "soberlife-functions",
+  "description": "Firebase Cloud Functions — SOS DeepSeek proxy",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.3.0"
+  },
+  "private": true
+}
