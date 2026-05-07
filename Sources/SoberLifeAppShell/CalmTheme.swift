@@ -69,6 +69,17 @@ enum CalmTheme {
         #endif
     }()
 
+    static let backdropVeil: Color = {
+        #if canImport(UIKit)
+        dynamic(
+            UIColor.white.withAlphaComponent(0.14),
+            UIColor.black.withAlphaComponent(0.34)
+        )
+        #else
+        Color.black.opacity(0.2)
+        #endif
+    }()
+
     static let pageGradient: LinearGradient = {
         #if canImport(UIKit)
         LinearGradient(
@@ -165,7 +176,18 @@ extension View {
     }
 
     func calmPageBackground() -> some View {
-        background(CalmTheme.pageGradient.ignoresSafeArea())
+        background(
+            ZStack {
+                Image("meditative-background", bundle: .module)
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                CalmTheme.pageGradient.opacity(0.42)
+                    .ignoresSafeArea()
+                CalmTheme.backdropVeil
+                    .ignoresSafeArea()
+            }
+        )
     }
 
     func calmSectionTitle() -> some View {
