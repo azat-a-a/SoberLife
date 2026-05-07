@@ -1,8 +1,0 @@
-// Non-secret defaults for local builds and CI. Override in Xcode or a private xcconfig for TestFlight.
-// For production, set SUPABASE_URL and SUPABASE_ANON_KEY (User-Defined Build Settings) or replace this file locally (do not commit secrets).
-
-SUPABASE_URL =
-SUPABASE_ANON_KEY =
-
-MARKETING_VERSION = 1.0
-CURRENT_PROJECT_VERSION = 1

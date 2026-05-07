@@ -1,0 +1,11 @@
+{
+  "name": "soberlife-pwa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SoberLife PWA with Firebase auth, database, and hosting.",
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "firebase:serve": "firebase emulators:start --only hosting",
+    "firebase:deploy": "firebase deploy --only hosting,firestore,storage"
+  }
+}

@@ -92,6 +92,12 @@
 - Decision: Migrate backend from Supabase to Yandex Cloud stack: Auth via dedicated backend (JWT + refresh), managed PostgreSQL in Yandex Cloud, API layer in Yandex Serverless Containers / Functions, object storage in Yandex Object Storage.
 - Why: Align infrastructure with Yandex Cloud operations, residency/compliance goals, and unified platform ownership.
 - Impact: Existing Supabase-bound services become adapter-based; cloud sync/auth endpoints change; DB migrations must be replayed on Yandex PostgreSQL; rollout uses dual-run + cutover plan documented in `YANDEX-CLOUD-MIGRATION.md`.
+- Status: Deprecated (replaced by D-018)
+
+## 2026-05-07 - D-018
+- Decision: Rebuild SoberLife as a PWA and use Firebase as the single platform for auth, database, and hosting.
+- Why: Faster cross-platform delivery with one client codebase and managed backend/hosting.
+- Impact: Native iOS client code is removed from this repository; app runtime moves to web stack (`public/*`) with Firebase Authentication, Cloud Firestore, and Firebase Hosting.
 - Status: Accepted
 
 ## Open Decisions

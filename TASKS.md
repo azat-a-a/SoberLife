@@ -10,47 +10,23 @@
 
 ## Todo
 
-- [ ] YC-01 Yandex Cloud foundation + environments
+- [ ] PWA-01 Firebase project wiring
   - Priority: P0
-  - Outcome: Dev/Stage/Prod in Yandex Cloud are ready with VPC, IAM service accounts, Lockbox secrets, and baseline network policies.
-  - DoD: `YANDEX-CLOUD-MIGRATION.md` section 1 fully executed; connectivity and secret access validated from runtime identity.
-  - Estimate: 1.5d
+  - Outcome: Auth/Firestore/Hosting are connected to the app with real project config.
+  - DoD: `.firebaserc` and `public/firebase-config.js` contain valid values; login and registration work against Firebase Auth.
+  - Estimate: 0.5d
 
-- [ ] YC-02 PostgreSQL migration bootstrap on Yandex
+- [ ] PWA-02 Firestore security validation
   - Priority: P0
-  - Outcome: Managed PostgreSQL contains schema equivalent to current production behavior.
-  - DoD: SQL migration replay completed; constraints/indexes/triggers verified; migration tracking enabled.
-  - Estimate: 1d
+  - Outcome: Firestore access is limited to owner-safe reads/writes for profile and relapse data.
+  - DoD: `firestore.rules` deployed; manual checks confirm cross-user access is denied.
+  - Estimate: 0.5d
 
-- [ ] YC-03 Auth service replacement (JWT + refresh)
+- [ ] PWA-03 Production deploy
   - Priority: P0
-  - Outcome: Supabase Auth is replaced by Yandex-hosted auth API compatible with current app session semantics.
-  - DoD: `/auth/signup`, `/auth/signin`, `/auth/refresh`, `/auth/signout` implemented with password hashing, rotation, and error mapping; stage smoke passes.
-  - Estimate: 2.5d
-
-- [ ] YC-04 Core app API replacement for cloud sync
-  - Priority: P0
-  - Outcome: Existing sync/chat/profile endpoints are served by Yandex backend API with ownership checks.
-  - DoD: Profile, sobriety, achievements, settings/support-contact, community pulse, and AI conversation endpoints implemented and contract-tested.
-  - Estimate: 3d
-
-- [ ] YC-05 iOS adapter migration (Supabase -> Yandex backend)
-  - Priority: P0
-  - Outcome: iOS app uses Yandex backend adapters while preserving UX and fallback behavior.
-  - DoD: `SessionState` + cloud sync services switched to new wiring; no regressions in auth/onboarding/home/chat/profile core flows.
-  - Estimate: 2d
-
-- [ ] YC-06 Data transfer and cutover rehearsal
-  - Priority: P1
-  - Outcome: Existing user data is migrated from Supabase to Yandex PostgreSQL with validated integrity.
-  - DoD: Export/transform/import script run on stage; row-count + checksum checks pass; rollback steps documented.
-  - Estimate: 1.5d
-
-- [ ] YC-07 Observability + rollback readiness for Yandex
-  - Priority: P1
-  - Outcome: Production launch of new backend has actionable telemetry and a safe rollback path.
-  - DoD: Alerts/dashboards configured for auth errors, API latency, DB failures; rollback runbook tested in stage.
-  - Estimate: 1d
+  - Outcome: PWA is live on Firebase Hosting with SPA rewrites and installable manifest.
+  - DoD: `firebase deploy --only hosting,firestore,storage` succeeds; app opens from hosted URL and installs as PWA.
+  - Estimate: 0.5d
 
 ---
 
@@ -59,6 +35,10 @@
 ---
 
 ## Done
+
+- [x] MIG-01 Pivot to PWA + Firebase and remove iOS client code
+  - Date: 2026-05-07
+  - Notes: Added PWA app in `public/` with Firebase Auth + Firestore flows; added Firebase Hosting/Firestore/Storage config files; removed iOS client code (`ios/`, Swift package sources/tests, Supabase migration folder) from repository.
 
 - [x] OPS-01 DB-02 rollout verification (field)
   - Date: 2026-05-07
