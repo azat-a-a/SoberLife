@@ -59,11 +59,11 @@ private enum AppAppearance: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String {
+    var labelKey: String {
         switch self {
-        case .system: "System"
-        case .light: "Light"
-        case .night: "Night"
+        case .system: "profile.theme.system"
+        case .light: "profile.theme.light"
+        case .night: "profile.theme.night"
         }
     }
 
@@ -1033,10 +1033,12 @@ private struct ProfileView: View {
                 }
 
                 Section {
-                    Picker("Theme", selection: $appearanceSettings.selectedAppearance) {
+                    Picker(selection: $appearanceSettings.selectedAppearance) {
                         ForEach(AppAppearance.allCases) { opt in
-                            Text(opt.label).tag(opt)
+                            Text(LocalizedStringKey(opt.labelKey), bundle: .module).tag(opt)
                         }
+                    } label: {
+                        L10n.text("profile.theme")
                     }
                 }
 

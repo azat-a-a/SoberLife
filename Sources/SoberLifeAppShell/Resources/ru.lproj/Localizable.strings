@@ -88,6 +88,11 @@
 "profile.language.thai" = "ไทย";
 "profile.language.japanese" = "日本語";
 
+"profile.theme" = "Тема";
+"profile.theme.system" = "Как в системе";
+"profile.theme.light" = "Светлая";
+"profile.theme.night" = "Ночная";
+
 // Chat
 "chat.nav_title" = "AI-чат";
 "chat.chats" = "Чаты";
